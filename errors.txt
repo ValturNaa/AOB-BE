@@ -1,0 +1,9 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/MapArrys.rpy", line 294: u'right_padding' is not a keyword argument or valid child for the add statement.
+    add SelectedBattleSkills[x].WeaponIdle right_padding 23
+                                                        ^
+
+Ren'Py Version: Ren'Py 6.99.11.1749

@@ -1,0 +1,66 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/CombatEngine.rpy", line 607, in script
+    call screen ZoomScreen
+  File "renpy/common/000statements.rpy", line 471, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "game/MapArrys.rpy", line 309, in execute
+    screen PlayerMonsterCard(Unit):
+  File "game/MapArrys.rpy", line 309, in execute
+    screen PlayerMonsterCard(Unit):
+  File "game/MapArrys.rpy", line 316, in execute
+    bar:
+  File "game/MapArrys.rpy", line 316, in keywords
+    bar:
+NameError: name 'Im' is not defined
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/CombatEngine.rpy", line 607, in script
+    call screen ZoomScreen
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\ast.py", line 1696, in execute
+    self.call("execute")
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\ast.py", line 1714, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\statements.py", line 144, in call
+    return method(parsed, *args, **kwargs)
+  File "renpy/common/000statements.rpy", line 471, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\exports.py", line 2496, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\ui.py", line 278, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\display\core.py", line 2496, in interact
+    repeat, rv = self.interact_core(preloads=preloads, **kwargs)
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\display\core.py", line 2764, in interact_core
+    root_widget.visit_all(lambda i : i.per_interact())
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\display\core.py", line 464, in visit_all
+    d.visit_all(callback)
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\display\core.py", line 464, in visit_all
+    d.visit_all(callback)
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\display\core.py", line 464, in visit_all
+    d.visit_all(callback)
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\display\screen.py", line 394, in visit_all
+    callback(self)
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\display\core.py", line 2764, in <lambda>
+    root_widget.visit_all(lambda i : i.per_interact())
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\display\screen.py", line 404, in per_interact
+    self.update()
+  File "C:\Users\Luke Jackson\Documents\Renpy\renpy-6.99.10-sdk\renpy\display\screen.py", line 573, in update
+    self.screen.function(**self.scope)
+  File "game/MapArrys.rpy", line 309, in execute
+    screen PlayerMonsterCard(Unit):
+  File "game/MapArrys.rpy", line 309, in execute
+    screen PlayerMonsterCard(Unit):
+  File "game/MapArrys.rpy", line 316, in execute
+    bar:
+  File "game/MapArrys.rpy", line 316, in keywords
+    bar:
+  File "<screen language>", line 318, in <module>
+NameError: name 'Im' is not defined
+
+Windows-8-6.2.9200
+Ren'Py 6.99.11.1749
+BSR combat engine 0.0
