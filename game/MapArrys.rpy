@@ -314,7 +314,8 @@ screen PlayerMonsterCard(Unit):
     add "images/GUI/charmRes.png" xpos 188 ypos 960
     
     bar:
-        value StaticValue(Unit.CurrentMorale, Unit.MaxMorale)
+        value Unit.CurrentMorale
+        range Unit.MaxMorale
         right_bar im.Scale("images/GUI/hp_empty.png", 150, 20)
         left_bar im.Scale("images/GUI/hp_full.png", 150, 20)
         thumb None 
@@ -342,7 +343,8 @@ screen EnemyMonsterCard(Unit):
     add "images/GUI/charmRes.png" xpos 1038 ypos 960
     
     bar:
-        value StaticValue(Unit.CurrentMorale, Unit.MaxMorale)
+        value Unit.CurrentMorale
+        range Unit.MaxMorale
         right_bar im.Scale("images/GUI/hp_empty.png", 150, 20)
         left_bar im.Scale("images/GUI/hp_full.png", 150, 20)
         thumb None 
@@ -352,7 +354,10 @@ screen EnemyMonsterCard(Unit):
         ypos 825
         left_gutter 0
         right_gutter 0
-    text "{}".format(Unit.CurrentMorale) xpos 1240 ypos 824
+        
+    hbox:
+        xpos 1140 ypos 824
+        text "{}/{}".format(Unit.CurrentMorale, Unit.MaxMorale)
         
     text "{}".format(Unit.Agression) xpos 1085 ypos 865
     text "{}".format(Unit.Seduction) xpos 1085 ypos 905
