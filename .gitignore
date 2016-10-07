@@ -1,3 +1,7 @@
+# Photoshop source #
+##############################
+*.psd
+
 # Compiled source #
 ###################
 *.rpyc
@@ -51,5 +55,5 @@ persistent/
 orig/
 testing.rpy
 tmp/
-chars/
+#chars/
 rchars/
