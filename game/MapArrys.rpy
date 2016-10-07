@@ -325,7 +325,10 @@ screen PlayerMonsterCard(Unit):
         ypos 825
         left_gutter 0
         right_gutter 0
-    text "{}".format(Unit.CurrentMorale) xpos 390 ypos 824
+        
+    hbox:
+        xpos 290 ypos 824
+        text "{}/{}".format(Unit.CurrentMorale, Unit.MaxMorale)
         
     text "{}".format(Unit.Agression) xpos 235 ypos 865
     text "{}".format(Unit.Seduction) xpos 235 ypos 905
@@ -371,7 +374,7 @@ screen EnemyMonsterCard(Unit):
 
 
 
-screen ZoomScreen:
+screen ZoomScreen():
     if AtoB == False:
         if MapZoom == 9:
             add "ZoomInAplha" xpos 580 ypos 5

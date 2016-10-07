@@ -363,7 +363,7 @@ init 1 python:
             self.Seduction = Finesse+Cunning
             self.CurrentMorale = Determination*4+Ferocity*2
             self.BufferMorale = 0
-            self.MaxMorale = Determination*2+Ferocity
+            self.MaxMorale = Determination*4+Ferocity*2
             self.Power = Cunning/2
             # integer, used to offset physical damage
             self.PhysicalResist = getPresist(Finesse, Cunning)
