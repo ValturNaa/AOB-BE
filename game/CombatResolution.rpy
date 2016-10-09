@@ -37,8 +37,8 @@ init python:
             Basic = Attacker.Agression+Weapon.Damage
         elif (Weapon.DamageType == "Charm"):
             Basic = Attacker.Seduction+Weapon.Damage
-        TopDamage = Basic*1.2
-        BottomDamage = Basic*0.8
+        TopDamage = int(Basic*1.2)
+        BottomDamage = int(Basic*0.8)
         UnmodifiedDamage = renpy.random.randint(BottomDamage, TopDamage)
 
         if (Weapon.DamageType =="Physical"):

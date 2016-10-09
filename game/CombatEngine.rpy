@@ -151,55 +151,110 @@ init -1:
     image SoldierMove:
         "SoldierIdle"
         
+    
+    image FWolfIdle:
+        "images/BattleSprites/wolf/FwolfFrontIdle.png"
+        zoom 0.5
+    image FWolfHover:
+        "FWolfIdle"
+        alpha 0.7
+    image FWolfMoveS:
+        zoom 0.5
+        "images/BattleSprites/wolf/FwolfFrontIdle.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfFront1.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfFrontIdle.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfFront2.png"
+        pause 0.5
+        repeat
+    image FWolfMoveN:
+        zoom 0.5
+        "images/BattleSprites/wolf/FwolfBackIdle.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfBack1.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfBackIdle.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfBack2.png"
+        pause 0.5
+        repeat
+    image FWolfMoveE:
+        zoom 0.5
+        "images/BattleSprites/wolf/FwolfRightIdle.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfRight1.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfRightIdle.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfRight2.png"
+        pause 0.5
+        repeat
+    image FWolfMoveW:
+        zoom 0.5
+        "images/BattleSprites/wolf/FwolfLeftIdle.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfLeft1.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfLeftIdle.png"
+        pause 0.5
+        "images/BattleSprites/wolf/FwolfLeft2.png"
+        pause 0.5
+        repeat
+    image FWolfMove = ConditionSwitch("CurrentFacing == 'N'", "FWolfMoveN", "CurrentFacing == 'E'", "FWolfMoveE", "CurrentFacing == 'S'", "FWolfMoveS", "CurrentFacing == 'W'", "FWolfMoveW")
+        
+    
+        
         
     image BruiserIdle:
-        "images/BattleSprites/BanditBruiserIdle.png"
+        "images/BattleSprites/bandit/BanditBruiserIdle.png"
         zoom 0.5
     image BruiserHover:
         "BruiserIdle"
         alpha 0.7
     image BruiserMoveS:
         zoom 0.5
-        "images/BattleSprites/BanditBruiserIdle.png"
+        "images/BattleSprites/bandit/BanditBruiserIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditBruiserFrontStep2.png"
+        "images/BattleSprites/bandit/BanditBruiserFrontStep2.png"
         pause 0.5
-        "images/BattleSprites/BanditBruiserIdle.png"
+        "images/BattleSprites/bandit/BanditBruiserIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditBruiserFrontStep1.png"
+        "images/BattleSprites/bandit/BanditBruiserFrontStep1.png"
         pause 0.5
         repeat
     image BruiserMoveN:
         zoom 0.5
-        "images/BattleSprites/BruiserBackIdle.png"
+        "images/BattleSprites/bandit/BruiserBackIdle.png"
         pause 0.5
-        "images/BattleSprites/BruiserBack2.png"
+        "images/BattleSprites/bandit/BruiserBack2.png"
         pause 0.5
-        "images/BattleSprites/BruiserBackIdle.png"
+        "images/BattleSprites/bandit/BruiserBackIdle.png"
         pause 0.5
-        "images/BattleSprites/BruiserBack1.png"
+        "images/BattleSprites/bandit/BruiserBack1.png"
         pause 0.5
         repeat
     image BruiserMoveE:
         zoom 0.5
-        "images/BattleSprites/BruiserRightIdle.png"
+        "images/BattleSprites/bandit/BruiserRightIdle.png"
         pause 0.5
-        "images/BattleSprites/BruiserRight2.png"
+        "images/BattleSprites/bandit/BruiserRight2.png"
         pause 0.5
-        "images/BattleSprites/BruiserRightIdle.png"
+        "images/BattleSprites/bandit/BruiserRightIdle.png"
         pause 0.5
-        "images/BattleSprites/BruiserRight1.png"
+        "images/BattleSprites/bandit/BruiserRight1.png"
         pause 0.5
         repeat
     image BruiserMoveW:
         zoom 0.5
-        "images/BattleSprites/BruiserLeftIdle.png"
+        "images/BattleSprites/bandit/BruiserLeftIdle.png"
         pause 0.5
-        "images/BattleSprites/BruiserLeft2.png"
+        "images/BattleSprites/bandit/BruiserLeft2.png"
         pause 0.5
-        "images/BattleSprites/BruiserLeftIdle.png"
+        "images/BattleSprites/bandit/BruiserLeftIdle.png"
         pause 0.5
-        "images/BattleSprites/BruiserLeft1.png"
+        "images/BattleSprites/bandit/BruiserLeft1.png"
         pause 0.5
         repeat
     image BruiserMove = ConditionSwitch("CurrentFacing == 'N'", "BruiserMoveN", "CurrentFacing == 'E'", "BruiserMoveE", "CurrentFacing == 'S'", "BruiserMoveS", "CurrentFacing == 'W'", "BruiserMoveW")
@@ -225,6 +280,54 @@ init 1 python:
         temp1 = int(50*ZoomLevel)
         temp2 = temp1*x
         return temp2
+        
+    def ReturnPositive(Start, Target):
+        temp1 = Start - Target
+        temp2 = temp1*temp1
+        return temp2
+        
+    
+    class AIEnemyInfo(object):
+        def __init__(self, XDistance, YDistance):
+            self.XDistance = XDistance
+            self.Ydistance = YDistance
+            self.TotalDistance = XDistance + YDistance
+        
+    def AIDecideAction(Unit, Map):
+        StartX = 0
+        StartY = 0
+        PotentialTarget = 0
+        TargetList = []
+        ClosestTargetDistance = 100000
+        ClosestTarget = 0
+        Action = "Move"
+        for x in range(0, len(Map)):
+            for y in range(0, len(Map[x])):
+                if (Map.UnitPresent == Unit.BattleName):
+                    StartX = x
+                    StartY = y
+                else:
+                    pass
+        for x in range(0, len(Map)):
+            for y in range(0, len(Map[x])):
+                if (Map[x][y].UnitPresent == "Null"):
+                    pass
+                else:
+                    if (Map[x][y].UnitPresent.ArmyID == Unit.ArmyID):
+                        pass
+                    else:
+                        str("Target" + PotentailTarget) = AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y))
+                        TargetList.append(str("Target" + PotentailTarget))
+                        PotentailTarget += 1
+        for x in range(0, len(TargetList)):
+            if (TargetList[x].TotalDistance < ClosestTargetDistance):
+                ClosestTargetDistance = TargetList[x].TotalDistance
+                ClosestTarget = x
+        for x in range(0, len(Unit.BattleSkills)):
+            if (ClosestTargetDistance >= Unit.BattleSkills[x].Range):
+                Action = "Attack"
+        return Action
+                    
                 
     
     # one instantiated for each type of tile that exists in the game.        
@@ -323,7 +426,7 @@ init 1 python:
     # One instantiated for every individual unit involved in each battle. Keeps track of stats without messing with the classes instantiated for breeding purposes. 
     # Monster stats for each chosen to participate passed into this class, used as needed and then discareded at the end of the battle. Any stat increases or bonuses passed back to the breeding class at the end.
     class unit(object):
-        def __init__(self, Ferocity, Finesse, Determination, Cunning,  BattleName, OrigionalName, BattleSkills, Traits, MovementMax, BattleSpriteIdle, BattleSpriteHover, BattleSpriteMove, Mugshot, ArmyID, PAB=0, CAB=0, PRB=0, CRB=0):
+        def __init__(self, Ferocity, Finesse, Determination, Cunning,  BattleName, OrigionalName, BattleSkills, Traits, MovementMax, BattleSpriteIdle, BattleSpriteHover, BattleSpriteMove, Mugshot, Gender, ArmyID, PAB=0, CAB=0, PRB=0, CRB=0):
             # used to append self to lists
             self.Self = self
             # string used to reference self
@@ -377,6 +480,8 @@ init 1 python:
             self.Routed = True
             # has the unit attacked
             self.Action = True
+            # Gender
+            self.Gender = Gender
             
     def getPresist(Finesse, Cunning):
         temp1 = Finesse+Cunning
@@ -469,14 +574,22 @@ init 1 python:
     Club3 = weapon("Club", 1, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", IndirectFire=True)
     Club4 = weapon("Club", 3, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", IndirectFire=True)
     Club5 = weapon("Club", 5, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", IndirectFire=True)
+    Claw = weapon("Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover")
     
     
     
-    #(self, Ferocity, Finesse, Determination, Cunning,  BattleName, OrigionalName, BattleSkills, Traits, MovementMax, BattleSpriteIdle, BattleSpriteHover, BattleSpriteMove, Mugshot, ArmyID, PAB=0, CAB=0, PRB=0, CRB=0):
-    Soldier = unit(5, 5, 5, 5, "PlaceHolder", "Soldier", [Stab], [], 4, "SoldierIdle", "SoldierHover", "SoldierMove", "Placeholder", 2)
-    Bruiser = unit(5, 5, 5, 5, "PlaceHolder", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "Placeholder", 2)
+    #(self, Ferocity, Finesse, Determination, Cunning,  BattleName, OrigionalName, BattleSkills, Traits, MovementMax, BattleSpriteIdle, BattleSpriteHover, BattleSpriteMove, Mugshot, Gender, ArmyID, PAB=0, CAB=0, PRB=0, CRB=0):
+    # these are only used for template style reference
+    # FWolf = unit(5, 5, 5, 5, "PlaceHolder", "Soldier", [Stab], [], 4, "SoldierIdle", "SoldierHover", "SoldierMove", "Placeholder", "Female", 2)
+    # Bruiser = unit(5, 5, 5, 5, "PlaceHolder", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "Placeholder", "Male", 2)
     
     config.layers = ['master', 'mapdisplay', 'transient', 'screens', 'overlay']
+    
+    def ReturnArmies():
+        return []
+    
+    ActiveAIArmies = ReturnArmies()
+    
 
 
     
@@ -486,16 +599,17 @@ init 1 python:
 label CombatEngine:
     python:
         # sets up player army. Works for a fixed army, but will need some sort of selection screen and drawing stats from breeding classes.
-        p1 = unit(5, 5, 5, 5, "p1", "Bruiser", [Club, Club1, Club2, Club3, Club4, Club5], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", 1)
-        p2 = unit(5, 5, 5, 5, "p2", "Bruiser", [Club, Club1, Club2, Club3, Club4, Club5], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", 1)
-        p3 = unit(5, 5, 5, 5, "p3", "Bruiser", [Club, Club1, Club2, Club3, Club4, Club5], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", 1)
+        p1 = unit(5, 5, 5, 5, "p1", "Claw Wolf", [Claw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MaleWolfMug", "Female", 1)
+        p2 = unit(5, 5, 5, 5, "p2", "Claw Wolf", [Claw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MaleWolfMug", "Female", 1)
+        p3 = unit(5, 5, 5, 5, "p3", "Claw Wolf", [Claw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MaleWolfMug", "Female", 1)
         PlayerArmy = [p1, p2, p3]
         PlayerPartyDep = [p1, p2, p3]
         # sets up enely 1's army. Will need a generator for random events and scripted ones some sort of selection method
-        e1 = unit(5, 5, 5, 5, "e1", "Soldier", [Stab], [], 4, "SoldierIdle", "SoldierHover", "SoldierMove", "MaleWolfMug", 2)
-        e2 = unit(5, 5, 5, 5, "e2", "Soldier", [Stab], [], 4, "SoldierIdle", "SoldierHover", "SoldierMove", "MaleWolfMug", 2)
-        e3 = unit(5, 5, 5, 5, "e3", "Soldier", [Stab], [], 4, "SoldierIdle", "SoldierHover", "SoldierMove", "MaleWolfMug", 2)
+        e1 = unit(5, 5, 5, 5, "e1", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
+        e2 = unit(5, 5, 5, 5, "e2", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
+        e3 = unit(5, 5, 5, 5, "e3", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
         Enemy1Army = [e1, e2, e3]
+        ActiveAIArmies.append(Enemy1Army)
         Enemy1ArmyDep = [e1, e2, e3]
         # completeddeployment keeps track of which units have been deployed, used for all armies in turn and reset after use
         CompletedDeployment = []
@@ -604,7 +718,10 @@ label RenderMap:
         call FinishMove
         hide screen CurrentMap
     show screen CurrentMap
-    call screen ZoomScreen
+    if AITurn == True:
+        return
+    else:
+        call screen ZoomScreen
     ###Laird Removed looping call
     
     
@@ -618,6 +735,15 @@ label NextTurn:
     jump AITurn
     
 label AITurn:
+    default AIAction = "None"
+    default AITurn = False
+    $ AITurn = True
+    python:
+        for army in range(0, ActiveAIArmies)
+            for x in range(0, ActiveAIArmies[army]):
+                if x.Routed == True:
+                    AIAction = AIDecideAction(x, CurrentOverlay)
+        
     jump RenderMap
 
     
