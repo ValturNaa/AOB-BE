@@ -38,70 +38,67 @@ init python:
     BugTestPath = "None"
     BugTestList = []
     
-    
-    
-    
-label PathGenerator:
-    python:
-        if MoveSelect[0].MovementCurrent == 0:
-            pass
+    def GeneratePaths(MoveSelect, CurrentMap, StartX, StartY):
+        PathList = []
+        if (MoveSelect[0].MovementCurrent == 0):
+            return PathList
         # Establish the first four directions the path could lead
         else:
-            if CurrentMap[StartX][StartY].PassN == True:
-                if CurrentOverlay[StartX-1][StartY].UnitID == "None":
+            if (CurrentMap[StartX][StartY].PassN == True):
+                if (CurrentOverlay[StartX-1][StartY].UnitID == "None"):
                     N = Path()
                     N.Name = "N"
                     N.WayPoints = ["N"]
                     N.MoveRequired = CurrentMap[StartX-1][StartY].MoveRequired
                     PathList.append(N)
-            if CurrentMap[StartX][StartY].PassE == True:
-                if CurrentOverlay[StartX][StartY+1].UnitID == "None":
+            if (CurrentMap[StartX][StartY].PassE == True):
+                if (CurrentOverlay[StartX][StartY+1].UnitID == "None"):
                     E = Path()
                     E.Name = "E"
                     E.WayPoints = ["E"]
                     E.MoveRequired = CurrentMap[StartX][StartY+1].MoveRequired
                     PathList.append(E)
-            if CurrentMap[StartX][StartY].PassS == True:
-                if CurrentOverlay[StartX+1][StartY].UnitID == "None":
+            if (CurrentMap[StartX][StartY].PassS == True):
+                if (CurrentOverlay[StartX+1][StartY].UnitID == "None"):
                     S = Path()
                     S.Name = "S"
                     S.WayPoints = ["S"]
                     S.MoveRequired = CurrentMap[StartX+1][StartY].MoveRequired
                     PathList.append(S)
-            if CurrentMap[StartX][StartY].PassW == True:
-                if CurrentOverlay[StartX][StartY-1].UnitID == "None":
+            if (CurrentMap[StartX][StartY].PassW == True):
+                if (CurrentOverlay[StartX][StartY-1].UnitID == "None"):
                     W = Path()
                     W.Name = "W"
                     W.WayPoints = ["W"]
                     W.MoveRequired = CurrentMap[StartX][StartY-1].MoveRequired
                     PathList.append(W)        
                 
-        if MoveSelect[0].MovementCurrent == 0:
-            pass
-        elif MoveSelect[0].MovementCurrent == 1:
-            pass
+        if (MoveSelect[0].MovementCurrent == 0):
+            return PathList
+        elif (MoveSelect[0].MovementCurrent == 1):
+            return PathList
         # big o'l for loop to generate remaining paths
         else:
             # determine how far this path leads
             for distance in range(1, MoveSelect[0].MovementCurrent):
                 for path in range(0, len(PathList)):
                     # if there is a path that can be extened then this generates a new, extended path
-                    if PathList[path].Explored == False:
+                    if (PathList[path].Explored == False):
                         # establish start point of parent
                         TempStartX = StartX
                         TempStartY = StartY
                         for waypoint in PathList[path].WayPoints:
-                            if waypoint == "N":
+                            if (waypoint == "N"):
                                 TempStartX -= 1
-                            if waypoint == "E":
+                            if (waypoint == "E"):
                                 TempStartY += 1
-                            if waypoint == "S":
+                            if (waypoint == "S"):
                                 TempStartX += 1
-                            if waypoint == "W":
+                            if (waypoint == "W"):
                                 TempStartY -= 1
                         # check if you can move in next direction and generate a new path for that direction
-                        if CurrentMap[TempStartX][TempStartY].PassN == True:
-                            if CurrentOverlay[TempStartX-1][TempStartY].UnitID == "None":
+                        if (CurrentMap[TempStartX][TempStartY].PassN == True):
+                            if (CurrentOverlay[TempStartX-1][TempStartY].UnitID == "None"):
                                 TempPath = []
                                 TempPath.append(NewPathName(PathList[path].Name, "N"))
                                 TempPath[0] = Path()
@@ -112,8 +109,8 @@ label PathGenerator:
                                 TempPath[0].MoveRequired = PathList[path].MoveRequired
                                 TempPath[0].MoveRequired += CurrentMap[TempStartX-1][TempStartY].MoveRequired
                                 PathList.append(TempPath[0])
-                        if CurrentMap[TempStartX][TempStartY].PassE == True:
-                            if CurrentOverlay[TempStartX][TempStartY+1].UnitID == "None":
+                        if (CurrentMap[TempStartX][TempStartY].PassE == True):
+                            if (CurrentOverlay[TempStartX][TempStartY+1].UnitID == "None"):
                                 TempPath = []
                                 TempPath.append(NewPathName(PathList[path].Name, "E"))
                                 TempPath[0] = Path()
@@ -124,8 +121,8 @@ label PathGenerator:
                                 TempPath[0].MoveRequired = PathList[path].MoveRequired
                                 TempPath[0].MoveRequired += CurrentMap[TempStartX][TempStartY+1].MoveRequired
                                 PathList.append(TempPath[0])
-                        if CurrentMap[TempStartX][TempStartY].PassS == True:
-                            if CurrentOverlay[TempStartX+1][TempStartY].UnitID == "None":
+                        if (CurrentMap[TempStartX][TempStartY].PassS == True):
+                            if (CurrentOverlay[TempStartX+1][TempStartY].UnitID == "None"):
                                 TempPath = []
                                 TempPath.append(NewPathName(PathList[path].Name, "S"))
                                 TempPath[0] = Path()
@@ -136,8 +133,8 @@ label PathGenerator:
                                 TempPath[0].MoveRequired = PathList[path].MoveRequired
                                 TempPath[0].MoveRequired += CurrentMap[TempStartX+1][TempStartY].MoveRequired
                                 PathList.append(TempPath[0])
-                        if CurrentMap[TempStartX][TempStartY].PassW == True:
-                            if CurrentOverlay[TempStartX][TempStartY-1].UnitID == "None":
+                        if (CurrentMap[TempStartX][TempStartY].PassW == True):
+                            if (CurrentOverlay[TempStartX][TempStartY-1].UnitID == "None"):
                                 TempPath = []
                                 TempPath.append(NewPathName(PathList[path].Name, "W"))
                                 TempPath[0] = Path()
@@ -149,6 +146,15 @@ label PathGenerator:
                                 TempPath[0].MoveRequired += CurrentMap[TempStartX][TempStartY-1].MoveRequired
                                 PathList.append(TempPath[0])
                         PathList[path].Explored = True
+        
+            return PathList 
+    
+    
+    
+    
+label PathGenerator:
+    python:
+        PathList = GeneratePaths(MoveSelect, CurrentMap, StartX, StartY)
         
 
         for path in range(0, len(PathList)):

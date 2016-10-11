@@ -316,8 +316,7 @@ init 1 python:
                     if (Map[x][y].UnitPresent.ArmyID == Unit.ArmyID):
                         pass
                     else:
-                        str("Target" + PotentailTarget) = AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y))
-                        TargetList.append(str("Target" + PotentailTarget))
+                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y)))
                         PotentailTarget += 1
         for x in range(0, len(TargetList)):
             if (TargetList[x].TotalDistance < ClosestTargetDistance):
@@ -609,7 +608,7 @@ label CombatEngine:
         e2 = unit(5, 5, 5, 5, "e2", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
         e3 = unit(5, 5, 5, 5, "e3", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
         Enemy1Army = [e1, e2, e3]
-        ActiveAIArmies.append(Enemy1Army)
+        ActiveAIArmies.append("Enemy1Army")
         Enemy1ArmyDep = [e1, e2, e3]
         # completeddeployment keeps track of which units have been deployed, used for all armies in turn and reset after use
         CompletedDeployment = []
@@ -739,8 +738,8 @@ label AITurn:
     default AITurn = False
     $ AITurn = True
     python:
-        for army in range(0, ActiveAIArmies)
-            for x in range(0, ActiveAIArmies[army]):
+        for army in range(0, len(ActiveAIArmies))
+            for x in range(0, len(ActiveAIArmies[army])):
                 if x.Routed == True:
                     AIAction = AIDecideAction(x, CurrentOverlay)
         
