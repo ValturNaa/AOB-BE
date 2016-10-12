@@ -281,54 +281,8 @@ init 1 python:
         temp2 = temp1*x
         return temp2
         
-    def ReturnPositive(Start, Target):
-        temp1 = Start - Target
-        temp2 = temp1*temp1
-        return temp2
-        
-    
-    class AIEnemyInfo(object):
-        def __init__(self, XDistance, YDistance):
-            self.XDistance = XDistance
-            self.Ydistance = YDistance
-            self.TotalDistance = XDistance + YDistance
-        
-    def AIDecideAction(Unit, Map):
-        StartX = 0
-        StartY = 0
-        PotentialTarget = 0
-        TargetList = []
-        ClosestTargetDistance = 100000
-        ClosestTarget = 0
-        Action = "Move"
-        for x in range(0, len(Map)):
-            for y in range(0, len(Map[x])):
-                if (Map.UnitPresent == Unit.BattleName):
-                    StartX = x
-                    StartY = y
-                else:
-                    pass
-        for x in range(0, len(Map)):
-            for y in range(0, len(Map[x])):
-                if (Map[x][y].UnitPresent == "Null"):
-                    pass
-                else:
-                    if (Map[x][y].UnitPresent.ArmyID == Unit.ArmyID):
-                        pass
-                    else:
-                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y)))
-                        PotentailTarget += 1
-        for x in range(0, len(TargetList)):
-            if (TargetList[x].TotalDistance < ClosestTargetDistance):
-                ClosestTargetDistance = TargetList[x].TotalDistance
-                ClosestTarget = x
-        for x in range(0, len(Unit.BattleSkills)):
-            if (ClosestTargetDistance >= Unit.BattleSkills[x].Range):
-                Action = "Attack"
-        return Action
                     
                 
-    
     # one instantiated for each type of tile that exists in the game.        
     class tile(object):
         def __init__(self, Name, PassN=True, PassE=True, PassS=True, PassW=True, VisibleN=True, VisibleE=True, VisibleS=True, VisibleW=True, MoveRequired=1, Void=False):
@@ -535,22 +489,10 @@ init 1 python:
     CurrentEnemy3Deployment = []
     # Used to end battle and return to farm screen
     BattleEnd = False
-    # Monsters in the players army, used to feed the battlefield class
-    PlayerArmy = []
-    # Used to keep track of what units have been deployed and which haven't
-    PlayerPartyDep = []
-    # Enemy 1's army, feed to battlefield class
-    Enemy1Army = []
-    # same as player 1 party deployment
-    Enemy1ArmyDep = []
-    # Enemy 2's army, feed to battlefield class
-    Enemy2Army = []
-    # same as player 2 party deployment
-    Enemy2ArmyDep = []
-    # Enemy 3's army, feed to battlefield class
-    Enemy3Army = []
-    # same as player 3 party deployment
-    Enemy3ArmyDep = []
+    
+    PlayerArmy = "None"
+    Enemy1Army = "None"
+
 
     DeploymentStart = False
     ActiveDeployment = []
@@ -584,6 +526,11 @@ init 1 python:
     
     config.layers = ['master', 'mapdisplay', 'transient', 'screens', 'overlay']
     
+    class Army(object):
+        def __init__(self, ArmyList):
+            self.Army = ArmyList
+            self.DeployArmy = ArmyList
+    
     def ReturnArmies():
         return []
     
@@ -601,20 +548,18 @@ label CombatEngine:
         p1 = unit(5, 5, 5, 5, "p1", "Claw Wolf", [Claw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MaleWolfMug", "Female", 1)
         p2 = unit(5, 5, 5, 5, "p2", "Claw Wolf", [Claw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MaleWolfMug", "Female", 1)
         p3 = unit(5, 5, 5, 5, "p3", "Claw Wolf", [Claw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MaleWolfMug", "Female", 1)
-        PlayerArmy = [p1, p2, p3]
-        PlayerPartyDep = [p1, p2, p3]
+        PlayerArmy = Army([p1, p2, p3])
         # sets up enely 1's army. Will need a generator for random events and scripted ones some sort of selection method
         e1 = unit(5, 5, 5, 5, "e1", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
         e2 = unit(5, 5, 5, 5, "e2", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
         e3 = unit(5, 5, 5, 5, "e3", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
-        Enemy1Army = [e1, e2, e3]
-        ActiveAIArmies.append("Enemy1Army")
-        Enemy1ArmyDep = [e1, e2, e3]
+        Enemy1Army = Army([e1, e2, e3])
+        ActiveAIArmies.append(Enemy1Army)
         # completeddeployment keeps track of which units have been deployed, used for all armies in turn and reset after use
         CompletedDeployment = []
         # Instantiation of battlefield.  Will need a generator for random events and scripted ones some sort of selection method
         ###Laird updated this to use the functions
-        GrassFieldMap= battlefield(grassField(), grassFieldOverlay(), 0, GrassFieldPlayerDeploy, PlayerArmy, GrassFieldEnemy1Deploy, Enemy1Army)
+        GrassFieldMap= battlefield(grassField(), grassFieldOverlay(), 0, GrassFieldPlayerDeploy, PlayerArmy.Army, GrassFieldEnemy1Deploy, Enemy1Army.Army)
         # any battlefield instance needs to be stored here
         ###Laird cleaned the BattleFieldList
         BattleFieldList= []
@@ -727,22 +672,84 @@ label RenderMap:
     
 label NextTurn:
     python:
-        for x in range(0, len(PlayerArmy)):
-            PlayerArmy[x].MovementCurrent = PlayerArmy[x].MovementMax
-            PlayerArmy[x].Action = True
+        for x in range(0, len(PlayerArmy.Army)):
+            PlayerArmy.Army[x].MovementCurrent = PlayerArmy.Army[x].MovementMax
+            PlayerArmy.Army[x].Action = True
     call ResetMoveVariables from _call_ResetMoveVariables_1
     jump AITurn
     
 label AITurn:
     default AIAction = "None"
     default AITurn = False
+    default AITarget = "None"
     $ AITurn = True
     python:
-        for army in range(0, len(ActiveAIArmies))
-            for x in range(0, len(ActiveAIArmies[army])):
-                if x.Routed == True:
-                    AIAction = AIDecideAction(x, CurrentOverlay)
+        for army in range(0, len(ActiveAIArmies)):
+            for x in range(0, len(ActiveAIArmies[army].Army)):
+                if ActiveAIArmies[army].Army[x].Routed == True:
+                    AIAction = AIDecideAction(ActiveAIArmies[army].Army[x], CurrentOverlay)
+                    if AIAction == "Move":
+                        AITarget = IDNearestTarget(ActiveAIArmies[army].Army[x], CurrentOverlay)
+                        MoveSelect.append(ActiveAIArmies[army].Army[x])
+                        StartX = GetX(ActiveAIArmies[army].Army[x])
+                        StartY = GetY(ActiveAIArmies[army].Army[x])
+                        PathList = GeneratePaths(MoveSelect[0], CurrentMap, StartX, StartY)
+                        FinalPath = []
+                        FinalPath.append(AISetDestination(MoveSelect[0], CurrentMap, StartX, StartY, PathList, AITarget))
+                        
+                        AtoB = True
+                        CurrentOverlay[StartX][StartY].UnitPresent = "Null"
+                        CurrentOverlay[StartX][StartY].UnitID = "None"
+                        CurrentOverlay[StartX][StartY].UnitIdle = "None"
+                        CurrentOverlay[StartX][StartY].UnitHover = "None"
+                        CurrentOverlay[StartX][StartY].Visibility = 0
+                        MoveSelect[0].MovementCurrent -= FinalPath[0].MoveRequired
+                        PickingDestination = False
+                        if FinalPath[0].WayPoints[0] == "N":
+                            CurrentFacing = "N"
+                            if MoveTick == False:
+                                MoveTick = True
+                                CurrentMove = MovePathN1
+                            else:
+                                MoveTick = False
+                                CurrentMove = MovePathN2
+                        elif FinalPath[0].WayPoints[0] == "E":
+                            CurrentFacing = "E"
+                            if MoveTick == False:
+                                MoveTick = True
+                                CurrentMove = MovePathE1
+                            else:
+                                MoveTick = False
+                                CurrentMove = MovePathE2
+                        elif FinalPath[0].WayPoints[0] == "S":
+                            CurrentFacing = "S"
+                            if MoveTick == False:
+                                MoveTick = True
+                                CurrentMove = MovePathS1
+                            else:
+                                MoveTick = False
+                                CurrentMove = MovePathS2
+                        elif FinalPath[0].WayPoints[0] == "W":
+                            CurrentFacing = "W"
+                            if MoveTick == False:
+                                MoveTick = True
+                                CurrentMove = MovePathW1
+                            else:
+                                MoveTick = False
+                                CurrentMove = MovePathW2
+                        renpy.hide_screen("CurrentMap")
+                        renpy.call("RenderMap")
+                        
+
+                        
+                        
         
     jump RenderMap
+    
+label ResetAI:
+    python:
+        AIAction = "None"
+        AITurn = False
+
 
     

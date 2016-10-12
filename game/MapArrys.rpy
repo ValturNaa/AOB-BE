@@ -137,7 +137,7 @@ screen CurrentMap:
         area 0, 50, 1300, 750
         draggable True
         if EdgeScroll == True:
-            edgescroll (150, 600)
+            edgescroll (120, 450)
         xadjustment MCX
         yadjustment MCY
         child_size 50*ZoomList[MapZoom][1]*len(CurrentMap[1]), 50*ZoomList[MapZoom][1]*len(CurrentMap)
@@ -230,7 +230,7 @@ screen CurrentMap:
                             add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
                         else:
                             # used to remove an already deployed unit and put them back into the deployment list, re-setting the battletile perameters
-                            imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover action AddToSet(PlayerPartyDep, CurrentOverlay[x][y].UnitID), SetField(CurrentOverlay[x][y], "UnitID", "None"), SetField(CurrentOverlay[x][y], "UnitPresent", "Deploy"), SetField(CurrentOverlay[x][y], "Visibility", 0), SetField(CurrentOverlay[x][y], "UnitIdle", "None"), SetField(CurrentOverlay[x][y], "UnitHover", "None"), Jump("RenderMap")
+                            imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover action AddToSet(PlayerArmy.DeployArmy, CurrentOverlay[x][y].UnitID), SetField(CurrentOverlay[x][y], "UnitID", "None"), SetField(CurrentOverlay[x][y], "UnitPresent", "Deploy"), SetField(CurrentOverlay[x][y], "Visibility", 0), SetField(CurrentOverlay[x][y], "UnitIdle", "None"), SetField(CurrentOverlay[x][y], "UnitHover", "None"), Jump("RenderMap")
                 at ZoomList[MapZoom][0]    
                         
                         
@@ -262,11 +262,11 @@ screen CurrentMap:
     if DeploymentStart == True:
             hbox:
                 xpos 20 ypos 820
-                for x in range(0, len(PlayerPartyDep)):
+                for x in range(0, len(PlayerArmy.DeployArmy)):
                     imagebutton:
-                        idle PlayerPartyDep[x].BattleSpriteIdle
-                        hover PlayerPartyDep[x].BattleSpriteHover
-                        action SetVariable("ActiveDeployment", [PlayerPartyDep[x].Self]), SetVariable("PlaceUnit", True), Jump("RenderMap")
+                        idle PlayerArmy.DeployArmy[x].BattleSpriteIdle
+                        hover PlayerArmy.DeployArmy[x].BattleSpriteHover
+                        action SetVariable("ActiveDeployment", [PlayerArmy.DeployArmy[x].Self]), SetVariable("PlaceUnit", True), Jump("RenderMap")
    
     add "BattleMonsterCardSmall" xpos 450 ypos 800
         
@@ -274,8 +274,8 @@ screen CurrentMap:
     if DeploymentStart == True:
             hbox:
                 xpos 870 ypos 820
-                for x in range(0, len(Enemy1Army)):
-                    add Enemy1Army[x].BattleSpriteIdle
+                for x in range(0, len(Enemy1Army.Army)):
+                    add Enemy1Army.Army[x].BattleSpriteIdle
     
     hbox:
         xpos 0
@@ -294,7 +294,7 @@ screen CurrentMap:
 
     
     if DeploymentStart == True:
-        if len(PlayerPartyDep) == 0:
+        if len(PlayerArmy.DeployArmy) == 0:
             imagebutton idle "FinishDeploymentIdle" hover "FinishDeploymentHover" xpos 0.44 ypos 0.84 action Jump("FinishDeployment")
         else:
             add "FinishDeploymentAlpha" xpos 0.44 ypos 0.84
@@ -388,7 +388,7 @@ screen ZoomScreen():
         
         
 label UnitPlacement:
-    $ PlayerPartyDep.remove(ActiveDeployment[0])
+    $ PlayerArmy.DeployArmy.remove(ActiveDeployment[0])
     $ CompletedDeployment.append(ActiveDeployment[0])
     $ ActiveDeployment = []
     $ UnitPlaced = True
@@ -410,11 +410,11 @@ label FinishDeployment:
                 CurrentOverlay[TempIndecesY][TempIndecesX].UnitPresent = "Deploy"
         
         # physically deploy enemy1 units (More sophisticated versions will be made, but for now random deployment is fine)
-        for i in range(0, len(Enemy1ArmyDep)):
-            ActiveDeployment.append(Enemy1ArmyDep[i])
-            DeploymentRandomiser = renpy.random.randint(0, len(Enemy1ArmyDep))
+        for i in range(0, len(Enemy1Army.DeployArmy)):
+            ActiveDeployment.append(Enemy1Army.DeployArmy[i])
+            DeploymentRandomiser = renpy.random.randint(0, len(Enemy1Army.DeployArmy))
             while CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitPresent != "Deploy":
-                DeploymentRandomiser = renpy.random.randint(0, len(Enemy1ArmyDep))
+                DeploymentRandomiser = renpy.random.randint(0, len(Enemy1Army.DeployArmy))
             CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitID = ActiveDeployment[0]
             CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitPresent = ActiveDeployment[0].BattleName
             CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitIdle = ActiveDeployment[0].BattleSpriteIdle
