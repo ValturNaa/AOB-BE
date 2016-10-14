@@ -610,58 +610,8 @@ label RenderMap:
                     CurrentOverlay[y][x].XPos = FindPos(x, zoomlist[MapZoom][1])
                     CurrentOverlay[y][x].YPos = FindPos(y, zoomlist[MapZoom][1])
     if AtoB == True:
-        "Check for movement and what is [FinalPath[0].WayPoints]"
-        show screen CurrentMap
         python:
-            renpy.restart_interaction()
-            for waypoint in range(0, len(FinalPath[0].WayPoints)):
-                if FinalPath[0].WayPoints[waypoint] == "N":
-                    CurrentFacing = "N"
-                    if MoveTick == False:
-                        MoveTick = True
-                        CurrentMove = MovePathN1
-                    else:
-                        MoveTick = False
-                        CurrentMove = MovePathN2
-                    renpy.restart_interaction()
-                    renpy.pause(1)
-                    StartX -= 1
-                elif FinalPath[0].WayPoints[waypoint] == "E":
-                    CurrentFacing = "E"
-                    if MoveTick == False:
-                        MoveTick = True
-                        CurrentMove = MovePathE1
-                    else:
-                        MoveTick = False
-                        CurrentMove = MovePathE2
-                    renpy.restart_interaction()
-                    renpy.pause(1)
-                    StartY += 1
-                elif FinalPath[0].WayPoints[waypoint] == "S":
-                    CurrentFacing = "S"
-                    if MoveTick == False:
-                        MoveTick = True
-                        CurrentMove = MovePathS1
-                    else:
-                        MoveTick = False
-                        CurrentMove = MovePathS2
-                    renpy.restart_interaction()
-                    renpy.pause(1)
-                    StartX += 1
-                elif FinalPath[0].WayPoints[waypoint] == "W":
-                    CurrentFacing = "W"
-                    if MoveTick == False:
-                        MoveTick = True
-                        CurrentMove = MovePathW1
-                    else:
-                        MoveTick = False
-                        CurrentMove = MovePathW2
-                    renpy.restart_interaction()
-                    renpy.pause(1)
-                    StartY -= 1
-            AtoB = False
-        call FinishMove
-        hide screen CurrentMap
+            ExecuteMovement()
     show screen CurrentMap
     if AITurn == True:
         return
@@ -679,17 +629,6 @@ label NextTurn:
     call ResetMoveVariables from _call_ResetMoveVariables_1
     jump AITurn
     
-label check:
-    "Checking - [AIAction]"
-    return
-    
-label check1:
-    "Checking 1 - [AIAction]"
-    return
-    
-label fail:
-    "Fail"
-    return
     
 label AITurn:
     default AIAction = "None"
@@ -753,8 +692,7 @@ label AITurn:
                             else:
                                 MoveTick = False
                                 CurrentMove = MovePathW2
-                        renpy.hide_screen("CurrentMap")
-                        renpy.call("RenderMap")
+                        ExecuteMovement()
                     
                         
 
@@ -768,6 +706,10 @@ label ResetAI:
     python:
         AIAction = "None"
         AITurn = False
+        for army in range(0, len(ActiveAIArmies)):
+            for x in range(0, len(ActiveAIArmies[army].Army)):
+                if ActiveAIArmies[army].Army[x].Routed == True:
+                    ActiveAIArmies[army].Army[x].MovementCurrent = ActiveAIArmies[army].Army[x].MovementMax
     return
 
 

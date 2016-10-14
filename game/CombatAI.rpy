@@ -122,6 +122,7 @@ init python:
             PerfectFinishY = AITarget.Ypos-1
         PathDifference = 1000
         StoreDifference = 1000
+        BestPath = 0
         for path in range(0, len(PathList)):
             EndXShort = 0
             EndYShort = 0
@@ -159,5 +160,159 @@ init python:
             if (waypoint == "E"):
                 StartY += 1
         return StartY
+    
+    def ExecuteMovement():
+        renpy.hide_screen("CurrentMap")
+        renpy.show_screen("CurrentMap")
+        global StartX
+        global StartY
+        global MoveTick
+        global CurrentMove
+        global CurrentFacing
+        
+        renpy.restart_interaction()
+        for waypoint in range(0, len(FinalPath[0].WayPoints)):
+            if (FinalPath[0].WayPoints[waypoint] == "N"):
+                CurrentFacing = "N"
+                if (MoveTick == False):
+                    MoveTick = True
+                    CurrentMove = MovePathN1
+                else:
+                    MoveTick = False
+                    CurrentMove = MovePathN2
+                renpy.restart_interaction()
+                renpy.pause(1)
+                StartX -= 1
+            elif (FinalPath[0].WayPoints[waypoint] == "E"):
+                CurrentFacing = "E"
+                if (MoveTick == False):
+                    MoveTick = True
+                    CurrentMove = MovePathE1
+                else:
+                    MoveTick = False
+                    CurrentMove = MovePathE2
+                renpy.restart_interaction()
+                renpy.pause(1)
+                StartY += 1
+            elif (FinalPath[0].WayPoints[waypoint] == "S"):
+                CurrentFacing = "S"
+                if (MoveTick == False):
+                    MoveTick = True
+                    CurrentMove = MovePathS1
+                else:
+                    MoveTick = False
+                    CurrentMove = MovePathS2
+                renpy.restart_interaction()
+                renpy.pause(1)
+                StartX += 1
+            elif (FinalPath[0].WayPoints[waypoint] == "W"):
+                CurrentFacing = "W"
+                if (MoveTick == False):
+                    MoveTick = True
+                    CurrentMove = MovePathW1
+                else:
+                    MoveTick = False
+                    CurrentMove = MovePathW2
+                renpy.restart_interaction()
+                renpy.pause(1)
+                StartY -= 1
+        AtoB = False
+        FinishMove()
+        renpy.hide_screen("CurrentMap")
+        renpy.show_screen("CurrentMap")
+
+    def FinishMove():
+        global CurrentOverlay
+        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0].BattleName
+        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitID = MoveSelect[0]
+        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitIdle = MoveSelect[0].BattleSpriteIdle
+        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitHover = MoveSelect[0].BattleSpriteHover
+        CurrentOverlay[FinalDestinationX][FinalDestinationY].Visibility = 1
+        ResetMoveVariables()
+        
+    def ResetMoveVariables():
+        global PathList
+        global StartX
+        global StartY
+        global MoveSelect
+        global TempPath
+        global TempStartX
+        global TempStartY
+        global PickingDestination
+        global FinalDestination
+        global FinalDestinationX
+        global FinalDestinationY
+        global FinalPathBuffer
+        global FinalPath
+        global AtoB
+        global CurrentFacing
+        global CurrentMove
+        global OwnMonsterCard
+        global MonsterCardStats
+        global CurrentOverlay
+        global MoveCancel
+        
+        renpy.hide_screen("PlayerMonsterCard")
+        renpy.hide_screen("EnemyMonsterCard")
+        
+        PathList = []
+        StartX = 0
+        StartY = 0
+        MoveSelect = []
+        TempPath = []
+        TempStartX = 0
+        TempStartY = 0
+        PickingDestination = False
+        FinalDestination = []
+        FinalDestinationX = 0
+        FinalDestinationY = 0
+        FinalPathBuffer = []
+        FinalPath = []
+        AtoB = False
+        CurrentFacing = "S"
+        CurrentMove = "Starter"
+        OwnMonsterCard = False
+        MonsterCardStats = []
+        for x in range(0, len(CurrentOverlay)):
+            for y in range(0, len(CurrentOverlay[x])):
+                CurrentOverlay[x][y].RouteStore = []
+        ResetAttack()
+        if (MoveCancel == True):
+            MoveCancel = False
+            for x in range(0, len(CurrentOverlay)):
+                for y in range(0, len(CurrentOverlay[x])):
+                    if (CurrentOverlay[x][y].UnitPresent == "Move"):
+                        CurrentOverlay[x][y].UnitPresent = "Null"
+
+        
+        
+        
+    def ResetAttack():
+        global TempUnitID
+        global RangeCalculation
+        global TargetX
+        global TargetY
+        global TargetID
+        global SelectedAttack
+        global ResolvingDamage
+        global CurrentOverlay
             
+        TempUnitID = []
+        RangeCalculation = False
+        TargetX = 0
+        TargetY = 0
+        TargetID = []
+        SelectedAttack = []
+        ResolvingDamage = False
+        for x in range(0, len(CurrentOverlay)):
+            for y in range(0, len(CurrentOverlay[x])):
+                CurrentOverlay[x][y].RangeOverlay = "None"
+                CurrentOverlay[x][y].FireNorth = True
+                CurrentOverlay[x][y].FireSouth = True
+                CurrentOverlay[x][y].FireEast = True
+                CurrentOverlay[x][y].FireWest = True
+                CurrentOverlay[x][y].RangeCheck = False
+                CurrentOverlay[x][y].CheckAround = False
+                CurrentOverlay[x][y].CheckDelay = False
+
         
