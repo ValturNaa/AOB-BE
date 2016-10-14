@@ -416,7 +416,7 @@ label ResolveDamage:
             CurrentOverlay[TargetX][TargetY].Visibility = 0
     hide screen DamageScreen
     pause 1.5
-    call ResetMoveVariables from _call_ResetMoveVariables_2
+    call ResetMoveVariables
     jump RenderMap
     
 

@@ -274,7 +274,7 @@ label ResetMoveVariables:
         for x in range(0, len(CurrentOverlay)):
             for y in range(0, len(CurrentOverlay[x])):
                 CurrentOverlay[x][y].RouteStore = []
-    call ResetAttack from _call_ResetAttack
+    call ResetAttack
     if MoveCancel == True:
         $ MoveCancel = False
         python:

@@ -709,7 +709,7 @@ label AITurn:
                         
                         
     "Completed AI move"    
-    call ResetAI from _call_ResetAI
+    call ResetAI
     jump RenderMap
     
 label ResetAI:

@@ -3,7 +3,7 @@ init python:
         temp1 = Start - Target
         temp2 = temp1*temp1
         temp3 = temp2**0.5
-        return temp2
+        return temp3
         
     def GetX(Unit, Map):
         for x in range(0, len(Map)):
@@ -23,7 +23,7 @@ init python:
     class AIEnemyInfo(object):
         def __init__(self, XDistance, YDistance, x, y):
             self.XDistance = XDistance
-            self.Ydistance = YDistance
+            self.YDistance = YDistance
             self.TotalDistance = XDistance + YDistance
             self.Xpos = x
             self.Ypos = y
@@ -105,21 +105,21 @@ init python:
         
     def AISetDestination(Unit, Map, StartX, StartY, PathList, AITarget):
         if (StartX > AITarget.Xpos):
-            LeftRight = "Right"
+            LeftRight = "Up"
         else:
-            LeftRight = "Left"
+            LeftRight = "Down"
         if (StartY > AITarget.Ypos):
-            UpDown = "Down"
+            UpDown = "Right"
         else:
-            UpDown = "Up"
+            UpDown = "Left"
         if (LeftRight == "Right"):
-            PerfectFinishX = AITarget.Xpos+1
-        else:
-            PerfectFinishX = AITarget.Xpos-1
-        if (UpDown == "Down"):
             PerfectFinishY = AITarget.Ypos+1
         else:
             PerfectFinishY = AITarget.Ypos-1
+        if (UpDown == "Down"):
+            PerfectFinishX = AITarget.Xpos+1
+        else:
+            PerfectFinishX = AITarget.Xpos-1
         PathDifference = 1000
         StoreDifference = 1000
         BestPath = 0
@@ -141,6 +141,7 @@ init python:
             EndYShort = ReturnPlus(EndY-PerfectFinishY)
             StoreDifference = EndXShort+EndYShort
             if (StoreDifference < PathDifference):
+                PathDifference = StoreDifference
                 BestPath = path
                 
         return PathList[BestPath]
