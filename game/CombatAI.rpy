@@ -5,17 +5,17 @@ init python:
         temp3 = temp2**0.5
         return temp2
         
-    def GetX(Unit):
+    def GetX(Unit, Map):
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map.UnitPresent == Unit.BattleName):
+                if (Map[x][y].UnitPresent == Unit.BattleName):
                     StartX = x
         return StartX
         
-    def GetY(Unit):
+    def GetY(Unit, Map):
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map.UnitPresent == Unit.BattleName):
+                if (Map[x][y].UnitPresent == Unit.BattleName):
                     StartY = y
         return StartY
         
@@ -37,7 +37,7 @@ init python:
         ClosestTarget = 0
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map.UnitPresent == Unit.BattleName):
+                if (Map[x][y].UnitPresent == Unit.BattleName):
                     StartX = x
                     StartY = y
                 else:
@@ -47,11 +47,11 @@ init python:
                 if (Map[x][y].UnitPresent == "Null"):
                     pass
                 else:
-                    if (Map[x][y].UnitPresent.ArmyID == Unit.ArmyID):
+                    if (Map[x][y].UnitID.ArmyID == Unit.ArmyID):
                         pass
                     else:
                         TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
-                        PotentailTarget += 1
+                        PotentialTarget += 1
         for x in range(0, len(TargetList)):
             if (TargetList[x].TotalDistance < ClosestTargetDistance):
                 ClosestTargetDistance = TargetList[x].TotalDistance
@@ -60,15 +60,41 @@ init python:
         
     def AIDecideAction(Unit, Map):
         Action = "Move"
-        ClosestTarget = IDNearestTarget(Unit, Map)
+        StartX = 0
+        StartY = 0
+        PotentialTarget = 0
+        TargetList = []
+        ClosestTargetDistance = 100000
+        ClosestTarget = 0
+        for x in range(0, len(Map)):
+            for y in range(0, len(Map[x])):
+                if (Map[x][y].UnitPresent == Unit.BattleName):
+                    StartX = x
+                    StartY = y
+                else:
+                    pass
+        for x in range(0, len(Map)):
+            for y in range(0, len(Map[x])):
+                if (Map[x][y].UnitPresent == "Null"):
+                    pass
+                else:
+                    if (Map[x][y].UnitID.ArmyID == Unit.ArmyID):
+                        pass
+                    else:
+                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
+                        PotentialTarget += 1
+        for x in range(0, len(TargetList)):
+            if (TargetList[x].TotalDistance < ClosestTargetDistance):
+                ClosestTargetDistance = TargetList[x].TotalDistance
+                ClosestTarget = TargetList[x]
         for x in range(0, len(Unit.BattleSkills)):
-            if (ClosestTargetDistance >= Unit.BattleSkills[x].Range):
+            if (ClosestTargetDistance <= Unit.BattleSkills[x].Range):
                 Action = "Attack"
-            elif (ClosestTargetDistance >= Unit.BattleSkills[x].Range + Unit.MovementCurrent):
+            elif (ClosestTargetDistance <= Unit.BattleSkills[x].Range + Unit.MovementCurrent):
                 if (Action != "Attack"):
                     Action = "Move Attack"
             else:
-                if (Action != "Attack" and Action != "Move Attack"):
+                if (Action != "Attack" or Action != "Move Attack"):
                     Action = "Move"
         return Action
         
@@ -117,6 +143,21 @@ init python:
                 BestPath = path
                 
         return PathList[BestPath]
+        
+    def DetermineFinishX(StartX, StartY, Path):
+        for waypoint in Path.WayPoints:
+            if (waypoint == "N"):
+                StartX -= 1
+            if (waypoint == "S"):
+                StartX += 1
+        return StartX
             
+    def DetermineFinishY(StartX, StartY, Path):
+        for waypoint in Path.WayPoints:
+            if (waypoint == "W"):
+                StartY -= 1
+            if (waypoint == "E"):
+                StartY += 1
+        return StartY
             
         

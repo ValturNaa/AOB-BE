@@ -40,7 +40,7 @@ init python:
     
     def GeneratePaths(MoveSelect, CurrentMap, StartX, StartY):
         PathList = []
-        if (MoveSelect[0].MovementCurrent == 0):
+        if (MoveSelect.MovementCurrent == 0):
             return PathList
         # Establish the first four directions the path could lead
         else:
@@ -73,14 +73,14 @@ init python:
                     W.MoveRequired = CurrentMap[StartX][StartY-1].MoveRequired
                     PathList.append(W)        
                 
-        if (MoveSelect[0].MovementCurrent == 0):
+        if (MoveSelect.MovementCurrent == 0):
             return PathList
-        elif (MoveSelect[0].MovementCurrent == 1):
+        elif (MoveSelect.MovementCurrent == 1):
             return PathList
         # big o'l for loop to generate remaining paths
         else:
             # determine how far this path leads
-            for distance in range(1, MoveSelect[0].MovementCurrent):
+            for distance in range(1, MoveSelect.MovementCurrent):
                 for path in range(0, len(PathList)):
                     # if there is a path that can be extened then this generates a new, extended path
                     if (PathList[path].Explored == False):
@@ -154,7 +154,7 @@ init python:
     
 label PathGenerator:
     python:
-        PathList = GeneratePaths(MoveSelect, CurrentMap, StartX, StartY)
+        PathList = GeneratePaths(MoveSelect[0], CurrentMap, StartX, StartY)
         
 
         for path in range(0, len(PathList)):

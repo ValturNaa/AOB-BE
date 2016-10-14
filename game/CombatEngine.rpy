@@ -610,6 +610,7 @@ label RenderMap:
                     CurrentOverlay[y][x].XPos = FindPos(x, zoomlist[MapZoom][1])
                     CurrentOverlay[y][x].YPos = FindPos(y, zoomlist[MapZoom][1])
     if AtoB == True:
+        "Check for movement and what is [FinalPath[0].WayPoints]"
         show screen CurrentMap
         python:
             renpy.restart_interaction()
@@ -678,6 +679,18 @@ label NextTurn:
     call ResetMoveVariables from _call_ResetMoveVariables_1
     jump AITurn
     
+label check:
+    "Checking - [AIAction]"
+    return
+    
+label check1:
+    "Checking 1 - [AIAction]"
+    return
+    
+label fail:
+    "Fail"
+    return
+    
 label AITurn:
     default AIAction = "None"
     default AITurn = False
@@ -691,11 +704,14 @@ label AITurn:
                     if AIAction == "Move":
                         AITarget = IDNearestTarget(ActiveAIArmies[army].Army[x], CurrentOverlay)
                         MoveSelect.append(ActiveAIArmies[army].Army[x])
-                        StartX = GetX(ActiveAIArmies[army].Army[x])
-                        StartY = GetY(ActiveAIArmies[army].Army[x])
+                        StartX = GetX(ActiveAIArmies[army].Army[x], CurrentOverlay)
+                        StartY = GetY(ActiveAIArmies[army].Army[x], CurrentOverlay)
                         PathList = GeneratePaths(MoveSelect[0], CurrentMap, StartX, StartY)
                         FinalPath = []
                         FinalPath.append(AISetDestination(MoveSelect[0], CurrentMap, StartX, StartY, PathList, AITarget))
+                        FinalDestinationX = DetermineFinishX(StartX, StartY, FinalPath[0])
+                        FinalDestinationY = DetermineFinishY(StartX, StartY, FinalPath[0])
+                        FinalDestination.append(CurrentOverlay[FinalDestinationX][FinalDestinationY])
                         
                         AtoB = True
                         CurrentOverlay[StartX][StartY].UnitPresent = "Null"
@@ -739,17 +755,20 @@ label AITurn:
                                 CurrentMove = MovePathW2
                         renpy.hide_screen("CurrentMap")
                         renpy.call("RenderMap")
+                    
                         
 
                         
                         
-        
+    "Completed AI move"    
+    call ResetAI
     jump RenderMap
     
 label ResetAI:
     python:
         AIAction = "None"
         AITurn = False
+    return
 
 
     
