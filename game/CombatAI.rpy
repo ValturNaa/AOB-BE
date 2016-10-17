@@ -103,23 +103,138 @@ init python:
         temp2 = temp1**0.5
         return temp2
         
+    def PerfectFinish(AITarget, LeftRight, UpDown, Map, XY):
+        PerfectFinishX = AITarget.Xpos
+        PerfectFinishY = AITarget.Ypos
+        if (LeftRight == "Right"):
+            PerfectFinishY += 1
+            if (UpDown == "Down"):
+                if (Map.UnitPresent[PerfectFinishX][PerfectFinishY] != "Null"):
+                    if (Map.UnitPresent[PerfectFinishX+1][PerfectFinishY] != "Null"):
+                        if (Map.UnitPresent[PerfectFinishX-1][PerfectFinishY] != "Null"):
+                            if (Map.UnitPresent[PerfectFinishX][PerfectFinishY-2] != "Null"):
+                                pass
+                            else:
+                                PerfectFinishY -= 2
+                        else:
+                            PerfectFinishX -= 1
+                    else:
+                        PerfectFinishX += 1
+            elif (UpDown == "Up"):
+                if (Map.UnitPresent[PerfectFinishX][PerfectFinishY] != "Null"):
+                    if (Map.UnitPresent[PerfectFinishX-1][PerfectFinishY] != "Null"):
+                        if (Map.UnitPresent[PerfectFinishX+1][PerfectFinishY] != "Null"):
+                            if (Map.UnitPresent[PerfectFinishX][PerfectFinishY-2] != "Null"):
+                                pass
+                            else:
+                                PerfectFinishY -= 2
+                        else:
+                            PerfectFinishX += 1
+                    else:
+                        PerfectFinishX -= 1
+            else:
+                if (Map.UnitPresent[PerfectFinishX][PerfectFinishY] != "Null"):
+                    if (Map.UnitPresent[PerfectFinishX+1][PerfectFinishY] != "Null"):
+                        if (Map.UnitPresent[PerfectFinishX-1][PerfectFinishY] != "Null"):
+                            if (Map.UnitPresent[PerfectFinishX][PerfectFinishY-2] != "Null"):
+                                pass
+                            else:
+                                PerfectFinishY -= 2
+                        else:
+                            PerfectFinishX -= 1
+                    else:
+                        PerfectFinishX += 1
+        if (LeftRight == "Left"): 
+            PerfectFinishY -= 1
+            if (UpDown == "Down"):
+                if (Map.UnitPresent[PerfectFinishX][PerfectFinishY] != "Null"):
+                    if (Map.UnitPresent[PerfectFinishX+1][PerfectFinishY] != "Null"):
+                        if (Map.UnitPresent[PerfectFinishX-1][PerfectFinishY] != "Null"):
+                            if (Map.UnitPresent[PerfectFinishX][PerfectFinishY+2] != "Null"):
+                                pass
+                            else:
+                                PerfectFinishY += 2
+                        else:
+                            PerfectFinishX -= 1
+                    else:
+                        PerfectFinishX += 1
+            elif (UpDown == "Up"):
+                if (Map.UnitPresent[PerfectFinishX][PerfectFinishY] != "Null"):
+                    if (Map.UnitPresent[PerfectFinishX-1][PerfectFinishY] != "Null"):
+                        if (Map.UnitPresent[PerfectFinishX+1][PerfectFinishY] != "Null"):
+                            if (Map.UnitPresent[PerfectFinishX][PerfectFinishY+2] != "Null"):
+                                pass
+                            else:
+                                PerfectFinishY += 2
+                        else:
+                            PerfectFinishX += 1
+                    else:
+                        PerfectFinishX -= 1
+            else:
+                if (Map.UnitPresent[PerfectFinishX][PerfectFinishY] != "Null"):
+                    if (Map.UnitPresent[PerfectFinishX+1][PerfectFinishY] != "Null"):
+                        if (Map.UnitPresent[PerfectFinishX-1][PerfectFinishY] != "Null"):
+                            if (Map.UnitPresent[PerfectFinishX][PerfectFinishY-2] != "Null"):
+                                pass
+                            else:
+                                PerfectFinishY -= 2
+                        else:
+                            PerfectFinishX -= 1
+                    else:
+                        PerfectFinishX += 1
+        else:
+            if (UpDown == "Down"):
+                PerfectFinishX -=1
+                if (Map.UnitPresent[PerfectFinishX][PerfectFinishY] != "Null"):
+                    if (Map.UnitPresent[PerfectFinishX][PerfectFinishY+1] != "Null"):
+                        if (Map.UnitPresent[PerfectFinishX][PerfectFinishY-1] != "Null"):
+                            if (Map.UnitPresent[PerfectFinishX+2][PerfectFinishY] != "Null"):
+                                pass
+                            else:
+                                PerfectFinishX += 2
+                        else:
+                            PerfectFinishY -= 1
+                    else:
+                        PerfectFinishY += 1
+            elif (UpDown == "Up"):
+                PerfectFinishX +=1
+                if (Map.UnitPresent[PerfectFinishX][PerfectFinishY] != "Null"):
+                    if (Map.UnitPresent[PerfectFinishX][PerfectFinishY-1] != "Null"):
+                        if (Map.UnitPresent[PerfectFinishX][PerfectFinishY+1] != "Null"):
+                            if (Map.UnitPresent[PerfectFinishX-2][PerfectFinishY] != "Null"):
+                                pass
+                            else:
+                                PerfectFinishX -= 2
+                        else:
+                            PerfectFinishY += 1
+                    else:
+                        PerfectFinishY -= 1
+        if (XY == "X"):
+            return PerfectFinishX
+        else:
+            return PerfectFinishY
+            
+
+        
+        
     def AISetDestination(Unit, Map, StartX, StartY, PathList, AITarget):
         if (StartX > AITarget.Xpos):
             LeftRight = "Up"
+        elif (StartX == AITarget.Xpos):
+            LeftRight = "Spot on"
         else:
             LeftRight = "Down"
         if (StartY > AITarget.Ypos):
             UpDown = "Right"
+        elif (StartY == AITarget.Ypos):
+            UpDown = "Spot on"
         else:
             UpDown = "Left"
-        if (LeftRight == "Right"):
-            PerfectFinishY = AITarget.Ypos+1
-        else:
-            PerfectFinishY = AITarget.Ypos-1
-        if (UpDown == "Down"):
-            PerfectFinishX = AITarget.Xpos+1
-        else:
-            PerfectFinishX = AITarget.Xpos-1
+            
+        PerfectFinishX = PerfectFinish(AITarget, LeftRight, UpDown, Map, "X")
+        PerfectFinishY = PerfectFinish(AITarget, LeftRight, UpDown, Map, "Y")
+            
+            
         PathDifference = 1000
         StoreDifference = 1000
         BestPath = 0
@@ -284,6 +399,187 @@ init python:
                 for y in range(0, len(CurrentOverlay[x])):
                     if (CurrentOverlay[x][y].UnitPresent == "Move"):
                         CurrentOverlay[x][y].UnitPresent = "Null"
+                        
+    def AIMoveAction():
+        global AITarget
+        global MoveSelect
+        global StartX
+        global StartY
+        global PathList
+        global FinalPath
+        global FinalDestinationX
+        global FinalDestinationY
+        global FinalDestination
+        global AtoB
+        global CurrentOverlay
+        global PickingDestination
+        global CurrentFacing
+        global MoveTick
+        global CurrentMove
+        AITarget = IDNearestTarget(ActiveAIArmies[army].Army[x], CurrentOverlay)
+        MoveSelect.append(ActiveAIArmies[army].Army[x])
+        StartX = GetX(ActiveAIArmies[army].Army[x], CurrentOverlay)
+        StartY = GetY(ActiveAIArmies[army].Army[x], CurrentOverlay)
+        PathList = GeneratePaths(MoveSelect[0], CurrentMap, StartX, StartY)
+        FinalPath = []
+        FinalPath.append(AISetDestination(MoveSelect[0], CurrentMap, StartX, StartY, PathList, AITarget))
+        FinalDestinationX = DetermineFinishX(StartX, StartY, FinalPath[0])
+        FinalDestinationY = DetermineFinishY(StartX, StartY, FinalPath[0])
+        FinalDestination.append(CurrentOverlay[FinalDestinationX][FinalDestinationY])
+                        
+        AtoB = True
+        CurrentOverlay[StartX][StartY].UnitPresent = "Null"
+        CurrentOverlay[StartX][StartY].UnitID = "None"
+        CurrentOverlay[StartX][StartY].UnitIdle = "None"
+        CurrentOverlay[StartX][StartY].UnitHover = "None"
+        CurrentOverlay[StartX][StartY].Visibility = 0
+        MoveSelect[0].MovementCurrent -= FinalPath[0].MoveRequired
+        PickingDestination = False
+        if (FinalPath[0].WayPoints[0] == "N"):
+            CurrentFacing = "N"
+            if (MoveTick == False):
+                MoveTick = True
+                CurrentMove = MovePathN1
+            else:
+                MoveTick = False
+                CurrentMove = MovePathN2
+        elif (FinalPath[0].WayPoints[0] == "E"):
+            CurrentFacing = "E"
+            if (MoveTick == False):
+                MoveTick = True
+                CurrentMove = MovePathE1
+            else:
+                MoveTick = False
+                CurrentMove = MovePathE2
+        elif (FinalPath[0].WayPoints[0] == "S"):
+            CurrentFacing = "S"
+            if (MoveTick == False):
+                MoveTick = True
+                CurrentMove = MovePathS1
+            else:
+                MoveTick = False
+                CurrentMove = MovePathS2
+        elif (FinalPath[0].WayPoints[0] == "W"):
+            CurrentFacing = "W"
+            if (MoveTick == False):
+                MoveTick = True
+                CurrentMove = MovePathW1
+            else:
+                MoveTick = False
+                CurrentMove = MovePathW2
+        ExecuteMovement()
+        
+        
+    ################################## Attack functions ####################################
+        
+        
+    def AIAttackAction(Unit):
+        global StartX
+        global StartY
+        global CurrentOverlay
+        global SelectedAttack
+        global CombatDamage
+        global TargetID
+        global ResolvingDamage
+        for x in range(0, len(CurrentOverlay)):
+            for y in range(0, len(CurrentOverlay[x])):
+                if (CurrentOverlay[x][y].UnitPresent == Unit.BattleName):
+                    StartX = x
+                    StartY = y
+        AISelectAttack(Unit, StartX, StartY)
+        Target = AIAttackTarget(Unit, SelectedAttack[0], StartX, StartY)
+        TargetID = [CurrentOverlay[Target.Xpos][Target.Ypos].UnitID]
+        for x in range(0, len(CurrentOverlay)):
+            for y in range(0, len(CurrentOverlay[x])):
+                if (CurrentOverlay[x][y].UnitPresent == TargetID[0].BattleName):
+                    TargetX = x
+                    TargetY = y 
+        CombatDamage = GetDamage(Unit, SelectedAttack[0], TargetID[0])
+        Unit.Action = False
+        Unit.MovementCurrent = 0
+        ResolvingDamage = True
+        renpy.restart_interaction()
+        
+        renpy.show_screen("PlayerMonsterCard", TargetID[0])
+        renpy.show_screen("EnemyMonsterCard", Unit)
+        renpy.show_screen("DamageScreen", Damage=CombatDamage.FinalDamage, ArmyID=TargetID[0].ArmyID)
+        while CombatDamage.FinalDamage > 0:
+            TargetID[0].CurrentMorale -= 1
+            CombatDamage.FinalDamage -= 1
+            renpy.pause(0.05)
+        if TargetID[0].CurrentMorale <= 0:
+            renpy.hide("EnemyMonsterCard")
+            TargetID[0].Routed = True
+            CurrentOverlay[TargetX][TargetY].UnitPresent="Null"
+            CurrentOverlay[TargetX][TargetY].UnitIdle="None"
+            CurrentOverlay[TargetX][TargetY].UnitHover="None"
+            CurrentOverlay[TargetX][TargetY].UnitID="None"
+            CurrentOverlay[TargetX][TargetY].Visibility = 0
+        renpy.hide_screen("DamageScreen")
+        renpy.pause(1.5)
+        renpy.hide_screen("PlayerMonsterCard")
+        renpy.hide_screen("EnemyMonsterCard")
+        ResetMoveVariables()
+        renpy.restart_interaction()
+        
+        
+        
+        
+    
+    def AISelectAttack(Unit, StartX, StartY):
+        global SelectedAttack
+        SameList = ReturnSameList(Unit.BattleSkills)
+        for x in range(0, len(Unit.BattleSkills)):
+            Temp = IsTarget(Unit, Unit.BattleSkills[x], StartX, StartY)
+            if (Temp == "False"):
+                SameList[x] = "Nope"
+        RandomAttack = renpy.random.randint(0, len(SameList)-1)
+        while SameList[RandomAttack] == "Nope":
+            RandomAttack = renpy.random.randint(0, len(SameList)-1)
+        SelectedAttack = [Unit.BattleSkills[RandomAttack]]
+        
+            
+    def IsTarget(Unit, Attack, StartX, StartY):
+        is_target = False
+        MaxRangeX = StartX + Attack.Range
+        MinRangeX = StartX - Attack.Range
+        MaxRangeY = StartY + Attack.Range
+        MinRangeY = StartY - Attack.Range
+        for x in range(MinRangeX, MaxRangeX):
+            for y in range(MinRangeY, MaxRangeY):
+                if (CurrentOverlay[x][y].UnitPresent != "Null"):
+                    if (CurrentOverlay[x][y].UnitID.ArmyID != Unit.ArmyID):
+                        is_target = True
+        return is_target
+                
+    def ReturnSameList(List):
+        temp = []
+        for x in range(0, len(List)):
+            temp.append(List[x])
+        return temp
+        
+    
+    def AIAttackTarget(Unit, Attack, StartX, StartY):
+        global CurrentOverlay
+        target_list = []
+
+        MaxRangeX = StartX + Attack.Range
+        MinRangeX = StartX - Attack.Range
+        MaxRangeY = StartY + Attack.Range
+        MinRangeY = StartY - Attack.Range
+        for x in range(MinRangeX, MaxRangeX):
+            for y in range(MinRangeY, MaxRangeY):
+                if (CurrentOverlay[x][y].UnitPresent != "Null"):
+                    if (CurrentOverlay[x][y].UnitID.ArmyID != Unit.ArmyID):
+                        target_list.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
+        target_ID = 0
+        target_distance = 1000
+        for x in range(0, len(target_list)):
+            if (target_list[x].TotalDistance < target_distance):
+                target_ID = x
+                target_distance = target_list[x].TotalDistance
+        return target_list[target_ID]
+        
 
         
         
@@ -297,7 +593,9 @@ init python:
         global SelectedAttack
         global ResolvingDamage
         global CurrentOverlay
-            
+        
+        StartX = 0
+        StartY = 0
         TempUnitID = []
         RangeCalculation = False
         TargetX = 0

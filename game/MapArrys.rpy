@@ -290,7 +290,8 @@ screen CurrentMap:
             for x in range(0, len(SelectedBattleSkills)):
                 if MoveSelect[0].Action == True:
                     imagebutton idle SelectedBattleSkills[x].WeaponIdle hover SelectedBattleSkills[x].WeaponHover right_padding 23 hovered SetVariable("EdgeScroll", False) unhovered SetVariable("EdgeScroll", True) action SetVariable("SelectedAttack", [SelectedBattleSkills[x]]), Jump("AttackRange")
-                
+                else:
+                    imagebutton idle SelectedBattleSkills[x].WeaponIdle hover SelectedBattleSkills[x].WeaponIdle right_padding 23 hovered SetVariable("EdgeScroll", False) unhovered SetVariable("EdgeScroll", True) action Null()
 
     
     if DeploymentStart == True:

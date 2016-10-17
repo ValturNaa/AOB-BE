@@ -430,7 +430,7 @@ init 1 python:
             # integer, stands for charm resist bonus. bonus Applied to Charm resistance 
             self.CRB = CRB
             # toggle to kill monster
-            self.Routed = True
+            self.Routed = False
             # has the unit attacked
             self.Action = True
             # Gender
@@ -647,68 +647,22 @@ label AITurn:
     python:
         for army in range(0, len(ActiveAIArmies)):
             for x in range(0, len(ActiveAIArmies[army].Army)):
-                if ActiveAIArmies[army].Army[x].Routed == True:
+                if ActiveAIArmies[army].Army[x].Routed == False:
                     AIAction = AIDecideAction(ActiveAIArmies[army].Army[x], CurrentOverlay)
                     if AIAction == "Move":
-                        AITarget = IDNearestTarget(ActiveAIArmies[army].Army[x], CurrentOverlay)
-                        MoveSelect.append(ActiveAIArmies[army].Army[x])
-                        StartX = GetX(ActiveAIArmies[army].Army[x], CurrentOverlay)
-                        StartY = GetY(ActiveAIArmies[army].Army[x], CurrentOverlay)
-                        PathList = GeneratePaths(MoveSelect[0], CurrentMap, StartX, StartY)
-                        FinalPath = []
-                        FinalPath.append(AISetDestination(MoveSelect[0], CurrentMap, StartX, StartY, PathList, AITarget))
-                        FinalDestinationX = DetermineFinishX(StartX, StartY, FinalPath[0])
-                        FinalDestinationY = DetermineFinishY(StartX, StartY, FinalPath[0])
-                        FinalDestination.append(CurrentOverlay[FinalDestinationX][FinalDestinationY])
-                        # renpy.call("showpath")
-                        
-                        AtoB = True
-                        CurrentOverlay[StartX][StartY].UnitPresent = "Null"
-                        CurrentOverlay[StartX][StartY].UnitID = "None"
-                        CurrentOverlay[StartX][StartY].UnitIdle = "None"
-                        CurrentOverlay[StartX][StartY].UnitHover = "None"
-                        CurrentOverlay[StartX][StartY].Visibility = 0
-                        MoveSelect[0].MovementCurrent -= FinalPath[0].MoveRequired
-                        PickingDestination = False
-                        if FinalPath[0].WayPoints[0] == "N":
-                            CurrentFacing = "N"
-                            if MoveTick == False:
-                                MoveTick = True
-                                CurrentMove = MovePathN1
-                            else:
-                                MoveTick = False
-                                CurrentMove = MovePathN2
-                        elif FinalPath[0].WayPoints[0] == "E":
-                            CurrentFacing = "E"
-                            if MoveTick == False:
-                                MoveTick = True
-                                CurrentMove = MovePathE1
-                            else:
-                                MoveTick = False
-                                CurrentMove = MovePathE2
-                        elif FinalPath[0].WayPoints[0] == "S":
-                            CurrentFacing = "S"
-                            if MoveTick == False:
-                                MoveTick = True
-                                CurrentMove = MovePathS1
-                            else:
-                                MoveTick = False
-                                CurrentMove = MovePathS2
-                        elif FinalPath[0].WayPoints[0] == "W":
-                            CurrentFacing = "W"
-                            if MoveTick == False:
-                                MoveTick = True
-                                CurrentMove = MovePathW1
-                            else:
-                                MoveTick = False
-                                CurrentMove = MovePathW2
-                        ExecuteMovement()
+                        AIMoveAction()
+                    elif AIAction == "Attack":
+                        AIAttackAction(ActiveAIArmies[army].Army[x])
+                    elif AIAction == "Move Attack":
+                        AIMoveAction()
+                        AIAttackAction(ActiveAIArmies[army].Army[x])
+                    ResetMoveVariables()
                     
                         
 
                         
                         
-    "Completed AI move"    
+    
     call ResetAI from _call_ResetAI
     jump RenderMap
     
@@ -718,8 +672,9 @@ label ResetAI:
         AITurn = False
         for army in range(0, len(ActiveAIArmies)):
             for x in range(0, len(ActiveAIArmies[army].Army)):
-                if ActiveAIArmies[army].Army[x].Routed == True:
+                if ActiveAIArmies[army].Army[x].Routed == False:
                     ActiveAIArmies[army].Army[x].MovementCurrent = ActiveAIArmies[army].Army[x].MovementMax
+                    ActiveAIArmies[army].Army[x].Action = True
     return
 
 

@@ -253,28 +253,7 @@ label ResetMoveVariables:
     hide screen PlayerMonsterCard
     hide screen EnemyMonsterCard
     python:
-        PathList = []
-        StartX = 0
-        StartY = 0
-        MoveSelect = []
-        TempPath = []
-        TempStartX = 0
-        TempStartY = 0
-        PickingDestination = False
-        FinalDestination = []
-        FinalDestinationX = 0
-        FinalDestinationY = 0
-        FinalPathBuffer = []
-        FinalPath = []
-        AtoB = False
-        CurrentFacing = "S"
-        CurrentMove = "Starter"
-        OwnMonsterCard = False
-        MonsterCardStats = []
-        for x in range(0, len(CurrentOverlay)):
-            for y in range(0, len(CurrentOverlay[x])):
-                CurrentOverlay[x][y].RouteStore = []
-    call ResetAttack from _call_ResetAttack
+        ResetMoveVariables()
     if MoveCancel == True:
         $ MoveCancel = False
         python:

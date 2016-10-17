@@ -66,29 +66,11 @@ init python:
         ReturnedAttack.FinalDamage = int(CompleteDamage)
         
         return ReturnedAttack
-        
+    
 
 
-label ResetAttack:
-    python:
-        TempUnitID = []
-        RangeCalculation = False
-        TargetX = 0
-        TargetY = 0
-        TargetID = []
-        SelectedAttack = []
-        ResolvingDamage = False
-        for x in range(0, len(CurrentOverlay)):
-            for y in range(0, len(CurrentOverlay[x])):
-                CurrentOverlay[x][y].RangeOverlay = "None"
-                CurrentOverlay[x][y].FireNorth = True
-                CurrentOverlay[x][y].FireSouth = True
-                CurrentOverlay[x][y].FireEast = True
-                CurrentOverlay[x][y].FireWest = True
-                CurrentOverlay[x][y].RangeCheck = False
-                CurrentOverlay[x][y].CheckAround = False
-                CurrentOverlay[x][y].CheckDelay = False
-    return
+
+
     
 label AttackRange:
     python:
