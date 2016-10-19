@@ -58,6 +58,7 @@ init python:
                 ClosestTarget = x
         return TargetList[ClosestTarget]
         
+        
     def AIDecideAction(Unit, Map):
         Action = "Move"
         StartX = 0
@@ -87,15 +88,28 @@ init python:
             if (TargetList[x].TotalDistance < ClosestTargetDistance):
                 ClosestTargetDistance = TargetList[x].TotalDistance
                 ClosestTarget = TargetList[x]
-        for x in range(0, len(Unit.BattleSkills)):
-            if (ClosestTargetDistance <= Unit.BattleSkills[x].Range):
+        Action = "Move"
+        for x in Unit.BattleSkills:
+            tempaction = IsTarget(Unit, x, StartX, StartY, Indirect=x.IndirectFire)
+            if (tempaction == True):
                 Action = "Attack"
-            elif (ClosestTargetDistance <= Unit.BattleSkills[x].Range + Unit.MovementCurrent):
-                if (Action != "Attack"):
-                    Action = "Move Attack"
             else:
-                if (Action != "Attack" or Action != "Move Attack"):
-                    Action = "Move"
+                PredictPathList = GeneratePaths(Unit, StartX, StartY)
+                PredictFinalPath = []
+                PredictFinalPath.append(AISetDestination(Unit, Map, StartX, StartY, PredictPathList, ClosestTarget))
+                for y in range(0, len(PredictFinalPath[0].WayPoints)):
+                    if (PredictFinalPath[0].WayPoints[y] == "N"):
+                        StartX -= 1
+                    if (PredictFinalPath[0].WayPoints[y] == "E"):
+                        StartY += 1
+                    if (PredictFinalPath[0].WayPoints[y] == "S"):
+                        StartX += 1
+                    if (PredictFinalPath[0].WayPoints[y] == "W"):
+                        StartY -= 1
+                tempaction = IsTarget(Unit, x, StartX, StartY, Indirect=x.IndirectFire)
+                if (tempaction == True):
+                    if (Action != "Attack"):
+                        Action = "Move Attack"
         return Action
         
     def ReturnPlus(x):
@@ -420,7 +434,7 @@ init python:
         MoveSelect.append(ActiveAIArmies[army].Army[x])
         StartX = GetX(ActiveAIArmies[army].Army[x], CurrentOverlay)
         StartY = GetY(ActiveAIArmies[army].Army[x], CurrentOverlay)
-        PathList = GeneratePaths(MoveSelect[0], CurrentMap, StartX, StartY)
+        PathList = GeneratePaths(MoveSelect[0], StartX, StartY)
         FinalPath = []
         FinalPath.append(AISetDestination(MoveSelect[0], CurrentMap, StartX, StartY, PathList, AITarget))
         FinalDestinationX = DetermineFinishX(StartX, StartY, FinalPath[0])
@@ -539,17 +553,141 @@ init python:
         SelectedAttack = [Unit.BattleSkills[RandomAttack]]
         
             
-    def IsTarget(Unit, Attack, StartX, StartY):
+    def IsTarget(Unit, Attack, StartX, StartY, Indirect=False):
+        global CurrentOverlay
         is_target = False
-        MaxRangeX = StartX + Attack.Range
-        MinRangeX = StartX - Attack.Range
-        MaxRangeY = StartY + Attack.Range
-        MinRangeY = StartY - Attack.Range
-        for x in range(MinRangeX, MaxRangeX):
-            for y in range(MinRangeY, MaxRangeY):
-                if (CurrentOverlay[x][y].UnitPresent != "Null"):
-                    if (CurrentOverlay[x][y].UnitID.ArmyID != Unit.ArmyID):
+        if (Indirect == True):
+            MaxRangeX = StartX + Attack.Range
+            MinRangeX = StartX - Attack.Range
+            MaxRangeY = StartY + Attack.Range
+            MinRangeY = StartY - Attack.Range
+            for x in range(MinRangeX, MaxRangeX):
+                for y in range(MinRangeY, MaxRangeY):
+                    if (CurrentOverlay[x][y].UnitPresent != "Null"):
+                        if (CurrentOverlay[x][y].UnitID.ArmyID != Unit.ArmyID):
+                            is_target = True
+        else:
+            # Shooting north
+            if (CurrentMap[StartX][StartY].VisibleN == True):
+                if (CurrentOverlay[StartX-1][StartY].UnitID != "None"):
+                    if (CurrentOverlay[StartX-1][StartY].UnitID.ArmyID != Unit.ArmyID):
                         is_target = True
+                    CurrentOverlay[StartX-1][StartY].FireNorth = False
+                CurrentOverlay[StartX-1][StartY].RangeCheck = True
+                CurrentOverlay[StartX-1][StartY].CheckDelay = True
+                CurrentOverlay[StartX-1][StartY].FireSouth = False
+            # Shooting east
+            if (CurrentMap[StartX][StartY].VisibleE == True):
+                if (CurrentOverlay[StartX][StartY+1].UnitID != "None"):
+                    if (CurrentOverlay[StartX][StartY+1].UnitID.ArmyID != Unit.ArmyID):
+                        is_target = True
+                    CurrentOverlay[StartX][StartY+1].FireEast = False
+                CurrentOverlay[StartX][StartY+1].RangeCheck = True
+                CurrentOverlay[StartX][StartY+1].CheckDelay = True
+                CurrentOverlay[StartX][StartY+1].FireWest = False
+            # Shooting south
+            if (CurrentMap[StartX][StartY].VisibleS == True):
+                if (CurrentOverlay[StartX+1][StartY].UnitID != "None"):
+                    if (CurrentOverlay[StartX+1][StartY].UnitID.ArmyID != Unit.ArmyID):
+                        is_target = True
+                    CurrentOverlay[StartX+1][StartY].FireSouth = False
+                CurrentOverlay[StartX+1][StartY].RangeCheck = True
+                CurrentOverlay[StartX+1][StartY].CheckDelay = True
+                CurrentOverlay[StartX+1][StartY].FireNorth = False
+            # Shooting west
+            if (CurrentMap[StartX][StartY].VisibleW == True):
+                if (CurrentOverlay[StartX][StartY-1].UnitID != "None"):
+                    if (CurrentOverlay[StartX][StartY-1].UnitID.ArmyID != Unit.ArmyID):
+                        is_target = True
+                    CurrentOverlay[StartX][StartY-1].FireWest = False
+                CurrentOverlay[StartX][StartY-1].RangeCheck = True
+                CurrentOverlay[StartX][StartY-1].CheckDelay = True
+                CurrentOverlay[StartX][StartY-1].FireEast = False
+                
+            for ranged in range(1, Attack.Range):
+                for x in range(0, len(CurrentOverlay)):
+                    for y in range(0, len(CurrentOverlay[x])):
+                        if (CurrentOverlay[x][y].RangeCheck == True):
+                            if (CurrentOverlay[x][y].CheckAround == False):
+                                if (CurrentOverlay[x][y].CheckDelay == True):
+                                    if (CurrentMap[x][y].VisibleN == True):
+                                        if (CurrentOverlay[x][y].FireNorth == True):
+                                            if (CurrentOverlay[x-1][y].UnitID != "None"):
+                                                if (CurrentOverlay[x-1][y].UnitID.ArmyID != Unit.ArmyID):
+                                                    is_target = True
+                                                CurrentOverlay[x-1][y].FireNorth = False
+                                            CurrentOverlay[x-1][y].RangeCheck = True
+                                            CurrentOverlay[x-1][y].FireSouth = False
+                                            if (CurrentOverlay[x+1][y+1].FireEast == False):
+                                                if (CurrentOverlay[x+1][y+1].UnitID != "None"):
+                                                    CurrentOverlay[x][y+1].FireEast = False
+                                            if (CurrentOverlay[x+1][y-1].FireWest == False):
+                                                if (CurrentOverlay[x+1][y-1].UnitID != "None"):
+                                                    CurrentOverlay[x][y-1].FireWest = False
+                                    if (CurrentMap[x][y].VisibleE == True):
+                                        if (CurrentOverlay[x][y].FireEast == True):
+                                            if (CurrentOverlay[x][y+1].UnitID != "None"):
+                                                if (CurrentOverlay[x][y+1].UnitID.ArmyID != Unit.ArmyID):
+                                                    is_target = True
+                                                CurrentOverlay[x][y+1].FireEast = False
+                                            CurrentOverlay[x][y+1].RangeCheck = True
+                                            CurrentOverlay[x][y+1].FireWest = False
+                                            if (CurrentOverlay[x-1][y-1].FireNorth == False):
+                                                if (CurrentOverlay[x-1][y-1].UnitID != "None"):
+                                                    CurrentOverlay[x-1][y].FireNorth = False
+                                            if (CurrentOverlay[x+1][y-1].FireSouth == False):
+                                                if (CurrentOverlay[x+1][y-1].UnitID != "None"):
+                                                    CurrentOverlay[x+1][y].FireSouth = False
+                                    if (CurrentMap[x][y].VisibleS == True):
+                                        if (CurrentOverlay[x][y].FireSouth == True):
+                                            if (CurrentOverlay[x+1][y].UnitID != "None"):
+                                                if (CurrentOverlay[x+1][y].UnitID.ArmyID != Unit.ArmyID):
+                                                    is_target = True
+                                                CurrentOverlay[x+1][y].FireSouth = False
+                                            CurrentOverlay[x+1][y].RangeCheck = True
+                                            CurrentOverlay[x+1][y].FireNorth = False
+                                            if (CurrentOverlay[x-1][y+1].FireEast == False):
+                                                if (CurrentOverlay[x-1][y+1].UnitID != "None"):
+                                                    CurrentOverlay[x][y+1].FireEast = False
+                                            if (CurrentOverlay[x-1][y-1].FireWest == False):
+                                                if (CurrentOverlay[x-1][y-1].UnitID != "None"):
+                                                    CurrentOverlay[x][y-1].FireWest = False
+                                    if (CurrentMap[x][y].VisibleW == True):
+                                        if (CurrentOverlay[x][y].FireWest == True):
+                                            if (CurrentOverlay[x][y-1].UnitID != "None"):
+                                                if (CurrentOverlay[x][y-1].UnitID.ArmyID != Unit.ArmyID):
+                                                    is_target = True
+                                                CurrentOverlay[x][y-1].FireWest = False
+                                            CurrentOverlay[x][y-1].RangeCheck = True
+                                            CurrentOverlay[x][y-1].FireEast = False
+                                            if (CurrentOverlay[x-1][y+1].FireNorth == False):
+                                                if (CurrentOverlay[x-1][y+1].UnitID != "None"):
+                                                    CurrentOverlay[x-1][y].FireNorth = False
+                                            if (CurrentOverlay[x+1][y+1].FireSouth == False):
+                                                if (CurrentOverlay[x+1][y+1].UnitID != "None"):
+                                                    CurrentOverlay[x+1][y].FireSouth = False
+                            
+                                    CurrentOverlay[x][y].CheckAround = True        
+                                    
+                for x in range(0, len(CurrentOverlay)):
+                    for y in range(0, len(CurrentOverlay[x])):
+                        if (CurrentOverlay[x][y].RangeCheck == True):
+                            if (CurrentOverlay[x][y].CheckAround == True):
+                                CurrentOverlay[x][y].CheckDelay = False
+                            else:
+                                CurrentOverlay[x][y].CheckDelay = True
+        
+        for x in range(0, len(CurrentOverlay)):
+            for y in range(0, len(CurrentOverlay[x])):
+                CurrentOverlay[x][y].FireNorth = True
+                CurrentOverlay[x][y].FireEast = True
+                CurrentOverlay[x][y].FireSouth = True
+                CurrentOverlay[x][y].FireWest = True
+                CurrentOverlay[x][y].RangeCheck = False
+                CurrentOverlay[x][y].CheckAround = False
+                CurrentOverlay[x][y].CheckDelay = False
+                
+        
         return is_target
                 
     def ReturnSameList(List):
@@ -562,7 +700,8 @@ init python:
     def AIAttackTarget(Unit, Attack, StartX, StartY):
         global CurrentOverlay
         target_list = []
-
+        
+        # needs upgrading. might use a beefed up version od istarget
         MaxRangeX = StartX + Attack.Range
         MinRangeX = StartX - Attack.Range
         MaxRangeY = StartY + Attack.Range

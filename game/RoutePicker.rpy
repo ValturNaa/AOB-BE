@@ -38,7 +38,7 @@ init python:
     BugTestPath = "None"
     BugTestList = []
     
-    def GeneratePaths(MoveSelect, CurrentMap, StartX, StartY):
+    def GeneratePaths(MoveSelect, StartX, StartY):
         PathList = []
         if (MoveSelect.MovementCurrent == 0):
             return PathList
@@ -147,14 +147,14 @@ init python:
                                 PathList.append(TempPath[0])
                         PathList[path].Explored = True
         
-            return PathList 
+        return PathList 
     
     
     
     
 label PathGenerator:
     python:
-        PathList = GeneratePaths(MoveSelect[0], CurrentMap, StartX, StartY)
+        PathList = GeneratePaths(MoveSelect[0], StartX, StartY)
         
 
         for path in range(0, len(PathList)):
