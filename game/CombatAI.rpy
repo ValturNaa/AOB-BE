@@ -553,9 +553,10 @@ init python:
         SelectedAttack = [Unit.BattleSkills[RandomAttack]]
         
             
-    def IsTarget(Unit, Attack, StartX, StartY, Indirect=False):
+    def IsTarget(Unit, Attack, StartX, StartY, Indirect=False, ReturnList=False):
         global CurrentOverlay
         is_target = False
+        TargetList = []
         if (Indirect == True):
             MaxRangeX = StartX + Attack.Range
             MinRangeX = StartX - Attack.Range
@@ -565,12 +566,14 @@ init python:
                 for y in range(MinRangeY, MaxRangeY):
                     if (CurrentOverlay[x][y].UnitPresent != "Null"):
                         if (CurrentOverlay[x][y].UnitID.ArmyID != Unit.ArmyID):
+                            TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
                             is_target = True
         else:
             # Shooting north
             if (CurrentMap[StartX][StartY].VisibleN == True):
                 if (CurrentOverlay[StartX-1][StartY].UnitID != "None"):
                     if (CurrentOverlay[StartX-1][StartY].UnitID.ArmyID != Unit.ArmyID):
+                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX-1), ReturnPositive(StartY, StartY), StartX-1, StartY))
                         is_target = True
                     CurrentOverlay[StartX-1][StartY].FireNorth = False
                 CurrentOverlay[StartX-1][StartY].RangeCheck = True
@@ -580,6 +583,7 @@ init python:
             if (CurrentMap[StartX][StartY].VisibleE == True):
                 if (CurrentOverlay[StartX][StartY+1].UnitID != "None"):
                     if (CurrentOverlay[StartX][StartY+1].UnitID.ArmyID != Unit.ArmyID):
+                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX), ReturnPositive(StartY, StartY+1), StartX, StartY+1))
                         is_target = True
                     CurrentOverlay[StartX][StartY+1].FireEast = False
                 CurrentOverlay[StartX][StartY+1].RangeCheck = True
@@ -589,6 +593,7 @@ init python:
             if (CurrentMap[StartX][StartY].VisibleS == True):
                 if (CurrentOverlay[StartX+1][StartY].UnitID != "None"):
                     if (CurrentOverlay[StartX+1][StartY].UnitID.ArmyID != Unit.ArmyID):
+                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX+1), ReturnPositive(StartY, StartY), StartX+1, StartY))
                         is_target = True
                     CurrentOverlay[StartX+1][StartY].FireSouth = False
                 CurrentOverlay[StartX+1][StartY].RangeCheck = True
@@ -598,6 +603,7 @@ init python:
             if (CurrentMap[StartX][StartY].VisibleW == True):
                 if (CurrentOverlay[StartX][StartY-1].UnitID != "None"):
                     if (CurrentOverlay[StartX][StartY-1].UnitID.ArmyID != Unit.ArmyID):
+                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX), ReturnPositive(StartY, StartY-1), StartX, StartY-1))
                         is_target = True
                     CurrentOverlay[StartX][StartY-1].FireWest = False
                 CurrentOverlay[StartX][StartY-1].RangeCheck = True
@@ -614,6 +620,7 @@ init python:
                                         if (CurrentOverlay[x][y].FireNorth == True):
                                             if (CurrentOverlay[x-1][y].UnitID != "None"):
                                                 if (CurrentOverlay[x-1][y].UnitID.ArmyID != Unit.ArmyID):
+                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
                                                     is_target = True
                                                 CurrentOverlay[x-1][y].FireNorth = False
                                             CurrentOverlay[x-1][y].RangeCheck = True
@@ -628,6 +635,7 @@ init python:
                                         if (CurrentOverlay[x][y].FireEast == True):
                                             if (CurrentOverlay[x][y+1].UnitID != "None"):
                                                 if (CurrentOverlay[x][y+1].UnitID.ArmyID != Unit.ArmyID):
+                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
                                                     is_target = True
                                                 CurrentOverlay[x][y+1].FireEast = False
                                             CurrentOverlay[x][y+1].RangeCheck = True
@@ -642,6 +650,7 @@ init python:
                                         if (CurrentOverlay[x][y].FireSouth == True):
                                             if (CurrentOverlay[x+1][y].UnitID != "None"):
                                                 if (CurrentOverlay[x+1][y].UnitID.ArmyID != Unit.ArmyID):
+                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
                                                     is_target = True
                                                 CurrentOverlay[x+1][y].FireSouth = False
                                             CurrentOverlay[x+1][y].RangeCheck = True
@@ -656,6 +665,7 @@ init python:
                                         if (CurrentOverlay[x][y].FireWest == True):
                                             if (CurrentOverlay[x][y-1].UnitID != "None"):
                                                 if (CurrentOverlay[x][y-1].UnitID.ArmyID != Unit.ArmyID):
+                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
                                                     is_target = True
                                                 CurrentOverlay[x][y-1].FireWest = False
                                             CurrentOverlay[x][y-1].RangeCheck = True
@@ -686,9 +696,10 @@ init python:
                 CurrentOverlay[x][y].RangeCheck = False
                 CurrentOverlay[x][y].CheckAround = False
                 CurrentOverlay[x][y].CheckDelay = False
-                
-        
-        return is_target
+        if (ReturnList == False):
+            return is_target
+        else:
+            return TargetList
                 
     def ReturnSameList(List):
         temp = []
@@ -699,18 +710,8 @@ init python:
     
     def AIAttackTarget(Unit, Attack, StartX, StartY):
         global CurrentOverlay
-        target_list = []
+        target_list = IsTarget(Unit, Attack, StartX, StartY, Indirect=Attack.IndirectFire, ReturnList=True)
         
-        # needs upgrading. might use a beefed up version od istarget
-        MaxRangeX = StartX + Attack.Range
-        MinRangeX = StartX - Attack.Range
-        MaxRangeY = StartY + Attack.Range
-        MinRangeY = StartY - Attack.Range
-        for x in range(MinRangeX, MaxRangeX):
-            for y in range(MinRangeY, MaxRangeY):
-                if (CurrentOverlay[x][y].UnitPresent != "Null"):
-                    if (CurrentOverlay[x][y].UnitID.ArmyID != Unit.ArmyID):
-                        target_list.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
         target_ID = 0
         target_distance = 1000
         for x in range(0, len(target_list)):

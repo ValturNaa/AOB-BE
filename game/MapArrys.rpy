@@ -301,7 +301,8 @@ screen CurrentMap:
             add "FinishDeploymentAlpha" xpos 0.44 ypos 0.84
     if DeploymentStart == False:
         if AtoB == False:
-            imagebutton idle "NextTurnIdle" hover "NextTurnHover" xpos 650 ypos 0 action Jump("NextTurn")
+            if AITurn == False:
+                imagebutton idle "NextTurnIdle" hover "NextTurnHover" xpos 650 ypos 0 action Jump("NextTurn")
 
 
 
