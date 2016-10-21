@@ -1,4 +1,38 @@
 init python:
+    
+    def CheckWin():
+        checkdeathtotal = len(PlayerArmy)
+        checkdeath = 0
+        WinLose = "No"
+        PlayerArmyDead = False
+        AllEnemyDead = False
+        for x in PlayerArmy.Army:
+            if (x.Routed == True):
+                checkdeath += 1
+        if (checkdeath == checkdeathtotal):
+            PlayerArmyDead = True
+            
+        checkdeathtotal = 0
+        for n in ActiveAIArmies:
+            checkdeathtotal += len(n.Army)
+        checkdeath = 0
+        
+        for y in ActiveAIArmies:
+            for z in y.Army:
+                if (y.z.Routed == True):
+                    checkdeath += 1
+        if (checkdeath == checkdeathtotal):
+            AllEnemyDead = True
+            
+        if (PlayerArmyDead and AllEnemyDead == True):
+            WinLose = "Draw"
+        elif (PlayerArmyDead == True):
+            WinLose = "Lose"
+        elif (AllEnemyDead == True):
+            WinLose = "Win"
+            
+        return WinLose
+    
     def ReturnPositive(Start, Target):
         temp1 = Start - Target
         temp2 = temp1*temp1
@@ -380,7 +414,6 @@ init python:
         global OwnMonsterCard
         global MonsterCardStats
         global CurrentOverlay
-        global MoveCancel
         
         renpy.hide_screen("PlayerMonsterCard")
         renpy.hide_screen("EnemyMonsterCard")
@@ -408,7 +441,6 @@ init python:
                 CurrentOverlay[x][y].RouteStore = []
         ResetAttack()
         if (MoveCancel == True):
-            MoveCancel = False
             for x in range(0, len(CurrentOverlay)):
                 for y in range(0, len(CurrentOverlay[x])):
                     if (CurrentOverlay[x][y].UnitPresent == "Move"):
