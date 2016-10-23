@@ -1,36 +1,25 @@
 init python:
     
     def CheckWin():
-        checkdeathtotal = len(PlayerArmy)
-        checkdeath = 0
         WinLose = "No"
-        PlayerArmyDead = False
-        AllEnemyDead = False
+        Win = True
+        Lose = True
         for x in PlayerArmy.Army:
-            if (x.Routed == True):
-                checkdeath += 1
-        if (checkdeath == checkdeathtotal):
-            PlayerArmyDead = True
+            if (x.Routed == False):
+                Lose = False
             
-        checkdeathtotal = 0
-        for n in ActiveAIArmies:
-            checkdeathtotal += len(n.Army)
-        checkdeath = 0
         
         for y in ActiveAIArmies:
-            for z in y.Army:
-                if (y.z.Routed == True):
-                    checkdeath += 1
-        if (checkdeath == checkdeathtotal):
-            AllEnemyDead = True
-            
-        if (PlayerArmyDead and AllEnemyDead == True):
+            for z in range(0, len(y.Army)):
+                if (y.Army[z].Routed == False):
+                    Win = False
+
+        if (Win and Lose == True):
             WinLose = "Draw"
-        elif (PlayerArmyDead == True):
+        elif (Lose == True):
             WinLose = "Lose"
-        elif (AllEnemyDead == True):
+        elif (Win == True):
             WinLose = "Win"
-            
         return WinLose
     
     def ReturnPositive(Start, Target):

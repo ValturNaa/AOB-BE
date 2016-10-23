@@ -308,6 +308,7 @@ init 1 python:
             self.MoveRequired = MoveRequired
             # used for absolute edges
             self.Void = Void
+
             
     
     # One instance created for each tile on the battlefield, keeps track of who is where.
@@ -589,6 +590,14 @@ label SetPos:
     
     
 label RenderMap:
+    default WinCheck = "No"
+    $ WinCheck = CheckWin()
+    if WinCheck == "Win":
+        jump WinLabel
+    elif WinCheck == "Lose":
+        jump LoseLabel
+    elif WinCheck == "Draw":
+        jump DrawLabel
     if UnitPlaced == True:
         $ ActiveDeployment = []
         $ UnitPlaced = False
@@ -657,6 +666,13 @@ label AITurn:
                         AIMoveAction()
                         AIAttackAction(ActiveAIArmies[army].Army[x])
                     ResetMoveVariables()
+                    WinCheck = CheckWin()
+                    if WinCheck == "Win":
+                        renpy.jump("WinLabel")
+                    elif WinCheck == "Lose":
+                        renpy.jump("LoseLabel")
+                    elif WinCheck == "Draw":
+                        renpy.jump("DrawLabel")
                     
                         
 
@@ -676,6 +692,21 @@ label ResetAI:
                     ActiveAIArmies[army].Army[x].MovementCurrent = ActiveAIArmies[army].Army[x].MovementMax
                     ActiveAIArmies[army].Army[x].Action = True
     return
+    
+label WinLabel:
+    "You Win"
+    python:
+        MainMenu()
+    
+label LoseLabel:
+    "You Lose"
+    python:
+        MainMenu()
+    
+label DrawLabel:
+    "You draw"
+    python:
+        MainMenu()
 
 
     

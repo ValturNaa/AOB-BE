@@ -2,8 +2,8 @@ init 2 python:
     # any xpos is always across(left to right), any ypos down
     
     # Tile classes instantiated here
-    blank = tile("images/Tiles/blankTile.png", Void=True)
-    grass = tile("images/Tiles/grassTile.png")
+    # blank = tile("images/Tiles/blankTile.png", Void=True)
+    # grass = tile("images/Tiles/grassTile.png")
     grassEdgeN = tile("images/Tiles/grassTile.png", PassN=False, VisibleN=False)
     grassEdgeE = tile("images/Tiles/grassTile.png", PassE=False, VisibleE=False)
     grassEdgeS = tile("images/Tiles/grassTile.png", PassS=False, VisibleS=False)
