@@ -46,8 +46,8 @@ init python:
             # Is this a multi par object (building etc) Instance Must be 2d array if this is the case 
             self.MultiPart = MultiPart
             # can limit number of this specific feature, even if more features can be added in excess of this another must be chosen.
-            self.MaxQuanity = MaxQuantity
-            self.PlacedQuanitity = 0
+            self.MaxQuantity = MaxQuantity
+            self.PlacedQuantity = 0
             
             
             
@@ -57,15 +57,20 @@ init python:
     grassTree = PlaceTile("images/Tiles/grassTree.png", SightObstructionN=True, SightObstructionE=True, SightObstructionS=True, SightObstructionW=True)
     grassCampfire = PlaceTile("images/Tiles/grassCampfire.png", Void=True)
     grassStone = PlaceTile("images/Tiles/grassStone.png", MoveRequired=2, SightObstructionN=True, SightObstructionE=True, SightObstructionS=True, SightObstructionW=True)
+    grassHBkade = PlaceTile("images/Tiles/HorizontalBarricade.png", Void=True)
+    grassVBkade = PlaceTile("images/Tiles/VerticalBarricade.png", Void=True)
     
     
     
+    
+    def OverlayGenerator(map):
+        return list([battletile(0, UnitPresent="Null") for x in range(0, len(map[y]))] for y in range(0, len(map)))
     
     
     # (height in accessable tiles (integer), width in accessable tiles (integer), base for map (string), specail features (list of SpecailFeature instances), 
     # number of features to go on map (integer), special features (list of SpecialFeature instances, only one will be put on the map per instance.) 
     
-    def UnderLayGenerator(height, width, base_ground, features, feature_density, special_features):
+    def UnderlayGenerator(height, width, base_ground, features, feature_density, special_features):
         
         actual_height = height+4
         actual_width = width+4
@@ -92,10 +97,10 @@ init python:
         for x in range(0, actual_height):
             temp_line = []
             for y in range(0, actual_width):
-                if (x == 0 or 1 or actual_height or actual_height-1):
+                if (x == 0 or x == 1 or x == actual_height or x == actual_height-1):
                     temp_line.append(tile(blank.Name, Void=blank.Void))
                 else:
-                    if (y == 0 or 1 or actual_width or actual_width-1):
+                    if (y == 0 or y == 1 or y == actual_width or y == actual_width-1):
                         temp_line.append(tile(blank.Name, Void=blank.Void))
                     else:
                         random = renpy.random.randint(0, len(base)-1)
@@ -108,12 +113,12 @@ init python:
             x = renpy.random.randint(0, len(features)-1)
             if features[x].SpecificPlacing == True:
                 if (features[x].MultiPart == False):
-                    return_map[features[x].SpecificX][features[x].SpecificY] =  tile(features[x].instance.Name, PassN=features[x].instance.PassN, PassE=features[x].instance.PassE, PassS=features[x].instance.PassS, PassW=features[x].instance.PassW, VisibleN=features[x].instance.VisibleN, VisibleE=features[x].instance.VisibleE, VisibleS=features[x].instance.VisibleS, VisibleW=features[x].instance.VisibleW, MoveRequired=features[x].instance.MoveRequired, Void=features[x].instance.Void, SightObstructionN=features[x].instance.SightObstructionN, SightObstructionE=features[x].instance.SightObstructionE, SightObstructionS=features[x].instance.SightObstructionS, SightObstructionW=features[x].instance.SightObstructionW)
+                    return_map[features[x].SpecificX][features[x].SpecificY] =  tile(features[x].Instance.Name, PassN=features[x].Instance.PassN, PassE=features[x].Instance.PassE, PassS=features[x].Instance.PassS, PassW=features[x].Instance.PassW, VisibleN=features[x].Instance.VisibleN, VisibleE=features[x].Instance.VisibleE, VisibleS=features[x].Instance.VisibleS, VisibleW=features[x].Instance.VisibleW, MoveRequired=features[x].Instance.MoveRequired, Void=features[x].Instance.Void, SightObstructionN=features[x].Instance.SightObstructionN, SightObstructionE=features[x].Instance.SightObstructionE, SightObstructionS=features[x].Instance.SightObstructionS, SightObstructionW=features[x].Instance.SightObstructionW)
                     return_map[features[x].SpecificX][features[x].SpecificY].Special = True
                 else:
                     for z in range(0, len(features[x].Instance)):
                         for y in range(0, len(features[x].Instance[0])):
-                            return_map[features[x].SpecificX+z][features[x].SpecificY+y] = tile(features[x].instance[z][y].Name, PassN=features[x].instance[z][y].PassN, PassE=features[x].instance[z][y].PassE, PassS=features[x].instance[z][y].PassS, PassW=features[x].instance[z][y].PassW, VisibleN=features[x].instance[z][y].VisibleN, VisibleE=features[x].instance[z][y].VisibleE, VisibleS=features[x].instance[z][y].VisibleS, VisibleW=features[x].instance[z][y].VisibleW, MoveRequired=features[x].instance[z][y].MoveRequired, Void=features[x].instance[z][y].Void, SightObstructionN=features[x].instance[z][y].SightObstructionN, SightObstructionE=features[x].instance[z][y].SightObstructionE, SightObstructionS=features[x].instance[z][y].SightObstructionS, SightObstructionW=features[x].instance[z][y].SightObstructionW)
+                            return_map[features[x].SpecificX+z][features[x].SpecificY+y] = tile(features[x].Instance[z][y].Name, PassN=features[x].Instance[z][y].PassN, PassE=features[x].Instance[z][y].PassE, PassS=features[x].Instance[z][y].PassS, PassW=features[x].Instance[z][y].PassW, VisibleN=features[x].Instance[z][y].VisibleN, VisibleE=features[x].Instance[z][y].VisibleE, VisibleS=features[x].Instance[z][y].VisibleS, VisibleW=features[x].Instance[z][y].VisibleW, MoveRequired=features[x].Instance[z][y].MoveRequired, Void=features[x].Instance[z][y].Void, SightObstructionN=features[x].Instance[z][y].SightObstructionN, SightObstructionE=features[x].Instance[z][y].SightObstructionE, SightObstructionS=features[x].Instance[z][y].SightObstructionS, SightObstructionW=features[x].Instance[z][y].SightObstructionW)
                             return_map[features[x].SpecificX+z][features[x].SpecificY+y].Special = True
                     
             else:
@@ -124,7 +129,7 @@ init python:
                         while return_map[RandomX][RandomY].Special == True:
                             RandomX = renpy.random.randint(3, actual_height-2)
                             RandomY = renpy.random.randint(3, actual_width-2)
-                        return_map[RandomX][RandomY] =  tile(features[x].instance.Name, PassN=features[x].instance.PassN, PassE=features[x].instance.PassE, PassS=features[x].instance.PassS, PassW=features[x].instance.PassW, VisibleN=features[x].instance.VisibleN, VisibleE=features[x].instance.VisibleE, VisibleS=features[x].instance.VisibleS, VisibleW=features[x].instance.VisibleW, MoveRequired=features[x].instance.MoveRequired, Void=features[x].instance.Void, SightObstructionN=features[x].instance.SightObstructionN, SightObstructionE=features[x].instance.SightObstructionE, SightObstructionS=features[x].instance.SightObstructionS, SightObstructionW=features[x].instance.SightObstructionW)
+                        return_map[RandomX][RandomY] =  tile(features[x].Instance.Name, PassN=features[x].Instance.PassN, PassE=features[x].Instance.PassE, PassS=features[x].Instance.PassS, PassW=features[x].Instance.PassW, VisibleN=features[x].Instance.VisibleN, VisibleE=features[x].Instance.VisibleE, VisibleS=features[x].Instance.VisibleS, VisibleW=features[x].Instance.VisibleW, MoveRequired=features[x].Instance.MoveRequired, Void=features[x].Instance.Void, SightObstructionN=features[x].Instance.SightObstructionN, SightObstructionE=features[x].Instance.SightObstructionE, SightObstructionS=features[x].Instance.SightObstructionS, SightObstructionW=features[x].Instance.SightObstructionW)
                         return_map[RandomX][RandomY].Special = True
                 else:
                     if (features[x].MaxQuantity != features[x].PlacedQuantity):
@@ -137,20 +142,20 @@ init python:
                             PlaceCheck = PlaceCheck(RandomX, RandomY, len(features[x].Instance), len(features[x].Instance[0]), return_map)
                         for z in range(0, len(features[x].Instance)):
                             for y in range(0, len(features[x].Instance[0])):
-                                return_map[RandomX+z][RandomY+y] = tile(features[x].instance[z][y].Name, PassN=features[x].instance[z][y].PassN, PassE=features[x].instance[z][y].PassE, PassS=features[x].instance[z][y].PassS, PassW=features[x].instance[z][y].PassW, VisibleN=features[x].instance[z][y].VisibleN, VisibleE=features[x].instance[z][y].VisibleE, VisibleS=features[x].instance[z][y].VisibleS, VisibleW=features[x].instance[z][y].VisibleW, MoveRequired=features[x].instance[z][y].MoveRequired, Void=features[x].instance[z][y].Void, SightObstructionN=features[x].instance[z][y].SightObstructionN, SightObstructionE=features[x].instance[z][y].SightObstructionE, SightObstructionS=features[x].instance[z][y].SightObstructionS, SightObstructionW=features[x].instance[z][y].SightObstructionW)
+                                return_map[RandomX+z][RandomY+y] = tile(features[x].Instance[z][y].Name, PassN=features[x].Instance[z][y].PassN, PassE=features[x].Instance[z][y].PassE, PassS=features[x].Instance[z][y].PassS, PassW=features[x].Instance[z][y].PassW, VisibleN=features[x].Instance[z][y].VisibleN, VisibleE=features[x].Instance[z][y].VisibleE, VisibleS=features[x].Instance[z][y].VisibleS, VisibleW=features[x].Instance[z][y].VisibleW, MoveRequired=features[x].Instance[z][y].MoveRequired, Void=features[x].Instance[z][y].Void, SightObstructionN=features[x].Instance[z][y].SightObstructionN, SightObstructionE=features[x].Instance[z][y].SightObstructionE, SightObstructionS=features[x].Instance[z][y].SightObstructionS, SightObstructionW=features[x].Instance[z][y].SightObstructionW)
                                 return_map[RandomX+z][RandomY+y].Special = True
         
         # Add special one off features that take priority
             
         for x in special_features:
             if (x.SpecificPlacing == True):
-                if (features[x].MultiPart == False):
-                    return_map[x.SpecificX][x.SpecificY] =  tile(x.instance.Name, PassN=x.instance.PassN, PassE=x.instance.PassE, PassS=x.instance.PassS, PassW=x.instance.PassW, VisibleN=x.instance.VisibleN, VisibleE=x.instance.VisibleE, VisibleS=x.instance.VisibleS, VisibleW=x.instance.VisibleW, MoveRequired=x.instance.MoveRequired, Void=x.instance.Void, SightObstructionN=x.instance.SightObstructionN, SightObstructionE=x.instance.SightObstructionE, SightObstructionS=x.instance.SightObstructionS, SightObstructionW=x.instance.SightObstructionW)
+                if (x.MultiPart == False):
+                    return_map[x.SpecificX][x.SpecificY] =  tile(x.Instance.Name, PassN=x.Instance.PassN, PassE=x.Instance.PassE, PassS=x.Instance.PassS, PassW=x.Instance.PassW, VisibleN=x.Instance.VisibleN, VisibleE=x.Instance.VisibleE, VisibleS=x.Instance.VisibleS, VisibleW=x.Instance.VisibleW, MoveRequired=x.Instance.MoveRequired, Void=x.Instance.Void, SightObstructionN=x.Instance.SightObstructionN, SightObstructionE=x.Instance.SightObstructionE, SightObstructionS=x.Instance.SightObstructionS, SightObstructionW=x.Instance.SightObstructionW)
                     return_map[x.SpecificX][x.SpecificY].Special = True
                 else:
                     for z in range(0, len(x.Instance)):
                         for y in range(0, len(x.Instance[0])):
-                            return_map[x.SpecificX+z][x.SpecificY+y] = tile(x.instance[z][y].Name, PassN=x.instance[z][y].PassN, PassE=x.instance[z][y].PassE, PassS=x.instance[z][y].PassS, PassW=x.instance[z][y].PassW, VisibleN=x.instance[z][y].VisibleN, VisibleE=x.instance[z][y].VisibleE, VisibleS=x.instance[z][y].VisibleS, VisibleW=x.instance[z][y].VisibleW, MoveRequired=x.instance[z][y].MoveRequired, Void=x.instance[z][y].Void, SightObstructionN=x.instance[z][y].SightObstructionN, SightObstructionE=x.instance[z][y].SightObstructionE, SightObstructionS=x.instance[z][y].SightObstructionS, SightObstructionW=x.instance[z][y].SightObstructionW)
+                            return_map[x.SpecificX+z][x.SpecificY+y] = tile(x.Instance[z][y].Name, PassN=x.Instance[z][y].PassN, PassE=x.Instance[z][y].PassE, PassS=x.Instance[z][y].PassS, PassW=x.Instance[z][y].PassW, VisibleN=x.Instance[z][y].VisibleN, VisibleE=x.Instance[z][y].VisibleE, VisibleS=x.Instance[z][y].VisibleS, VisibleW=x.Instance[z][y].VisibleW, MoveRequired=x.Instance[z][y].MoveRequired, Void=x.Instance[z][y].Void, SightObstructionN=x.Instance[z][y].SightObstructionN, SightObstructionE=x.Instance[z][y].SightObstructionE, SightObstructionS=x.Instance[z][y].SightObstructionS, SightObstructionW=x.Instance[z][y].SightObstructionW)
                             return_map[x.SpecificX+z][x.SpecificY+y].Special = True
             else:
                 if (x.MultiPart == False):
@@ -159,7 +164,7 @@ init python:
                     while return_map[RandomX][RandomY].Special == True:
                         RandomX = renpy.random.randint(3, actual_height-2)
                         RandomY = renpy.random.randint(3, actual_width-2)
-                    return_map[RandomX][RandomY] =  tile(x.instance.Name, PassN=x.instance.PassN, PassE=x.instance.PassE, PassS=x.instance.PassS, PassW=x.instance.PassW, VisibleN=x.instance.VisibleN, VisibleE=x.instance.VisibleE, VisibleS=x.instance.VisibleS, VisibleW=x.instance.VisibleW, MoveRequired=x.instance.MoveRequired, Void=x.instance.Void, SightObstructionN=x.instance.SightObstructionN, SightObstructionE=x.instance.SightObstructionE, SightObstructionS=x.instance.SightObstructionS, SightObstructionW=x.instance.SightObstructionW)
+                    return_map[RandomX][RandomY] =  tile(x.Instance.Name, PassN=x.Instance.PassN, PassE=x.Instance.PassE, PassS=x.Instance.PassS, PassW=x.Instance.PassW, VisibleN=x.Instance.VisibleN, VisibleE=x.Instance.VisibleE, VisibleS=x.Instance.VisibleS, VisibleW=x.Instance.VisibleW, MoveRequired=x.Instance.MoveRequired, Void=x.Instance.Void, SightObstructionN=x.Instance.SightObstructionN, SightObstructionE=x.Instance.SightObstructionE, SightObstructionS=x.Instance.SightObstructionS, SightObstructionW=x.Instance.SightObstructionW)
                     return_map[RandomX][RandomY].Special = True
                 else:
                     RandomX = renpy.random.randint(3, actual_height-2)
@@ -171,7 +176,7 @@ init python:
                         PlaceCheck = PlaceCheck(RandomX, RandomY, len(features[x].Instance), len(features[x].Instance[0]), return_map)
                     for z in range(0, len(x.Instance)):
                         for y in range(0, len(x.Instance[0])):
-                            return_map[RandomX+z][RandomY+y] = tile(x.instance[z][y].Name, PassN=x.instance[z][y].PassN, PassE=x.instance[z][y].PassE, PassS=x.instance[z][y].PassS, PassW=x.instance[z][y].PassW, VisibleN=x.instance[z][y].VisibleN, VisibleE=x.instance[z][y].VisibleE, VisibleS=x.instance[z][y].VisibleS, VisibleW=x.instance[z][y].VisibleW, MoveRequired=x.instance[z][y].MoveRequired, Void=x.instance[z][y].Void, SightObstructionN=x.instance[z][y].SightObstructionN, SightObstructionE=x.instance[z][y].SightObstructionE, SightObstructionS=x.instance[z][y].SightObstructionS, SightObstructionW=x.instance[z][y].SightObstructionW)
+                            return_map[RandomX+z][RandomY+y] = tile(x.Instance[z][y].Name, PassN=x.Instance[z][y].PassN, PassE=x.Instance[z][y].PassE, PassS=x.Instance[z][y].PassS, PassW=x.Instance[z][y].PassW, VisibleN=x.Instance[z][y].VisibleN, VisibleE=x.Instance[z][y].VisibleE, VisibleS=x.Instance[z][y].VisibleS, VisibleW=x.Instance[z][y].VisibleW, MoveRequired=x.Instance[z][y].MoveRequired, Void=x.Instance[z][y].Void, SightObstructionN=x.Instance[z][y].SightObstructionN, SightObstructionE=x.Instance[z][y].SightObstructionE, SightObstructionS=x.Instance[z][y].SightObstructionS, SightObstructionW=x.Instance[z][y].SightObstructionW)
                             return_map[RandomX+z][RandomY+y].Special = True
             
         # set line of sight and walk restrictions    

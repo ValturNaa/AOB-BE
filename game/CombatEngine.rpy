@@ -285,7 +285,7 @@ init 1 python:
                 
     # one instantiated for each type of tile that exists in the game.        
     class tile(object):
-        def __init__(self, Name, PassN=True, PassE=True, PassS=True, PassW=True, VisibleN=True, VisibleE=True, VisibleS=True, VisibleW=True, MoveRequired=1, Void=False):
+        def __init__(self, Name, PassN=True, PassE=True, PassS=True, PassW=True, VisibleN=True, VisibleE=True, VisibleS=True, VisibleW=True, MoveRequired=1, Void=False, VoidSight=False, SightObstructionN=False, SightObstructionE=False, SightObstructionS=False, SightObstructionW=False):
             # Type of tile, string
             self.Name = Name
             # can you move north from this tile (Boolean)
@@ -308,6 +308,14 @@ init 1 python:
             self.MoveRequired = MoveRequired
             # used for absolute edges
             self.Void = Void
+            self.VoidSight = VoidSight
+            # Used in Underlay generator
+            self.SightObstructionN = SightObstructionN
+            self.SightObstructionE = SightObstructionE
+            self.SightObstructionS = SightObstructionS
+            self.SightObstructionW = SightObstructionW
+            # used with special tiles
+            self.Special = False
 
             
     
@@ -561,16 +569,45 @@ label CombatEngine:
         # Instantiation of battlefield.  Will need a generator for random events and scripted ones some sort of selection method
         ###Laird updated this to use the functions
         GrassFieldMap= battlefield(grassField(), grassFieldOverlay(), 0, GrassFieldPlayerDeploy, PlayerArmy.Army, GrassFieldEnemy1Deploy, Enemy1Army.Army)
+        
+        
+        
         # any battlefield instance needs to be stored here
         ###Laird cleaned the BattleFieldList
         BattleFieldList= []
-        BattleFieldList.append(GrassFieldMap)
+        BattleFieldList.append(UnderlayGenerator(15, 15, "grass", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassVBkade, grass, grassCampfire, grass, grassVBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
+        BattleFieldList.append(UnderlayGenerator(15, 15, "light forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassVBkade, grass, grassCampfire, grass, grassVBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
+        BattleFieldList.append(UnderlayGenerator(15, 15, "forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassVBkade, grass, grassCampfire, grass, grassVBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
+        BattleFieldList.append(UnderlayGenerator(15, 15, "heavy forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassVBkade, grass, grassCampfire, grass, grassVBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
+        
+        
+        
         # Set to extrapolate needed info from BattleFieldList. All that should be needed to set up "current" variables
-        CurrentBattlefieldID = 0
-        CurrentMap = BattleFieldList[CurrentBattlefieldID].Field
-        CurrentOverlay = BattleFieldList[CurrentBattlefieldID].FieldOverlay
-        CurrentPlayerDeployment = BattleFieldList[CurrentBattlefieldID].PlayerDeployment
-        CurrentEnemy1Deployment = BattleFieldList[CurrentBattlefieldID].Enemy1Deployment
+    menu:
+        "Pick your battlefield type"
+        
+        "Grassland":
+            $ CurrentBattlefieldID = 0
+        "Light forest":
+            $ CurrentBattlefieldID = 1
+        "Forest":
+            $ CurrentBattlefieldID = 2
+        "Dense forest":
+            $ CurrentBattlefieldID = 3
+        
+        
+        
+    python:
+        CurrentMap = BattleFieldList[CurrentBattlefieldID]
+        CurrentOverlay = OverlayGenerator(CurrentMap)
+        CurrentPlayerDeployment = [[4, 4],[5, 4],[6, 4],
+        [4, 5],[5, 5],[6, 5],
+        [4, 6],[5, 6],[6, 6]]
+        CurrentEnemy1Deployment = [[7, 9], [8, 8], [8, 9], [8, 10], [9, 8], [9, 10], [9, 11], [10, 8], [10, 10], [11, 9]]
+        
+        
+        
+        
         # Sets the players deployment zone up on the overlay map
         for i in range(0, len(CurrentPlayerDeployment)):
             TempIndecesY = CurrentPlayerDeployment[i][0]
