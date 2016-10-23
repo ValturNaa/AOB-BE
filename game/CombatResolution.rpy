@@ -85,69 +85,65 @@ label AttackRange:
         # Since all weapons have a range of at least 1, establish the first four directional target tiles
         if SelectedAttack[0].IndirectFire == False:
             # Shooting north
-            if CurrentMap[StartX][StartY].VisibleN == True:
-                if CurrentOverlay[StartX-1][StartY].UnitID != "None":
-                    TempUnitID = []
-                    TempUnitID.append(CurrentOverlay[StartX-1][StartY].UnitID)
-                    if MoveSelect[0].ArmyID == TempUnitID[0].ArmyID:
-                        CurrentOverlay[StartX-1][StartY].RangeOverlay = "Range"
-                        CurrentOverlay[StartX-1][StartY].FireNorth = False
-                    else:
-                        CurrentOverlay[StartX-1][StartY].RangeOverlay = "Target"
-                        CurrentOverlay[StartX-1][StartY].FireNorth = False
-                else:
+            if CurrentOverlay[StartX-1][StartY].UnitID != "None":
+                TempUnitID = []
+                TempUnitID.append(CurrentOverlay[StartX-1][StartY].UnitID)
+                if MoveSelect[0].ArmyID == TempUnitID[0].ArmyID:
                     CurrentOverlay[StartX-1][StartY].RangeOverlay = "Range"
-                CurrentOverlay[StartX-1][StartY].RangeCheck = True
-                CurrentOverlay[StartX-1][StartY].CheckDelay = True
-                CurrentOverlay[StartX-1][StartY].FireSouth = False
+                    CurrentOverlay[StartX-1][StartY].FireNorth = False
+                else:
+                    CurrentOverlay[StartX-1][StartY].RangeOverlay = "Target"
+                    CurrentOverlay[StartX-1][StartY].FireNorth = False
+            else:
+                CurrentOverlay[StartX-1][StartY].RangeOverlay = "Range"
+            CurrentOverlay[StartX-1][StartY].RangeCheck = True
+            CurrentOverlay[StartX-1][StartY].CheckDelay = True
+            CurrentOverlay[StartX-1][StartY].FireSouth = False
             # Shooting east
-            if CurrentMap[StartX][StartY].VisibleE == True:
-                if CurrentOverlay[StartX][StartY+1].UnitID != "None":
-                    TempUnitID = []
-                    TempUnitID.append(CurrentOverlay[StartX][StartY+1].UnitID)
-                    if MoveSelect[0].ArmyID == TempUnitID[0].ArmyID:
-                        CurrentOverlay[StartX][StartY+1].RangeOverlay = "Range"
-                        CurrentOverlay[StartX][StartY+1].FireEast = False
-                    else:
-                        CurrentOverlay[StartX][StartY+1].RangeOverlay = "Target"
-                        CurrentOverlay[StartX][StartY+1].FireEast = False
-                else:
+            if CurrentOverlay[StartX][StartY+1].UnitID != "None":
+                TempUnitID = []
+                TempUnitID.append(CurrentOverlay[StartX][StartY+1].UnitID)
+                if MoveSelect[0].ArmyID == TempUnitID[0].ArmyID:
                     CurrentOverlay[StartX][StartY+1].RangeOverlay = "Range"
-                CurrentOverlay[StartX][StartY+1].RangeCheck = True
-                CurrentOverlay[StartX][StartY+1].CheckDelay = True
-                CurrentOverlay[StartX][StartY+1].FireWest = False
+                    CurrentOverlay[StartX][StartY+1].FireEast = False
+                else:
+                    CurrentOverlay[StartX][StartY+1].RangeOverlay = "Target"
+                    CurrentOverlay[StartX][StartY+1].FireEast = False
+            else:
+                CurrentOverlay[StartX][StartY+1].RangeOverlay = "Range"
+            CurrentOverlay[StartX][StartY+1].RangeCheck = True
+            CurrentOverlay[StartX][StartY+1].CheckDelay = True
+            CurrentOverlay[StartX][StartY+1].FireWest = False
             # Shooting south
-            if CurrentMap[StartX][StartY].VisibleS == True:
-                if CurrentOverlay[StartX+1][StartY].UnitID != "None":
-                    TempUnitID = []
-                    TempUnitID.append(CurrentOverlay[StartX+1][StartY].UnitID)
-                    if MoveSelect[0].ArmyID == TempUnitID[0].ArmyID:
-                        CurrentOverlay[StartX+1][StartY].RangeOverlay = "Range"
-                        CurrentOverlay[StartX+1][StartY].FireSouth = False
-                    else:
-                        CurrentOverlay[StartX+1][StartY].RangeOverlay = "Target"
-                        CurrentOverlay[StartX+1][StartY].FireSouth = False
-                else:
+            if CurrentOverlay[StartX+1][StartY].UnitID != "None":
+                TempUnitID = []
+                TempUnitID.append(CurrentOverlay[StartX+1][StartY].UnitID)
+                if MoveSelect[0].ArmyID == TempUnitID[0].ArmyID:
                     CurrentOverlay[StartX+1][StartY].RangeOverlay = "Range"
-                CurrentOverlay[StartX+1][StartY].RangeCheck = True
-                CurrentOverlay[StartX+1][StartY].CheckDelay = True
-                CurrentOverlay[StartX+1][StartY].FireNorth = False
-            # Shooting west
-            if CurrentMap[StartX][StartY].VisibleW == True:
-                if CurrentOverlay[StartX][StartY-1].UnitID != "None":
-                    TempUnitID = []
-                    TempUnitID.append(CurrentOverlay[StartX][StartY-1].UnitID)
-                    if MoveSelect[0].ArmyID == TempUnitID[0].ArmyID:
-                        CurrentOverlay[StartX][StartY-1].RangeOverlay = "Range"
-                        CurrentOverlay[StartX][StartY-1].FireWest = False
-                    else:
-                        CurrentOverlay[StartX][StartY-1].RangeOverlay = "Target"
-                        CurrentOverlay[StartX][StartY-1].FireWest = False
+                    CurrentOverlay[StartX+1][StartY].FireSouth = False
                 else:
+                    CurrentOverlay[StartX+1][StartY].RangeOverlay = "Target"
+                    CurrentOverlay[StartX+1][StartY].FireSouth = False
+            else:
+                CurrentOverlay[StartX+1][StartY].RangeOverlay = "Range"
+            CurrentOverlay[StartX+1][StartY].RangeCheck = True
+            CurrentOverlay[StartX+1][StartY].CheckDelay = True
+            CurrentOverlay[StartX+1][StartY].FireNorth = False
+            # Shooting west
+            if CurrentOverlay[StartX][StartY-1].UnitID != "None":
+                TempUnitID = []
+                TempUnitID.append(CurrentOverlay[StartX][StartY-1].UnitID)
+                if MoveSelect[0].ArmyID == TempUnitID[0].ArmyID:
                     CurrentOverlay[StartX][StartY-1].RangeOverlay = "Range"
-                CurrentOverlay[StartX][StartY-1].RangeCheck = True
-                CurrentOverlay[StartX][StartY-1].CheckDelay = True
-                CurrentOverlay[StartX][StartY-1].FireEast = False
+                    CurrentOverlay[StartX][StartY-1].FireWest = False
+                else:
+                    CurrentOverlay[StartX][StartY-1].RangeOverlay = "Target"
+                    CurrentOverlay[StartX][StartY-1].FireWest = False
+            else:
+                CurrentOverlay[StartX][StartY-1].RangeOverlay = "Range"
+            CurrentOverlay[StartX][StartY-1].RangeCheck = True
+            CurrentOverlay[StartX][StartY-1].CheckDelay = True
+            CurrentOverlay[StartX][StartY-1].FireEast = False
                     
             for ranged in range(1, SelectedAttack[0].Range):
                 for x in range(0, len(CurrentOverlay)):

@@ -285,7 +285,7 @@ init 1 python:
                 
     # one instantiated for each type of tile that exists in the game.        
     class tile(object):
-        def __init__(self, Name, PassN=True, PassE=True, PassS=True, PassW=True, VisibleN=True, VisibleE=True, VisibleS=True, VisibleW=True, MoveRequired=1, Void=False, VoidSight=False, SightObstructionN=False, SightObstructionE=False, SightObstructionS=False, SightObstructionW=False):
+        def __init__(self, Name, PassN=True, PassE=True, PassS=True, PassW=True, VisibleN=True, VisibleE=True, VisibleS=True, VisibleW=True, MoveRequired=1, Void=False, VoidSight=False):
             # Type of tile, string
             self.Name = Name
             # can you move north from this tile (Boolean)
@@ -309,11 +309,6 @@ init 1 python:
             # used for absolute edges
             self.Void = Void
             self.VoidSight = VoidSight
-            # Used in Underlay generator
-            self.SightObstructionN = SightObstructionN
-            self.SightObstructionE = SightObstructionE
-            self.SightObstructionS = SightObstructionS
-            self.SightObstructionW = SightObstructionW
             # used with special tiles
             self.Special = False
 

@@ -591,45 +591,41 @@ init python:
                             is_target = True
         else:
             # Shooting north
-            if (CurrentMap[StartX][StartY].VisibleN == True):
-                if (CurrentOverlay[StartX-1][StartY].UnitID != "None"):
-                    if (CurrentOverlay[StartX-1][StartY].UnitID.ArmyID != Unit.ArmyID):
-                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX-1), ReturnPositive(StartY, StartY), StartX-1, StartY))
-                        is_target = True
-                    CurrentOverlay[StartX-1][StartY].FireNorth = False
-                CurrentOverlay[StartX-1][StartY].RangeCheck = True
-                CurrentOverlay[StartX-1][StartY].CheckDelay = True
-                CurrentOverlay[StartX-1][StartY].FireSouth = False
+            if (CurrentOverlay[StartX-1][StartY].UnitID != "None"):
+                if (CurrentOverlay[StartX-1][StartY].UnitID.ArmyID != Unit.ArmyID):
+                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX-1), ReturnPositive(StartY, StartY), StartX-1, StartY))
+                    is_target = True
+                CurrentOverlay[StartX-1][StartY].FireNorth = False
+            CurrentOverlay[StartX-1][StartY].RangeCheck = True
+            CurrentOverlay[StartX-1][StartY].CheckDelay = True
+            CurrentOverlay[StartX-1][StartY].FireSouth = False
             # Shooting east
-            if (CurrentMap[StartX][StartY].VisibleE == True):
-                if (CurrentOverlay[StartX][StartY+1].UnitID != "None"):
-                    if (CurrentOverlay[StartX][StartY+1].UnitID.ArmyID != Unit.ArmyID):
-                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX), ReturnPositive(StartY, StartY+1), StartX, StartY+1))
-                        is_target = True
-                    CurrentOverlay[StartX][StartY+1].FireEast = False
-                CurrentOverlay[StartX][StartY+1].RangeCheck = True
-                CurrentOverlay[StartX][StartY+1].CheckDelay = True
-                CurrentOverlay[StartX][StartY+1].FireWest = False
+            if (CurrentOverlay[StartX][StartY+1].UnitID != "None"):
+                if (CurrentOverlay[StartX][StartY+1].UnitID.ArmyID != Unit.ArmyID):
+                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX), ReturnPositive(StartY, StartY+1), StartX, StartY+1))
+                    is_target = True
+                CurrentOverlay[StartX][StartY+1].FireEast = False
+            CurrentOverlay[StartX][StartY+1].RangeCheck = True
+            CurrentOverlay[StartX][StartY+1].CheckDelay = True
+            CurrentOverlay[StartX][StartY+1].FireWest = False
             # Shooting south
-            if (CurrentMap[StartX][StartY].VisibleS == True):
-                if (CurrentOverlay[StartX+1][StartY].UnitID != "None"):
-                    if (CurrentOverlay[StartX+1][StartY].UnitID.ArmyID != Unit.ArmyID):
-                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX+1), ReturnPositive(StartY, StartY), StartX+1, StartY))
-                        is_target = True
-                    CurrentOverlay[StartX+1][StartY].FireSouth = False
-                CurrentOverlay[StartX+1][StartY].RangeCheck = True
-                CurrentOverlay[StartX+1][StartY].CheckDelay = True
-                CurrentOverlay[StartX+1][StartY].FireNorth = False
+            if (CurrentOverlay[StartX+1][StartY].UnitID != "None"):
+                if (CurrentOverlay[StartX+1][StartY].UnitID.ArmyID != Unit.ArmyID):
+                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX+1), ReturnPositive(StartY, StartY), StartX+1, StartY))
+                    is_target = True
+                CurrentOverlay[StartX+1][StartY].FireSouth = False
+            CurrentOverlay[StartX+1][StartY].RangeCheck = True
+            CurrentOverlay[StartX+1][StartY].CheckDelay = True
+            CurrentOverlay[StartX+1][StartY].FireNorth = False
             # Shooting west
-            if (CurrentMap[StartX][StartY].VisibleW == True):
-                if (CurrentOverlay[StartX][StartY-1].UnitID != "None"):
-                    if (CurrentOverlay[StartX][StartY-1].UnitID.ArmyID != Unit.ArmyID):
-                        TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX), ReturnPositive(StartY, StartY-1), StartX, StartY-1))
-                        is_target = True
-                    CurrentOverlay[StartX][StartY-1].FireWest = False
-                CurrentOverlay[StartX][StartY-1].RangeCheck = True
-                CurrentOverlay[StartX][StartY-1].CheckDelay = True
-                CurrentOverlay[StartX][StartY-1].FireEast = False
+            if (CurrentOverlay[StartX][StartY-1].UnitID != "None"):
+                if (CurrentOverlay[StartX][StartY-1].UnitID.ArmyID != Unit.ArmyID):
+                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, StartX), ReturnPositive(StartY, StartY-1), StartX, StartY-1))
+                    is_target = True
+                CurrentOverlay[StartX][StartY-1].FireWest = False
+            CurrentOverlay[StartX][StartY-1].RangeCheck = True
+            CurrentOverlay[StartX][StartY-1].CheckDelay = True
+            CurrentOverlay[StartX][StartY-1].FireEast = False
                 
             for ranged in range(1, Attack.Range):
                 for x in range(0, len(CurrentOverlay)):
