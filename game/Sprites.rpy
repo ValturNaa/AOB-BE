@@ -1,14 +1,20 @@
 init:
     # Battle sprites defined here
+    # MWolf
+    # FWolf
+    # Bruiser
+    # Thug
+    # BanditArcher
+    # MC
     
     image MWolfIdle:
         "images/BattleSprites/MWolf/Walk/MwolfFrontIdle.png"
-        zoom 0.5
+        
     image MWolfHover:
         "MWolfIdle"
         alpha 0.7
     image MWolfMoveS:
-        zoom 0.5
+        
         "images/BattleSprites/MWolf/Walk/MwolfFrontIdle.png"
         pause 0.5
         "images/BattleSprites/MWolf/Walk/MwolfFront1.png"
@@ -19,7 +25,7 @@ init:
         pause 0.5
         repeat
     image MWolfMoveN:
-        zoom 0.5
+        
         "images/BattleSprites/MWolf/Walk/MwolfBackIdle.png"
         pause 0.5
         "images/BattleSprites/MWolf/Walk/MwolfBack1.png"
@@ -30,7 +36,7 @@ init:
         pause 0.5
         repeat
     image MWolfMoveE:
-        zoom 0.5
+        
         "images/BattleSprites/MWolf/Walk/MwolfRightIdle.png"
         pause 0.5
         "images/BattleSprites/MWolf/Walk/MwolfRight1.png"
@@ -41,7 +47,7 @@ init:
         pause 0.5
         repeat
     image MWolfMoveW:
-        zoom 0.5
+        
         "images/BattleSprites/MWolf/Walk/MwolfLeftIdle.png"
         pause 0.5
         "images/BattleSprites/MWolf/Walk/MwolfLeft1.png"
@@ -110,12 +116,12 @@ init:
         
     image BruiserIdle:
         "images/BattleSprites/BanditBruiser/Walk/BanditBruiserIdle.png"
-        zoom 0.5
+        
     image BruiserHover:
         "BruiserIdle"
         alpha 0.7
     image BruiserMoveS:
-        zoom 0.5
+        
         "images/BattleSprites/BanditBruiser/Walk/BanditBruiserIdle.png"
         pause 0.5
         "images/BattleSprites/BanditBruiser/Walk/BanditBruiserFrontStep2.png"
@@ -126,7 +132,7 @@ init:
         pause 0.5
         repeat
     image BruiserMoveN:
-        zoom 0.5
+        
         "images/BattleSprites/BanditBruiser/Walk/BruiserBackIdle.png"
         pause 0.5
         "images/BattleSprites/BanditBruiser/Walk/BruiserBack2.png"
@@ -137,7 +143,7 @@ init:
         pause 0.5
         repeat
     image BruiserMoveE:
-        zoom 0.5
+        
         "images/BattleSprites/BanditBruiser/Walk/BruiserRightIdle.png"
         pause 0.5
         "images/BattleSprites/BanditBruiser/Walk/BruiserRight2.png"
@@ -148,7 +154,7 @@ init:
         pause 0.5
         repeat
     image BruiserMoveW:
-        zoom 0.5
+        
         "images/BattleSprites/BanditBruiser/Walk/BruiserLeftIdle.png"
         pause 0.5
         "images/BattleSprites/BanditBruiser/Walk/BruiserLeft2.png"
@@ -163,12 +169,12 @@ init:
     
     image ThugIdle:
         "images/BattleSprites/BanditThug/Walk/BanditThugIdle.png"
-        zoom 0.5
+        
     image ThugHover:
         "ThugIdle"
         alpha 0.7
     image ThugMoveS:
-        zoom 0.5
+        
         "images/BattleSprites/BanditThug/Walk/ThugIdle.png"
         pause 0.5
         "images/BattleSprites/BanditThug/Walk/ThugFront2.png"
@@ -179,7 +185,7 @@ init:
         pause 0.5
         repeat
     image ThugMoveN:
-        zoom 0.5
+        
         "images/BattleSprites/BanditThug/Walk/ThugBackIdle.png"
         pause 0.5
         "images/BattleSprites/BanditThug/Walk/ThugBack2.png"
@@ -190,7 +196,7 @@ init:
         pause 0.5
         repeat
     image ThugMoveE:
-        zoom 0.5
+        
         "images/BattleSprites/BanditThug/Walk/ThugRightIdle.png"
         pause 0.5
         "images/BattleSprites/BanditThug/Walk/ThugRight2.png"
@@ -201,7 +207,7 @@ init:
         pause 0.5
         repeat
     image ThugMoveW:
-        zoom 0.5
+        
         "images/BattleSprites/BanditThug/Walk/ThugLeftIdle.png"
         pause 0.5
         "images/BattleSprites/BanditThug/Walk/ThugLeft2.png"
@@ -215,12 +221,12 @@ init:
     
     image BanditArcherIdle:
         "images/BattleSprites/BanditArcher/Walk/BanditArcherIdle.png"
-        zoom 0.5
+        
     image BanditArcherHover:
         "BanditArcherIdle"
         alpha 0.7
     image BanditArcherMoveS:
-        zoom 0.5
+        
         "images/BattleSprites/BanditArcher/Walk/BanditArcherIdle.png"
         pause 0.5
         "images/BattleSprites/BanditArcher/Walk/BanditArcherFront2.png"
@@ -231,7 +237,7 @@ init:
         pause 0.5
         repeat
     image BanditArcherMoveN:
-        zoom 0.5
+        
         "images/BattleSprites/BanditArcher/Walk/BanditArcherBackIdle.png"
         pause 0.5
         "images/BattleSprites/BanditArcher/Walk/BanditArcherBack2.png"
@@ -242,7 +248,7 @@ init:
         pause 0.5
         repeat
     image BanditArcherMoveE:
-        zoom 0.5
+        
         "images/BattleSprites/BanditArcher/Walk/BanditArcherRightIdle.png"
         pause 0.5
         "images/BattleSprites/BanditArcher/Walk/BanditArcherRight2.png"
@@ -253,7 +259,7 @@ init:
         pause 0.5
         repeat
     image BanditArcherMoveW:
-        zoom 0.5
+        
         "images/BattleSprites/BanditArcher/Walk/BanditArcherLeftIdle.png"
         pause 0.5
         "images/BattleSprites/BanditArcher/Walk/BanditArcherLeft2.png"
@@ -267,12 +273,12 @@ init:
     
     image MCIdle:
         "images/BattleSprites/MC/Walk/MCIdle.png"
-        zoom 0.5
+        
     image MCHover:
         "MCIdle"
         alpha 0.7
     image MCMoveS:
-        zoom 0.5
+        
         "images/BattleSprites/MC/Walk/MCIdle.png"
         pause 0.5
         "images/BattleSprites/MC/Walk/MCFront2.png"
@@ -283,7 +289,7 @@ init:
         pause 0.5
         repeat
     image MCMoveN:
-        zoom 0.5
+        
         "images/BattleSprites/MC/Walk/MCBackIdle.png"
         pause 0.5
         "images/BattleSprites/MC/Walk/MCBack2.png"
@@ -294,7 +300,7 @@ init:
         pause 0.5
         repeat
     image MCMoveE:
-        zoom 0.5
+        
         "images/BattleSprites/MC/Walk/MCRightIdle.png"
         pause 0.5
         "images/BattleSprites/MC/Walk/MCRight2.png"
@@ -305,7 +311,7 @@ init:
         pause 0.5
         repeat
     image MCMoveW:
-        zoom 0.5
+        
         "images/BattleSprites/MC/Walk/MCLeftIdle.png"
         pause 0.5
         "images/BattleSprites/MC/Walk/MCLeft2.png"
@@ -319,5 +325,5 @@ init:
     
 
     # mugshots defined here
-    image MaleWolfMug = "images/Mugshots/profile_wolf_male.png"
-    image FemWolfMug = "images/Mugshots/profile_wolf_fem.png"
+    image MWolfMug = "images/Mugshots/profile_wolf_male.png"
+    image FWolfMug = "images/Mugshots/profile_wolf_fem.png"

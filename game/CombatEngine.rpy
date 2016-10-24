@@ -326,7 +326,7 @@ init 1 python:
             
     # every type of attack needs an instance of this
     class weapon(object):
-        def __init__(self, Name, Range, Damage, DamageType, Attacks, Cooldown, Idle, Hover, Bonuses=[], IndirectFire=False):
+        def __init__(self, Name, Range, Damage, DamageType, Attacks, Cooldown, Idle, Hover, Animation, Bonuses=[], IndirectFire=False):
             # string, used to append self to lists
             self.Name = Name
             # integer, distance in tiles not including own
@@ -347,6 +347,9 @@ init 1 python:
             self.WeaponIdle = Idle
             # button hover image
             self.WeaponHover = Hover
+            # Animation, needs to be unit specific
+            self.Animation = Animation
+            
     
     # various battle engine only variables here
     
@@ -389,15 +392,14 @@ init 1 python:
     
     
     # define weapons here (self, Name, Range, Damage, DamageType, Attacks, Cooldown, Idle, Hover, Bonuses=[], IndirectFire=False)
-    Stab = weapon("Stab", 1, 8, "Physical", 1, 1, "None", "None")
-    Club = weapon("Club", 1, 5, "Physical", 1, 1, "ClubIdle", "ClubHover")
-    Club1 = weapon("Club", 3, 5, "Physical", 1, 1, "ClubIdle", "ClubHover")
-    Club2 = weapon("Club", 5, 5, "Physical", 1, 1, "ClubIdle", "ClubHover")
-    Club3 = weapon("Club", 1, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", IndirectFire=True)
-    Club4 = weapon("Club", 3, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", IndirectFire=True)
-    Club5 = weapon("Club", 5, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", IndirectFire=True)
-    Claw = weapon("Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover")
-    
+    ThugKnife = weapon("Knife", 1, 4, "Physical", 1, 1, "ClubIdle", "ClubHover", "ThugKnife")
+    BruiserClub = weapon("Club", 1, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", "BruiserClub")
+    BanditArcherBow = weapon("Bow", 5, 3, "Physical", 1, 1, "ClubIdle", "ClubHover")
+    P_MCAxe = weapon("Axe", 5, 7, "Physical", 1, 1, "ClubIdle", "ClubHover", "P_MCAxe")
+    FWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "FWClaw")
+    P_FWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "P_FWClaw")
+    MWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "MWClaw")
+    P_MWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "P_MWClaw")
     
     
     #(self, Ferocity, Finesse, Determination, Cunning,  BattleName, OrigionalName, BattleSkills, Traits, MovementMax, BattleSpriteIdle, BattleSpriteHover, BattleSpriteMove, Mugshot, Gender, ArmyID, PAB=0, CAB=0, PRB=0, CRB=0):
@@ -426,14 +428,14 @@ init 1 python:
 label CombatEngine:
     python:
         # sets up player army. Works for a fixed army, but will need some sort of selection screen and drawing stats from breeding classes.
-        p1 = unit(5, 5, 5, 5, "p1", "Claw Wolf", [Claw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MaleWolfMug", "Female", 1)
-        p2 = unit(5, 5, 5, 5, "p2", "Claw Wolf", [Claw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MaleWolfMug", "Female", 1)
-        p3 = unit(5, 5, 5, 5, "p3", "Claw Wolf", [Claw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MaleWolfMug", "Female", 1)
+        p1 = unit(5, 5, 5, 5, "p1", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MWolfMug", "Female", 1)
+        p2 = unit(5, 5, 5, 5, "p2", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MWolfMug", "Female", 1)
+        p3 = unit(5, 5, 5, 5, "p3", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MWolfMug", "Female", 1)
         PlayerArmy = Army([p1, p2, p3], [p1, p2, p3])
         # sets up enely 1's army. Will need a generator for random events and scripted ones some sort of selection method
-        e1 = unit(5, 5, 5, 5, "e1", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
-        e2 = unit(5, 5, 5, 5, "e2", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
-        e3 = unit(5, 5, 5, 5, "e3", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MaleWolfMug", "Male", 2)
+        e1 = unit(5, 5, 5, 5, "e1", "Bruiser", [BruiserClub], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MWolfMug", "Male", 2)
+        e2 = unit(5, 5, 5, 5, "e2", "Bruiser", [BruiserClub], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MWolfMug", "Male", 2)
+        e3 = unit(5, 5, 5, 5, "e3", "Bruiser", [BruiserClub], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "MWolfMug", "Male", 2)
         Enemy1Army = Army([e1, e2, e3], [e1, e2, e3])
         ActiveAIArmies.append(Enemy1Army)
         # completeddeployment keeps track of which units have been deployed, used for all armies in turn and reset after use
