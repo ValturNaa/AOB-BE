@@ -139,129 +139,6 @@ init -1:
     image RedTile = LiveComposite((50, 50), (0, 0), "red")
 
 
-
-    # Battle sprites defined here
-
-    image SoldierIdle:
-        "images/BattleSprites/SoldierFrontStepIdle.png"
-        zoom 0.5
-    image SoldierHover:
-        "SoldierIdle"
-        alpha 0.7
-    image SoldierMove:
-        "SoldierIdle"
-        
-    
-    image FWolfIdle:
-        "images/BattleSprites/wolf/FwolfFrontIdle.png"
-        zoom 0.5
-    image FWolfHover:
-        "FWolfIdle"
-        alpha 0.7
-    image FWolfMoveS:
-        zoom 0.5
-        "images/BattleSprites/wolf/FwolfFrontIdle.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfFront1.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfFrontIdle.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfFront2.png"
-        pause 0.5
-        repeat
-    image FWolfMoveN:
-        zoom 0.5
-        "images/BattleSprites/wolf/FwolfBackIdle.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfBack1.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfBackIdle.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfBack2.png"
-        pause 0.5
-        repeat
-    image FWolfMoveE:
-        zoom 0.5
-        "images/BattleSprites/wolf/FwolfRightIdle.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfRight1.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfRightIdle.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfRight2.png"
-        pause 0.5
-        repeat
-    image FWolfMoveW:
-        zoom 0.5
-        "images/BattleSprites/wolf/FwolfLeftIdle.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfLeft1.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfLeftIdle.png"
-        pause 0.5
-        "images/BattleSprites/wolf/FwolfLeft2.png"
-        pause 0.5
-        repeat
-    image FWolfMove = ConditionSwitch("CurrentFacing == 'N'", "FWolfMoveN", "CurrentFacing == 'E'", "FWolfMoveE", "CurrentFacing == 'S'", "FWolfMoveS", "CurrentFacing == 'W'", "FWolfMoveW")
-        
-    
-        
-        
-    image BruiserIdle:
-        "images/BattleSprites/bandit/BanditBruiserIdle.png"
-        zoom 0.5
-    image BruiserHover:
-        "BruiserIdle"
-        alpha 0.7
-    image BruiserMoveS:
-        zoom 0.5
-        "images/BattleSprites/bandit/BanditBruiserIdle.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BanditBruiserFrontStep2.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BanditBruiserIdle.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BanditBruiserFrontStep1.png"
-        pause 0.5
-        repeat
-    image BruiserMoveN:
-        zoom 0.5
-        "images/BattleSprites/bandit/BruiserBackIdle.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BruiserBack2.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BruiserBackIdle.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BruiserBack1.png"
-        pause 0.5
-        repeat
-    image BruiserMoveE:
-        zoom 0.5
-        "images/BattleSprites/bandit/BruiserRightIdle.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BruiserRight2.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BruiserRightIdle.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BruiserRight1.png"
-        pause 0.5
-        repeat
-    image BruiserMoveW:
-        zoom 0.5
-        "images/BattleSprites/bandit/BruiserLeftIdle.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BruiserLeft2.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BruiserLeftIdle.png"
-        pause 0.5
-        "images/BattleSprites/bandit/BruiserLeft1.png"
-        pause 0.5
-        repeat
-    image BruiserMove = ConditionSwitch("CurrentFacing == 'N'", "BruiserMoveN", "CurrentFacing == 'E'", "BruiserMoveE", "CurrentFacing == 'S'", "BruiserMoveS", "CurrentFacing == 'W'", "BruiserMoveW")
-
-    # mugshots defined here
-    image MaleWolfMug = "images/Mugshots/profile_wolf_male.png"
-    image FemWolfMug = "images/Mugshots/profile_wolf_fem.png"
     
 
 init 1 python:
@@ -570,10 +447,10 @@ label CombatEngine:
         # any battlefield instance needs to be stored here
         ###Laird cleaned the BattleFieldList
         BattleFieldList= []
-        BattleFieldList.append(UnderlayGenerator(15, 15, "grass", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassVBkade, grass, grassCampfire, grass, grassVBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
-        BattleFieldList.append(UnderlayGenerator(15, 15, "light forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassVBkade, grass, grassCampfire, grass, grassVBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
-        BattleFieldList.append(UnderlayGenerator(15, 15, "forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassVBkade, grass, grassCampfire, grass, grassVBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
-        BattleFieldList.append(UnderlayGenerator(15, 15, "heavy forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassVBkade, grass, grassCampfire, grass, grassVBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
+        BattleFieldList.append(UnderlayGenerator(15, 15, "grass", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grass, grass, grassCampfire, grass, grass], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
+        BattleFieldList.append(UnderlayGenerator(15, 15, "light forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grass, grass, grassCampfire, grass, grass], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
+        BattleFieldList.append(UnderlayGenerator(15, 15, "forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grass, grass, grassCampfire, grass, grass], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
+        BattleFieldList.append(UnderlayGenerator(15, 15, "heavy forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grass, grass, grassCampfire, grass, grass], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
         
         
         
@@ -671,7 +548,7 @@ label NextTurn:
             PlayerArmy.Army[x].Action = True
     #"[randomtest] and [PlayerArmy.Army]"
     #"Movement current 0 = [PlayerArmy.Army[0].MovementCurrent] / Movement current 1 = [PlayerArmy.Army[1].MovementCurrent] / Movement current 2 = [PlayerArmy.Army[2].MovementCurrent]"
-    call ResetMoveVariables from _call_ResetMoveVariables_1
+    call ResetMoveVariables
     jump AITurn
     
 label showpath:

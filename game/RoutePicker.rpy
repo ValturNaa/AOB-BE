@@ -254,13 +254,13 @@ label ResetMoveVariables:
     hide screen EnemyMonsterCard
     python:
         ResetMoveVariables()
+    python:
+        for x in range(0, len(CurrentOverlay)):
+            for y in range(0, len(CurrentOverlay[x])):
+                if CurrentOverlay[x][y].UnitPresent == "Move":
+                    CurrentOverlay[x][y].UnitPresent = "Null"
     if MoveCancel == True:
         $ MoveCancel = False
-        python:
-            for x in range(0, len(CurrentOverlay)):
-                for y in range(0, len(CurrentOverlay[x])):
-                    if CurrentOverlay[x][y].UnitPresent == "Move":
-                        CurrentOverlay[x][y].UnitPresent = "Null"
         jump RenderMap
     else:
         return

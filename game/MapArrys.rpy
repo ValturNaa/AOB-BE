@@ -160,23 +160,32 @@ screen CurrentMap:
                                         add CurrentOverlay[x][y].UnitIdle
                             at ZoomList[MapZoom][0]
                     else:
-                        # Idle overlay
-                        grid len(CurrentOverlay) len(CurrentOverlay[0]):
-                            for x in range(0, len(CurrentOverlay)): 
-                                for y in range(0, len(CurrentOverlay[x])):
-                                    if CurrentOverlay[x][y].UnitPresent == "Null":
-                                        add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
-                                    else:
-                                        if CurrentOverlay[x][y].UnitID.ArmyID == 1:
-                                            imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover hovered Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("PlayerMonsterCard") action SetVariable("StartX", x), SetVariable("StartY", y), AddToSet(MoveSelect, CurrentOverlay[x][y].UnitID), Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID), Jump("PathGenerator")
+                        if AITurn == False:
+                            # Idle overlay
+                            grid len(CurrentOverlay) len(CurrentOverlay[0]):
+                                for x in range(0, len(CurrentOverlay)): 
+                                    for y in range(0, len(CurrentOverlay[x])):
+                                        if CurrentOverlay[x][y].UnitPresent == "Null":
+                                            add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
                                         else:
-                                            if ResolvingDamage == False:
-                                                imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action NullAction()
+                                            if CurrentOverlay[x][y].UnitID.ArmyID == 1:
+                                                imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover hovered Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("PlayerMonsterCard") action SetVariable("StartX", x), SetVariable("StartY", y), AddToSet(MoveSelect, CurrentOverlay[x][y].UnitID), Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID), Jump("PathGenerator")
                                             else:
-                                                imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle action NullAction()
+                                                if ResolvingDamage == False:
+                                                    imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action NullAction()
+                                                else:
+                                                    imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle action NullAction()
 
-                            at ZoomList[MapZoom][0]
-                                
+                                at ZoomList[MapZoom][0]
+                        else:
+                            grid len(CurrentOverlay) len(CurrentOverlay[0]):
+                                for x in range(0, len(CurrentOverlay)): 
+                                    for y in range(0, len(CurrentOverlay[x])):
+                                        if CurrentOverlay[x][y].UnitPresent == "Null":
+                                            add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
+                                        else:
+                                            add CurrentOverlay[x][y].UnitIdle
+                                at ZoomList[MapZoom][0]  
                                         
                 else:
                     # movement range overlay
@@ -291,7 +300,7 @@ screen CurrentMap:
                 if MoveSelect[0].Action == True:
                     imagebutton idle SelectedBattleSkills[x].WeaponIdle hover SelectedBattleSkills[x].WeaponHover right_padding 23 hovered SetVariable("EdgeScroll", False) unhovered SetVariable("EdgeScroll", True) action SetVariable("SelectedAttack", [SelectedBattleSkills[x]]), Jump("AttackRange")
                 else:
-                    imagebutton idle SelectedBattleSkills[x].WeaponIdle hover SelectedBattleSkills[x].WeaponIdle right_padding 23 hovered SetVariable("EdgeScroll", False) unhovered SetVariable("EdgeScroll", True) action Null()
+                    imagebutton idle SelectedBattleSkills[x].WeaponIdle hover SelectedBattleSkills[x].WeaponIdle right_padding 23 hovered SetVariable("EdgeScroll", False) unhovered SetVariable("EdgeScroll", True) action NullAction()
 
     
     if DeploymentStart == True:
