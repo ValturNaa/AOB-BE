@@ -1,8 +1,8 @@
 init:
     
-    # to face right, prefix P_ to animation name, to face left do not
+    # to face right, no prefix on animation name, to face leftprefix E_
     
-    image BruiserClub:
+    image E_BruiserClub:
         im.Flip("images/BattleSprites/BanditBruiser/Attack/BruiserClub1.png", horizontal=True)
         pause 0.5
         im.Flip("images/BattleSprites/BanditBruiser/Attack/BruiserClub2.png", horizontal=True)
@@ -19,7 +19,7 @@ init:
         pause 1.5
         im.Flip("images/BattleSprites/BanditBruiser/Attack/BruiserClub1.png", horizontal=True)
         
-    image ThugKnife:
+    image E_ThugKnife:
         im.Flip("images/BattleSprites/BanditThug/Attack/ThugKnife1.png", horizontal=True)
         pause 0.5
         im.Flip("images/BattleSprites/BanditThug/Attack/ThugKnife2.png", horizontal=True)
@@ -40,7 +40,7 @@ init:
         pause 0.1
         im.Flip("images/BattleSprites/BanditThug/Attack/ThugKnife10.png", horizontal=True)
     
-    image FWClaw:
+    image E_FWClaw:
         im.Flip("images/BattleSprites/FWolf/Attack/FWClaw10.png", horizontal=True)
         pause 0.5
         im.Flip("images/BattleSprites/FWolf/Attack/FWClaw1.png", horizontal=True)
@@ -63,7 +63,7 @@ init:
         pause 0.1
         im.Flip("images/BattleSprites/FWolf/Attack/FWClaw10.png", horizontal=True)
         
-    image P_FWClaw:
+    image FWClaw:
         "images/BattleSprites/FWolf/Attack/FWClaw10.png"
         pause 0.5
         "images/BattleSprites/FWolf/Attack/FWClaw1.png"
@@ -86,7 +86,7 @@ init:
         pause 0.1
         "images/BattleSprites/FWolf/Attack/FWClaw10.png"
         
-    image P_MCAxe:
+    image MCAxe:
         im.Flip("images/BattleSprites/MC/Attack/MCAxe10.png", horizontal=True)
         pause 0.5
         im.Flip("images/BattleSprites/MC/Attack/MCAxe1.png", horizontal=True)
@@ -109,7 +109,7 @@ init:
         pause 0.1
         im.Flip("images/BattleSprites/MC/Attack/MCAxe10.png", horizontal=True)
         
-    image MWClaw:
+    image E_MWClaw:
         im.Flip("images/BattleSprites/MWolf/Attack/MWClaw1.png", horizontal=True)
         pause 0.5
         im.Flip("images/BattleSprites/MWolf/Attack/MWClaw2.png", horizontal=True)
@@ -130,7 +130,7 @@ init:
         pause 0.3
         im.Flip("images/BattleSprites/MWolf/Attack/MWClaw1.png", horizontal=True)
         
-    image P_MWClaw:
+    image MWClaw:
         "images/BattleSprites/MWolf/Attack/MWClaw1.png"
         pause 0.5
         "images/BattleSprites/MWolf/Attack/MWClaw2.png"
@@ -150,3 +150,30 @@ init:
         "images/BattleSprites/MWolf/Attack/MWClaw9.png"
         pause 0.3
         "images/BattleSprites/MWolf/Attack/MWClaw1.png"
+        
+    image E_BanditArcherBow:
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow1.png", horizontal=True)
+        pause 0.1
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow2.png", horizontal=True)
+        pause 0.1
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow3.png", horizontal=True)
+        pause 0.1
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow4.png", horizontal=True)
+        pause 0.1
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow5.png", horizontal=True)
+        pause 0.1
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow6.png", horizontal=True)
+        pause 0.1
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow7.png", horizontal=True)
+        pause 0.7
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow8.png", horizontal=True)
+        pause 0.05
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow9.png", horizontal=True)
+        pause 0.05
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow10.png", horizontal=True)
+        pause 0.1
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow11.png", horizontal=True)
+        pause 0.1
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow12.png", horizontal=True)
+        pause 0.1
+        im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow13.png", horizontal=True)

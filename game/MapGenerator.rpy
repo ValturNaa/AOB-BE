@@ -1,3 +1,11 @@
+# Available map types:
+# - "grass"
+# - "light forest"
+# - "forest"
+# - "heavy forest"
+
+
+
 init python:
     
     class PlaceTile(object):

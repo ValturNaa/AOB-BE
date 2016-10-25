@@ -168,53 +168,53 @@ init:
     
     
     image ThugIdle:
-        "images/BattleSprites/BanditThug/Walk/BanditThugIdle.png"
+        "images/BattleSprites/Thug/Walk/ThugIdle.png"
         
     image ThugHover:
         "ThugIdle"
         alpha 0.7
     image ThugMoveS:
         
-        "images/BattleSprites/BanditThug/Walk/ThugIdle.png"
+        "images/BattleSprites/Thug/Walk/ThugFrontIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugFront2.png"
+        "images/BattleSprites/Thug/Walk/ThugFront2.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugIdle.png"
+        "images/BattleSprites/Thug/Walk/ThugFrontIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugFront1.png"
+        "images/BattleSprites/Thug/Walk/ThugFront1.png"
         pause 0.5
         repeat
     image ThugMoveN:
         
-        "images/BattleSprites/BanditThug/Walk/ThugBackIdle.png"
+        "images/BattleSprites/Thug/Walk/ThugBackIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugBack2.png"
+        "images/BattleSprites/Thug/Walk/ThugBack2.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugBackIdle.png"
+        "images/BattleSprites/Thug/Walk/ThugBackIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugBack1.png"
+        "images/BattleSprites/Thug/Walk/ThugBack1.png"
         pause 0.5
         repeat
     image ThugMoveE:
         
-        "images/BattleSprites/BanditThug/Walk/ThugRightIdle.png"
+        "images/BattleSprites/Thug/Walk/ThugRightIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugRight2.png"
+        "images/BattleSprites/Thug/Walk/ThugRight2.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugRightIdle.png"
+        "images/BattleSprites/Thug/Walk/ThugRightIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugRight1.png"
+        "images/BattleSprites/Thug/Walk/ThugRight1.png"
         pause 0.5
         repeat
     image ThugMoveW:
         
-        "images/BattleSprites/BanditThug/Walk/ThugLeftIdle.png"
+        "images/BattleSprites/Thug/Walk/ThugLeftIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugLeft2.png"
+        "images/BattleSprites/Thug/Walk/ThugLeft2.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugLeftIdle.png"
+        "images/BattleSprites/Thug/Walk/ThugLeftIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditThug/Walk/ThugLeft1.png"
+        "images/BattleSprites/Thug/Walk/ThugLeft1.png"
         pause 0.5
         repeat
     image ThugMove = ConditionSwitch("CurrentFacing == 'N'", "ThugMoveN", "CurrentFacing == 'E'", "ThugMoveE", "CurrentFacing == 'S'", "ThugMoveS", "CurrentFacing == 'W'", "ThugMoveW")
