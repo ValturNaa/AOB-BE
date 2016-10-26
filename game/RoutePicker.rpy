@@ -241,7 +241,7 @@ label MostEfficientRoute:
             
 label FinishMove:
     python:
-        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0].BattleName
+        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0].Self
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitID = MoveSelect[0]
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitIdle = MoveSelect[0].BattleSpriteIdle
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitHover = MoveSelect[0].BattleSpriteHover

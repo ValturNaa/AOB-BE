@@ -378,7 +378,7 @@ label ResolveDamage:
         RangeCalculation = False
         renpy.restart_interaction()
     
-    show screen DamageScreen(Damage=CombatDamage.FinalDamage, ArmyID=TargetID[0].ArmyID)
+    show screen DamageScreen(Damage=CombatDamage.FinalDamage, ArmyID=TargetID[0].ArmyID, Attacker=MoveSelect[0], Defender=TargetID[0], Attack=SelectedAttack[0])
     python:
         while CombatDamage.FinalDamage > 0:
             TargetID[0].CurrentMorale -= 1
@@ -392,13 +392,24 @@ label ResolveDamage:
             CurrentOverlay[TargetX][TargetY].UnitHover="None"
             CurrentOverlay[TargetX][TargetY].UnitID="None"
             CurrentOverlay[TargetX][TargetY].Visibility = 0
+    pause 2.5
     hide screen DamageScreen
-    pause 1.5
     call ResetMoveVariables from _call_ResetMoveVariables_2
     jump RenderMap
     
 
-screen DamageScreen(Damage, ArmyID):
+screen DamageScreen(Damage, ArmyID, Attacker, Defender, Attack):
+    
+    if Attacker.ArmyID == 1:
+        add Attack.Animation xpos 0 ypos 100
+    else:
+        add Attack.Animation xpos 700 ypos 100
+        
+    if Defender.ArmyID == 1:
+        add Defender.PFlinch xpos 0 ypos 100
+    else:
+        add Defender.PFlinch xpos 700 ypos 100
+    
     if ArmyID == 1:
         text "-[Damage]" at FloatingDamage1, Fade
     else:

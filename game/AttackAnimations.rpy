@@ -19,6 +19,23 @@ init:
         pause 1.5
         im.Flip("images/BattleSprites/BanditBruiser/Attack/BruiserClub1.png", horizontal=True)
         
+    image BruiserClub:
+        "images/BattleSprites/BanditBruiser/Attack/BruiserClub1.png"
+        pause 0.5
+        "images/BattleSprites/BanditBruiser/Attack/BruiserClub2.png"
+        pause 0.4
+        "images/BattleSprites/BanditBruiser/Attack/BruiserClub3.png"
+        pause 0.1
+        "images/BattleSprites/BanditBruiser/Attack/BruiserClub4.1.png"
+        pause 0.05
+        "images/BattleSprites/BanditBruiser/Attack/BruiserClub5.1.png"
+        pause 0.05
+        "images/BattleSprites/BanditBruiser/Attack/BruiserClub5.2.png"
+        pause 0.05
+        "images/BattleSprites/BanditBruiser/Attack/BruiserClub5.png"
+        pause 1.5
+        "images/BattleSprites/BanditBruiser/Attack/BruiserClub1.png"
+        
     image E_ThugKnife:
         im.Flip("images/BattleSprites/BanditThug/Attack/ThugKnife1.png", horizontal=True)
         pause 0.5
@@ -40,7 +57,28 @@ init:
         pause 0.1
         im.Flip("images/BattleSprites/BanditThug/Attack/ThugKnife10.png", horizontal=True)
     
-    image E_FWClaw:
+    image E_ThugKnife:
+        "images/BattleSprites/BanditThug/Attack/ThugKnife1.png"
+        pause 0.5
+        "images/BattleSprites/BanditThug/Attack/ThugKnife2.png"
+        pause 0.1
+        "images/BattleSprites/BanditThug/Attack/ThugKnife3.png"
+        pause 0.1
+        "images/BattleSprites/BanditThug/Attack/ThugKnife4.png"
+        pause 0.15
+        "images/BattleSprites/BanditThug/Attack/ThugKnife5.png"
+        pause 0.05
+        "images/BattleSprites/BanditThug/Attack/ThugKnife6.png"
+        pause 0.05
+        "images/BattleSprites/BanditThug/Attack/ThugKnife7.png"
+        pause 0.05
+        "images/BattleSprites/BanditThug/Attack/ThugKnife8.png"
+        pause 0.3
+        "images/BattleSprites/BanditThug/Attack/ThugKnife9.png"
+        pause 0.1
+        "images/BattleSprites/BanditThug/Attack/ThugKnife10.png"
+    
+    image FWClaw:
         im.Flip("images/BattleSprites/FWolf/Attack/FWClaw10.png", horizontal=True)
         pause 0.5
         im.Flip("images/BattleSprites/FWolf/Attack/FWClaw1.png", horizontal=True)
@@ -63,7 +101,7 @@ init:
         pause 0.1
         im.Flip("images/BattleSprites/FWolf/Attack/FWClaw10.png", horizontal=True)
         
-    image FWClaw:
+    image E_FWClaw:
         "images/BattleSprites/FWolf/Attack/FWClaw10.png"
         pause 0.5
         "images/BattleSprites/FWolf/Attack/FWClaw1.png"
@@ -87,7 +125,7 @@ init:
         "images/BattleSprites/FWolf/Attack/FWClaw10.png"
         
     image MCAxe:
-        im.Flip("images/BattleSprites/MC/Attack/MCAxe10.png", horizontal=True)
+        im.Flip("images/BattleSprites/MC/Attack/MCAxe9.png", horizontal=True)
         pause 0.5
         im.Flip("images/BattleSprites/MC/Attack/MCAxe1.png", horizontal=True)
         pause 0.3
@@ -106,10 +144,9 @@ init:
         im.Flip("images/BattleSprites/MC/Attack/MCAxe8.png", horizontal=True)
         pause 0.1
         im.Flip("images/BattleSprites/MC/Attack/MCAxe9.png", horizontal=True)
-        pause 0.1
-        im.Flip("images/BattleSprites/MC/Attack/MCAxe10.png", horizontal=True)
+
         
-    image E_MWClaw:
+    image MWClaw:
         im.Flip("images/BattleSprites/MWolf/Attack/MWClaw1.png", horizontal=True)
         pause 0.5
         im.Flip("images/BattleSprites/MWolf/Attack/MWClaw2.png", horizontal=True)
@@ -130,7 +167,7 @@ init:
         pause 0.3
         im.Flip("images/BattleSprites/MWolf/Attack/MWClaw1.png", horizontal=True)
         
-    image MWClaw:
+    image E_MWClaw:
         "images/BattleSprites/MWolf/Attack/MWClaw1.png"
         pause 0.5
         "images/BattleSprites/MWolf/Attack/MWClaw2.png"
@@ -177,3 +214,30 @@ init:
         im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow12.png", horizontal=True)
         pause 0.1
         im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow13.png", horizontal=True)
+        
+    image BanditArcherBow:
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow1.png"
+        pause 0.1
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow2.png"
+        pause 0.1
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow3.png"
+        pause 0.1
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow4.png"
+        pause 0.1
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow5.png"
+        pause 0.1
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow6.png"
+        pause 0.1
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow7.png"
+        pause 0.7
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow8.png"
+        pause 0.05
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow9.png"
+        pause 0.05
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow10.png"
+        pause 0.1
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow11.png"
+        pause 0.1
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow12.png"
+        pause 0.1
+        "images/BattleSprites/BanditArcher/Attack/BanditArcherBow13.png"

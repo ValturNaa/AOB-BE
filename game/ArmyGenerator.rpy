@@ -4,9 +4,9 @@ init 5 python:
 
     FWolf = unit(0, 0, 0, 0, "FWolf", "Claw Wolf", [E_FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "FWolfMug", "Female", 2)
     MWolf = unit(0, 0, 0, 0, "MWolf", "Claw Wolf", [E_MWolfClaw], [], 4, "MWolfIdle", "MWolfHover", "MWolfMove", "MWolfMug", "Male", 2)
-    Bruiser = unit(0, 0, 0, 0, "Bruiser", "Bruiser", [E_BruiserClub], [], 2, "BruiserIdle", "BruiserHover", "BruiserMove", "MWolfMug", "Male", 2)
-    BanditArcher = unit(0, 0, 0, 0, "BanditArcher", "Bandit Archer", [E_BanditArcherBow], [], 3, "BanditArcherIdle", "BanditArcherHover", "BanditArcherMove", "FWolfMug", "Female", 2)
-    Thug = unit(0, 0, 0, 0, "Thug", "Thug", [E_ThugKnife], [], 4, "ThugIdle", "ThugHover", "ThugMove", "MWolfMug", "Male", 2)
+    Bruiser = unit(0, 0, 0, 0, "Bruiser", "Bruiser", [E_BruiserClub], [], 2, "BruiserIdle", "BruiserHover", "BruiserMove", "BruiserMug", "Male", 2)
+    BanditArcher = unit(0, 0, 0, 0, "BanditArcher", "Bandit Archer", [E_BanditArcherBow], [], 3, "BanditArcherIdle", "BanditArcherHover", "BanditArcherMove", "BanditArcherMug", "Female", 2)
+    Thug = unit(0, 0, 0, 0, "Thug", "Thug", [E_ThugKnife], [], 4, "ThugIdle", "ThugHover", "ThugMove", "ThugMug", "Male", 2)
         
     def EnemyArmyGenerator(ArmyType, Quantity, Strength):
         enemy_pool = []

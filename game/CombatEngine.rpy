@@ -316,7 +316,41 @@ init 1 python:
             self.Action = True
             # Gender
             self.Gender = Gender
+            # flinch
+            self.PFlinch = GetPFlinch(ArmyID, Mugshot)
             
+    def GetPFlinch(ArmyID, Mugshot):
+        return_flinch = "None"
+        if (Mugshot == "MWolfMug"):
+            if (ArmyID == 1):
+                return_flinch = im.Flip("images/BattleSprites/MWolf/Attack/MWClaw1.png", horizontal=True)
+            else:
+                return_flinch = "images/BattleSprites/MWolf/Attack/MWClaw1.png"
+        elif (Mugshot == "FWolfMug"):
+            if (ArmyID == 1):
+                return_flinch = im.Flip("images/BattleSprites/FWolf/Attack/FWClaw10.png", horizontal=True)
+            else:
+                return_flinch = "images/BattleSprites/FWolf/Attack/FWClaw10.png"
+        elif (Mugshot == "MCMug"):
+            if (ArmyID == 1):
+                return_flinch = im.Flip("images/BattleSprites/MC/Attack/MCAxe9.png", horizontal=True)
+        elif (Mugshot == "BanditArcherMug"):
+            if (ArmyID == 1):
+                return_flinch = "images/BattleSprites/BanditArcher/Attack/BanditArcherBow13.png"
+            else:
+                return_flinch = im.Flip("images/BattleSprites/BanditArcher/Attack/BanditArcherBow13.png", horizontal=True)
+        elif (Mugshot == "ThugMug"):
+            if (ArmyID == 1):
+                return_flinch = "images/BattleSprites/BanditThug/Attack/ThugKnife10.png"
+            else:
+                return_flinch = im.Flip("images/BattleSprites/BanditThug/Attack/ThugKnife10.png", horizontal=True)
+        elif (Mugshot == "BruiserMug"):
+            if (ArmyID == 1):
+                return_flinch = "images/BattleSprites/BanditBruiser/Attack/BruiserClub1.png"
+            else:
+                return_flinch = im.Flip("images/BattleSprites/BanditBruiser/Attack/BruiserClub1.png", horizontal=True)
+        return return_flinch
+                
     def getPresist(Finesse, Cunning):
         temp1 = Finesse+Cunning
         return temp1
@@ -395,7 +429,7 @@ init 1 python:
     E_ThugKnife = weapon("Knife", 1, 4, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_ThugKnife")
     E_BruiserClub = weapon("Club", 1, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_BruiserClub")
     E_BanditArcherBow = weapon("Bow", 5, 3, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_BanditArcherBow")
-    MCAxe = weapon("Axe", 5, 7, "Physical", 1, 1, "ClubIdle", "ClubHover", "MCAxe")
+    MCAxe = weapon("Axe", 1, 7, "Physical", 1, 1, "ClubIdle", "ClubHover", "MCAxe")
     E_FWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_FWClaw")
     FWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "FWClaw")
     E_MWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_MWClaw")
@@ -429,9 +463,9 @@ label CombatEngine:
     default testarmy = []
     python:
         # sets up player army. Works for a fixed army, but will need some sort of selection screen and drawing stats from breeding classes.
-        p1 = unit(5, 5, 5, 5, "p1", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MWolfMug", "Female", 1)
-        p2 = unit(5, 5, 5, 5, "p2", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MWolfMug", "Female", 1)
-        p3 = unit(5, 5, 5, 5, "p3", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "MWolfMug", "Female", 1)
+        p1 = unit(5, 5, 5, 5, "p1", "Claw Wolf", [MWolfClaw], [], 4, "MWolfIdle", "MWolfHover", "MWolfMove", "MWolfMug", "Male", 1)
+        p2 = unit(5, 5, 5, 5, "p2", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "FWolfMug", "Female", 1)
+        p3 = unit(5, 5, 5, 5, "p3", "Player", [MCAxe], [], 4, "MCIdle", "MCHover", "MCMove", "MCMug", "Male", 1)
         PlayerArmy = Army([p1, p2, p3], [p1, p2, p3])
         # sets up enely 1's army. Will need a generator for random events and scripted ones some sort of selection method
         testarmy = EnemyArmyGenerator("Bandits", 3, 4)

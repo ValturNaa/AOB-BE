@@ -115,20 +115,20 @@ init:
         
         
     image BruiserIdle:
-        "images/BattleSprites/BanditBruiser/Walk/BanditBruiserIdle.png"
+        "images/BattleSprites/BanditBruiser/Walk/BruiserFrontIdle.png"
         
     image BruiserHover:
         "BruiserIdle"
         alpha 0.7
     image BruiserMoveS:
         
-        "images/BattleSprites/BanditBruiser/Walk/BanditBruiserIdle.png"
+        "images/BattleSprites/BanditBruiser/Walk/BruiserFrontIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditBruiser/Walk/BanditBruiserFrontStep2.png"
+        "images/BattleSprites/BanditBruiser/Walk/BruiserFront2.png"
         pause 0.5
-        "images/BattleSprites/BanditBruiser/Walk/BanditBruiserIdle.png"
+        "images/BattleSprites/BanditBruiser/Walk/BruiserFrontIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditBruiser/Walk/BanditBruiserFrontStep1.png"
+        "images/BattleSprites/BanditBruiser/Walk/BruiserFront.png"
         pause 0.5
         repeat
     image BruiserMoveN:
@@ -168,53 +168,53 @@ init:
     
     
     image ThugIdle:
-        "images/BattleSprites/Thug/Walk/ThugIdle.png"
+        "images/BattleSprites/BanditThug/Walk/ThugFrontIdle.png"
         
     image ThugHover:
         "ThugIdle"
         alpha 0.7
     image ThugMoveS:
         
-        "images/BattleSprites/Thug/Walk/ThugFrontIdle.png"
+        "images/BattleSprites/BanditThug/Walk/ThugFrontIdle.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugFront2.png"
+        "images/BattleSprites/BanditThug/Walk/ThugFront2.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugFrontIdle.png"
+        "images/BattleSprites/BanditThug/Walk/ThugFrontIdle.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugFront1.png"
+        "images/BattleSprites/BanditThug/Walk/ThugFront1.png"
         pause 0.5
         repeat
     image ThugMoveN:
         
-        "images/BattleSprites/Thug/Walk/ThugBackIdle.png"
+        "images/BattleSprites/BanditThug/Walk/ThugBackIdle.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugBack2.png"
+        "images/BattleSprites/BanditThug/Walk/ThugBack2.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugBackIdle.png"
+        "images/BattleSprites/BanditThug/Walk/ThugBackIdle.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugBack1.png"
+        "images/BattleSprites/BanditThug/Walk/ThugBack1.png"
         pause 0.5
         repeat
     image ThugMoveE:
         
-        "images/BattleSprites/Thug/Walk/ThugRightIdle.png"
+        "images/BattleSprites/BanditThug/Walk/ThugRightIdle.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugRight2.png"
+        "images/BattleSprites/BanditThug/Walk/ThugRight2.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugRightIdle.png"
+        "images/BattleSprites/BanditThug/Walk/ThugRightIdle.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugRight1.png"
+        "images/BattleSprites/BanditThug/Walk/ThugRight1.png"
         pause 0.5
         repeat
     image ThugMoveW:
         
-        "images/BattleSprites/Thug/Walk/ThugLeftIdle.png"
+        "images/BattleSprites/BanditThug/Walk/ThugLeftIdle.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugLeft2.png"
+        "images/BattleSprites/BanditThug/Walk/ThugLeft2.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugLeftIdle.png"
+        "images/BattleSprites/BanditThug/Walk/ThugLeftIdle.png"
         pause 0.5
-        "images/BattleSprites/Thug/Walk/ThugLeft1.png"
+        "images/BattleSprites/BanditThug/Walk/ThugLeft1.png"
         pause 0.5
         repeat
     image ThugMove = ConditionSwitch("CurrentFacing == 'N'", "ThugMoveN", "CurrentFacing == 'E'", "ThugMoveE", "CurrentFacing == 'S'", "ThugMoveS", "CurrentFacing == 'W'", "ThugMoveW")
@@ -272,18 +272,18 @@ init:
     image BanditArcherMove = ConditionSwitch("CurrentFacing == 'N'", "BanditArcherMoveN", "CurrentFacing == 'E'", "BanditArcherMoveE", "CurrentFacing == 'S'", "BanditArcherMoveS", "CurrentFacing == 'W'", "BanditArcherMoveW")
     
     image MCIdle:
-        "images/BattleSprites/MC/Walk/MCIdle.png"
+        "images/BattleSprites/MC/Walk/MCFrontIdle.png"
         
     image MCHover:
         "MCIdle"
         alpha 0.7
     image MCMoveS:
         
-        "images/BattleSprites/MC/Walk/MCIdle.png"
+        "images/BattleSprites/MC/Walk/MCFrontIdle.png"
         pause 0.5
         "images/BattleSprites/MC/Walk/MCFront2.png"
         pause 0.5
-        "images/BattleSprites/MC/Walk/MCIdle.png"
+        "images/BattleSprites/MC/Walk/MCFrontIdle.png"
         pause 0.5
         "images/BattleSprites/MC/Walk/MCFront1.png"
         pause 0.5
@@ -327,3 +327,7 @@ init:
     # mugshots defined here
     image MWolfMug = "images/Mugshots/profile_wolf_male.png"
     image FWolfMug = "images/Mugshots/profile_wolf_fem.png"
+    image MCMug = "images/Mugshots/MCAva.png"
+    image BanditArcherMug = "images/Mugshots/profile_wolf_male.png"
+    image ThugMug = "images/Mugshots/profile_wolf_male.png"
+    image BruiserMug = "images/Mugshots/profile_wolf_male.png"

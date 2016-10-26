@@ -31,14 +31,14 @@ init python:
     def GetX(Unit, Map):
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map[x][y].UnitPresent == Unit.BattleName):
+                if (Map[x][y].UnitPresent == Unit.Self):
                     StartX = x
         return StartX
         
     def GetY(Unit, Map):
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map[x][y].UnitPresent == Unit.BattleName):
+                if (Map[x][y].UnitPresent == Unit.Self):
                     StartY = y
         return StartY
         
@@ -60,7 +60,7 @@ init python:
         ClosestTarget = 0
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map[x][y].UnitPresent == Unit.BattleName):
+                if (Map[x][y].UnitPresent == Unit.Self):
                     StartX = x
                     StartY = y
                 else:
@@ -92,7 +92,7 @@ init python:
         ClosestTarget = 0
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map[x][y].UnitPresent == Unit.BattleName):
+                if (Map[x][y].UnitPresent == Unit.Self):
                     StartX = x
                     StartY = y
                 else:
@@ -376,7 +376,7 @@ init python:
 
     def FinishMove():
         global CurrentOverlay
-        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0].BattleName
+        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0].Self
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitID = MoveSelect[0]
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitIdle = MoveSelect[0].BattleSpriteIdle
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitHover = MoveSelect[0].BattleSpriteHover
@@ -518,7 +518,7 @@ init python:
         global ResolvingDamage
         for x in range(0, len(CurrentOverlay)):
             for y in range(0, len(CurrentOverlay[x])):
-                if (CurrentOverlay[x][y].UnitPresent == Unit.BattleName):
+                if (CurrentOverlay[x][y].UnitPresent == Unit.Self):
                     StartX = x
                     StartY = y
         AISelectAttack(Unit, StartX, StartY)
@@ -526,7 +526,7 @@ init python:
         TargetID = [CurrentOverlay[Target.Xpos][Target.Ypos].UnitID]
         for x in range(0, len(CurrentOverlay)):
             for y in range(0, len(CurrentOverlay[x])):
-                if (CurrentOverlay[x][y].UnitPresent == TargetID[0].BattleName):
+                if (CurrentOverlay[x][y].UnitPresent == TargetID[0].Self):
                     TargetX = x
                     TargetY = y 
         CombatDamage = GetDamage(Unit, SelectedAttack[0], TargetID[0])
@@ -537,7 +537,7 @@ init python:
         
         renpy.show_screen("PlayerMonsterCard", TargetID[0])
         renpy.show_screen("EnemyMonsterCard", Unit)
-        renpy.show_screen("DamageScreen", Damage=CombatDamage.FinalDamage, ArmyID=TargetID[0].ArmyID)
+        renpy.show_screen("DamageScreen", Damage=CombatDamage.FinalDamage, ArmyID=TargetID[0].ArmyID, Attacker=MoveSelect[0], Defender=TargetID[0], Attack=SelectedAttack[0])
         while CombatDamage.FinalDamage > 0:
             TargetID[0].CurrentMorale -= 1
             CombatDamage.FinalDamage -= 1
@@ -550,8 +550,8 @@ init python:
             CurrentOverlay[TargetX][TargetY].UnitHover="None"
             CurrentOverlay[TargetX][TargetY].UnitID="None"
             CurrentOverlay[TargetX][TargetY].Visibility = 0
+        renpy.pause(2.5)
         renpy.hide_screen("DamageScreen")
-        renpy.pause(1.5)
         renpy.hide_screen("PlayerMonsterCard")
         renpy.hide_screen("EnemyMonsterCard")
         ResetMoveVariables()
