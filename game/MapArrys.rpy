@@ -169,12 +169,15 @@ screen CurrentMap:
                                             add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
                                         else:
                                             if CurrentOverlay[x][y].UnitID.ArmyID == 1:
-                                                imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover hovered Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("PlayerMonsterCard") action SetVariable("StartX", x), SetVariable("StartY", y), AddToSet(MoveSelect, CurrentOverlay[x][y].UnitID), Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID), Jump("PathGenerator")
+                                                if ResolvingDamage == False:
+                                                    imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover hovered Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("PlayerMonsterCard") action SetVariable("StartX", x), SetVariable("StartY", y), AddToSet(MoveSelect, CurrentOverlay[x][y].UnitID), Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID), Jump("PathGenerator")
+                                                else:
+                                                    add CurrentOverlay[x][y].UnitIdle
                                             else:
                                                 if ResolvingDamage == False:
                                                     imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action NullAction()
                                                 else:
-                                                    imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle action NullAction()
+                                                    add CurrentOverlay[x][y].UnitIdle
 
                                 at ZoomList[MapZoom][0]
                         else:
@@ -400,6 +403,7 @@ screen ZoomScreen():
         else:
             imagebutton idle "ZoomOutIdle" hover "ZoomOutHover" xpos 730 ypos 5 action SetVariable("MinusZoom", 1), Jump("RenderMap") focus_mask True
     text "Turn [Turn]" xpos 780 ypos 5
+
         
         
         
