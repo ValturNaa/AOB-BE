@@ -158,8 +158,6 @@ init -1:
 init 1 python:
     
     
-    # extra layer to apply transforms to the map
-    config.layers = ['master', 'mapdisplay', 'transient', 'screens', 'overlay']
     
     # used to ensure smooth movement
     MoveTick = False
@@ -419,8 +417,6 @@ init 1 python:
     CurrentEnemy2Deployment = []
     # enemy 3's deployment area (if used), same basis as CurrentMap
     CurrentEnemy3Deployment = []
-    # Used to end battle and return to farm screen
-    BattleEnd = False
     
     PlayerArmy = "None"
     Enemy1Army = "None"
@@ -436,6 +432,8 @@ init 1 python:
     DeploymentRandomiser = 0
     SelectedBattleSkills = []
     SelectedAttack = []
+    ReturnBattleInfo = "None"
+    Turn = 1
     
     
     
@@ -459,7 +457,6 @@ init 1 python:
     # FWolf = unit(5, 5, 5, 5, "PlaceHolder", "Soldier", [Stab], [], 4, "SoldierIdle", "SoldierHover", "SoldierMove", "Placeholder", "Female", 2)
     # Bruiser = unit(5, 5, 5, 5, "PlaceHolder", "Bruiser", [Club], [], 4, "BruiserIdle", "BruiserHover", "BruiserMove", "Placeholder", "Male", 2)
     
-    config.layers = ['master', 'mapdisplay', 'transient', 'screens', 'overlay']
     
     class Army(object):
         def __init__(self, ArmyList, DeployList):
@@ -552,14 +549,8 @@ label SetPos:
     
     
 label RenderMap:
-    default WinCheck = "No"
-    $ WinCheck = CheckWin()
-    if WinCheck == "Win":
-        jump WinLabel
-    elif WinCheck == "Lose":
-        jump LoseLabel
-    elif WinCheck == "Draw":
-        jump DrawLabel
+    python:
+        CheckWin()
     if UnitPlaced == True:
         $ ActiveDeployment = []
         $ UnitPlaced = False
@@ -595,6 +586,7 @@ label RenderMap:
 label NextTurn:
     default randomtest = 0
     python:
+        Turn += 1
         randomtest = len(PlayerArmy.Army)
         for x in range(0, len(PlayerArmy.Army)):
             PlayerArmy.Army[x].MovementCurrent = PlayerArmy.Army[x].MovementMax
@@ -628,13 +620,7 @@ label AITurn:
                         AIMoveAction()
                         AIAttackAction(ActiveAIArmies[army].Army[x])
                     ResetMoveVariables()
-                    WinCheck = CheckWin()
-                    if WinCheck == "Win":
-                        renpy.jump("WinLabel")
-                    elif WinCheck == "Lose":
-                        renpy.jump("LoseLabel")
-                    elif WinCheck == "Draw":
-                        renpy.jump("DrawLabel")
+                    CheckWin()
                     
                         
 
@@ -655,20 +641,49 @@ label ResetAI:
                     ActiveAIArmies[army].Army[x].Action = True
     return
     
-label WinLabel:
-    "You Win"
-    python:
-        MainMenu()
-    
-label LoseLabel:
-    "You Lose"
-    python:
-        MainMenu()
-    
-label DrawLabel:
-    "You draw"
-    python:
-        MainMenu()
 
 
+screen VictoryScreen(Condition):
+    add "images/GUI/VictoryScreen/victor_background.png" xpos 0 ypos 0
+    if Condition == "Win":
+        add "images/GUI/VictoryScreen/victor_winner.png" xpos 550 ypos 100
+    elif Condition == "Draw":
+        add "images/GUI/VictoryScreen/victor_tie.png" xpos 550 ypos 100
+    elif Condition == "Lose":
+        add "images/GUI/VictoryScreen/victor_loser.png" xpos 550 ypos 100
+        
+    add "images/GUI/VictoryScreen/victor_gold.png" xpos 600 ypos 520
+    text "[ReturnBattleInfo.Gold]" xpos 710 ypos 520
+    
+    add "images/GUI/VictoryScreen/victor_fame.png" xpos 600 ypos 580
+    text "[ReturnBattleInfo.Fame]" xpos 710 ypos 580
+
+    add "images/GUI/VictoryScreen/victor_exp.png" xpos 600 ypos 640
+    text "[ReturnBattleInfo.EXP]" xpos 710 ypos 640
+    
+    add "images/GUI/VictoryScreen/victor_turns.png" xpos 800 ypos 520
+    text "[ReturnBattleInfo.Turn]" xpos 980 ypos 520
+
+    add "images/GUI/VictoryScreen/victor_kills.png" xpos 800 ypos 580
+    text "[ReturnBattleInfo.Kills]" xpos 980 ypos 580
+    
+    add "images/GUI/VictoryScreen/victor_unitsused.png" xpos 800 ypos 640
+    text "[ReturnBattleInfo.UnitsUsed]" xpos 980 ypos 640
+    
+    add "images/GUI/VictoryScreen/victor_lost.png" xpos 800 ypos 700
+    text "[ReturnBattleInfo.UnitsRouted]" xpos 980 ypos 700
+    
+    add "images/GUI/VictoryScreen/victor_sides.png" xpos 800 ypos 760
+    text "[ReturnBattleInfo.SideQuests]" xpos 980 ypos 760
+    
+    imagebutton idle "images/GUI/VictoryScreen/victor_return_idle.png" hover "images/GUI/VictoryScreen/victor_return_hover.png" xpos 520 ypos 770 action ClearEverything(), MainMenu() 
+    
+    
+    
+    
+    
+    
+    
+    
+    
     

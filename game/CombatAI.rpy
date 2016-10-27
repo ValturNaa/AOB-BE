@@ -1,6 +1,87 @@
 init python:
+    def ClearEverything():
+        global DeploymentStart
+        global ActiveDeployment
+        global CompletedDeployment
+        global PlaceUnit
+        global UnitPlaced
+        global TempIndecesX
+        global TempIndecesY
+        global DeploymentRandomiser
+        global SelectedBattleSkills
+        global SelectedAttack
+        global ReturnBattleInfo
+        global Turn
+        global BattleFieldList
+        global CurrentBattlefieldID
+        global DeploymentPhase
+        global CurrentMap
+        global CurrentOverlay
+        global CurrentPlayerDeployment
+        global CurrentEnemy1Deployment
+        global CurrentEnemy2Deployment
+        global CurrentEnemy3Deployment
+        global AIAction
+        global AITurn
+        global AITarget
+        
+        
+        DeploymentStart = False
+        ActiveDeployment = []
+        CompletedDeployment = []
+        PlaceUnit = False
+        UnitPlaced = False
+        TempIndecesX = 0
+        TempIndecesY = 0
+        DeploymentRandomiser = 0
+        SelectedBattleSkills = []
+        SelectedAttack = []
+        ReturnBattleInfo = "None"
+        Turn = 1
+        BattleFieldList = []
+        CurrentBattlefieldID = 0
+        DeploymentPhase = True
+        CurrentMap = []
+        CurrentOverlay = []
+        CurrentPlayerDeployment = []
+        CurrentEnemy1Deployment = []
+        CurrentEnemy2Deployment = []
+        CurrentEnemy3Deployment = []
+        AIAction = "None"
+        AITurn = False
+        AITarget = "None"
+        ResetMoveVariables()
+        
     
+    class ReturnInfo(object):
+        def __init__(self, Turn, ActiveAIArmies, PlayerArmy):
+            self.Gold = renpy.random.randint(20, 80)
+            self.Fame = renpy.random.randint(5, 20)
+            self.EXP = renpy.random.randint(5, 20)
+            self.Turn = Turn
+            self.Kills = GetKills(ActiveAIArmies)
+            self.UnitsUsed = len(PlayerArmy)
+            self.UnitsRouted = GetRouted(PlayerArmy)
+            self.SideQuests = "Not Implemented"
+            
+            
+    def GetKills(List):
+        killstreak = 0
+        for x in range(0, len(List)):
+            for y in range(0, len(List[x].Army)):
+                if (List[x].Army[y].Routed == True):
+                    killstreak+= 1
+        return killstreak
+        
+    def GetRouted(Army):
+        killstreak = 0
+        for x in range(0, len(Army)):
+            if (Army[x].Routed == True):
+                killstreak += 1
+        return killstreak
+            
     def CheckWin():
+        global ReturnBattleInfo
         WinLose = "No"
         Win = True
         Lose = True
@@ -20,7 +101,12 @@ init python:
             WinLose = "Lose"
         elif (Win == True):
             WinLose = "Win"
-        return WinLose
+        
+        if (WinLose != "No"):
+            ReturnBattleInfo = ReturnInfo(Turn, ActiveAIArmies, PlayerArmy.Army)
+            renpy.hide_screen("ZoomScreen")
+            renpy.hide_screen("CurrentMap")
+            renpy.show_screen("VictoryScreen", WinLose)
     
     def ReturnPositive(Start, Target):
         temp1 = Start - Target

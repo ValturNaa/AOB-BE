@@ -313,6 +313,8 @@ screen CurrentMap:
             if AITurn == False:
                 if ResolvingDamage == False:
                     imagebutton idle "NextTurnIdle" hover "NextTurnHover" xpos 650 ypos 0 action Jump("NextTurn")
+    
+    
 
 
 
@@ -397,6 +399,7 @@ screen ZoomScreen():
             add "ZoomOutAplha" xpos 730 ypos 5
         else:
             imagebutton idle "ZoomOutIdle" hover "ZoomOutHover" xpos 730 ypos 5 action SetVariable("MinusZoom", 1), Jump("RenderMap") focus_mask True
+    text "Turn [Turn]" xpos 780 ypos 5
         
         
         
