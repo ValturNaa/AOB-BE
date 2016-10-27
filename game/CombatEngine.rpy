@@ -522,10 +522,8 @@ label CombatEngine:
     python:
         CurrentMap = BattleFieldList[CurrentBattlefieldID]
         CurrentOverlay = OverlayGenerator(CurrentMap)
-        CurrentPlayerDeployment = [[4, 4],[5, 4],[6, 4],
-        [4, 5],[5, 5],[6, 5],
-        [4, 6],[5, 6],[6, 6]]
-        CurrentEnemy1Deployment = [[7, 9], [8, 8], [8, 9], [8, 10], [9, 8], [9, 10], [9, 11], [10, 8], [10, 10], [11, 9]]
+        CurrentPlayerDeployment = DeployGenerator(CurrentMap, 4, 4, 3, 3)
+        CurrentEnemy1Deployment = DeployGenerator(CurrentMap, 7, 7, 5, 5)
         
         
         
