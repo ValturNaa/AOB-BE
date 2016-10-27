@@ -445,11 +445,11 @@ init 1 python:
     ThugKnife = weapon("Knife", 1, 4, "Physical", 1, 1, "KnifeIdle", "KnifeHover", "ThugKnife")
     BruiserClub = weapon("Club", 1, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", "BruiserClub")
     BanditArcherBow = weapon("Bow", 5, 3, "Physical", 1, 1, "BowIdle", "BowHover", "BanditArcherBow")
-    MCAxe = weapon("Axe", 1, 50, "Physical", 1, 1, "AxeIdle", "AxeHover", "MCAxe")
+    MCAxe = weapon("Axe", 1, 60, "Physical", 1, 1, "AxeIdle", "AxeHover", "MCAxe")
     E_FWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClawIdle", "ClawHover", "E_FWClaw")
-    FWolfClaw = weapon("Wolf Claw", 1, 50, "Physical", 1, 1, "ClawIdle", "ClawHover", "FWClaw")
+    FWolfClaw = weapon("Wolf Claw", 1, 60, "Physical", 1, 1, "ClawIdle", "ClawHover", "FWClaw")
     E_MWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClawIdle", "ClawHover", "E_MWClaw")
-    MWolfClaw = weapon("Wolf Claw", 1, 50, "Physical", 1, 1, "ClawIdle", "ClawHover", "MWClaw")
+    MWolfClaw = weapon("Wolf Claw", 1, 60, "Physical", 1, 1, "ClawIdle", "ClawHover", "MWClaw")
     
     
     #(self, Ferocity, Finesse, Determination, Cunning,  BattleName, OrigionalName, BattleSkills, Traits, MovementMax, BattleSpriteIdle, BattleSpriteHover, BattleSpriteMove, Mugshot, Gender, ArmyID, PAB=0, CAB=0, PRB=0, CRB=0):
