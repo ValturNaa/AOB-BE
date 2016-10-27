@@ -317,13 +317,9 @@ screen CurrentMap:
                 if AITurn == False:
                     if ResolvingDamage == False:
                         imagebutton idle "NextTurnIdle" hover "NextTurnHover" xpos 650 ypos 0 action Jump("NextTurn")
-    
-    
-
-
-
-
-
+                        
+    else: # getting rid of unused screens:
+        timer .001 action Hide("ZoomScreen"), Hide("CurrentMap")
 
 screen PlayerMonsterCard(Unit):
     add "images/GUI/stat_morale.png" xpos 187 ypos 820

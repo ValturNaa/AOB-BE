@@ -99,20 +99,17 @@ init python:
 
         if (Win and Lose == True):
             WinLose = "Draw"
-            renpy.hide_screen("ZoomScreen")
-            renpy.hide_screen("CurrentMap")
         elif (Lose == True):
             WinLose = "Lose"
-            renpy.hide_screen("ZoomScreen")
-            renpy.hide_screen("CurrentMap")
         elif (Win == True):
             WinLose = "Win"
-            renpy.hide_screen("ZoomScreen")
-            renpy.hide_screen("CurrentMap")
         
         if (WinLose != "No"):
             ReturnBattleInfo = ReturnInfo(Turn, ActiveAIArmies, PlayerArmy.Army)
             renpy.show_screen("VictoryScreen", WinLose)
+            return True
+        
+        return False
     
     def ReturnPositive(Start, Target):
         temp1 = Start - Target
