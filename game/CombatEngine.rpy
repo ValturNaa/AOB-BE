@@ -1,4 +1,6 @@
-init -1:    
+init -1:
+    default BE_ACTIVE = False
+    
 # zoom and alpha transforms used to wrap various tiles and sprites in the main viewport, though they can be used anywhere.
     transform hidden:
         alpha 0.0
@@ -156,9 +158,6 @@ init -1:
     
 
 init 1 python:
-    
-    
-    
     # used to ensure smooth movement
     MoveTick = False
     
@@ -520,6 +519,7 @@ label CombatEngine:
         
         
     python:
+        BE_ACTIVE = True # Global variable so we know if BE sequence is still running.
         CurrentMap = BattleFieldList[CurrentBattlefieldID]
         CurrentOverlay = OverlayGenerator(CurrentMap)
         CurrentPlayerDeployment = [[4, 4],[5, 4],[6, 4],
@@ -545,12 +545,19 @@ label SetPos:
                 CurrentOverlay[y][x].XPos = FindPos(x, zoomlist[MapZoom][1])
                 CurrentOverlay[y][x].YPos = FindPos(y, zoomlist[MapZoom][1])
         DeploymentStart = True
+        
     jump RenderMap
     
+label finished_be:
+    $ renpy.call_screen("VictoryScreen", BE_ACTIVE)
+    $ ClearEverything()
+    $ BE_ACTIVE = False # Could be moved to ClearEverything...
+    return # Should be back to the game!
     
 label RenderMap:
-    python:
-        CheckWin()
+    
+    $ CheckWin()
+    
     if UnitPlaced == True:
         $ ActiveDeployment = []
         $ UnitPlaced = False
@@ -588,9 +595,16 @@ label NextTurn:
     python:
         Turn += 1
         randomtest = len(PlayerArmy.Army)
-        for x in range(0, len(PlayerArmy.Army)):
-            PlayerArmy.Army[x].MovementCurrent = PlayerArmy.Army[x].MovementMax
-            PlayerArmy.Army[x].Action = True
+        
+        # The range is meaningless here:
+        # for x in range(0, len(PlayerArmy.Army)):
+            # PlayerArmy.Army[x].MovementCurrent = PlayerArmy.Army[x].MovementMax
+            # PlayerArmy.Army[x].Action = True
+            
+        for actor in PlayerArmy.Army:
+            actor.MovementCurrent = actor.MovementMax
+            actor.Action = True
+            
     #"[randomtest] and [PlayerArmy.Army]"
     #"Movement current 0 = [PlayerArmy.Army[0].MovementCurrent] / Movement current 1 = [PlayerArmy.Army[1].MovementCurrent] / Movement current 2 = [PlayerArmy.Army[2].MovementCurrent]"
     call ResetMoveVariables
@@ -624,11 +638,6 @@ label AITurn:
                     ResetMoveVariables()
                     CheckWin()
                     
-                        
-
-                        
-                        
-    
     call ResetAI from _call_ResetAI
     jump RenderMap
     
@@ -681,7 +690,7 @@ screen VictoryScreen(Condition):
     add "images/GUI/VictoryScreen/victor_sides.png" xpos 800 ypos 760
     text "[ReturnBattleInfo.SideQuests]" xpos 980 ypos 760
     
-    imagebutton idle "images/GUI/VictoryScreen/victor_return_idle.png" hover "images/GUI/VictoryScreen/victor_return_hover.png" xpos 520 ypos 770 action ClearEverything(), MainMenu() 
+    imagebutton idle "images/GUI/VictoryScreen/victor_return_idle.png" hover "images/GUI/VictoryScreen/victor_return_hover.png" xpos 520 ypos 770 action Return()
     
     
     
