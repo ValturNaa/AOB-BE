@@ -64,7 +64,15 @@ init python:
     grassVBkade = PlaceTile("images/Tiles/VerticalBarricade.png", Void=True)
     
     
-    
+    def DeployGenerator(map, startx, starty, height, width):
+        return_area = []
+        for x in range(0, height):
+            for y in range(0, width):
+                if map[startx+x][starty+y].Void == False:
+                    return_area.append([startx+x, starty+y])
+                    
+        return return_area
+                
     
     def OverlayGenerator(map):
         return list([battletile(0, UnitPresent="Null") for x in range(0, len(map[y]))] for y in range(0, len(map)))
