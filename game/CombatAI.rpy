@@ -99,15 +99,19 @@ init python:
 
         if (Win and Lose == True):
             WinLose = "Draw"
+            renpy.hide_screen("ZoomScreen")
+            renpy.hide_screen("CurrentMap")
         elif (Lose == True):
             WinLose = "Lose"
+            renpy.hide_screen("ZoomScreen")
+            renpy.hide_screen("CurrentMap")
         elif (Win == True):
             WinLose = "Win"
+            renpy.hide_screen("ZoomScreen")
+            renpy.hide_screen("CurrentMap")
         
         if (WinLose != "No"):
             ReturnBattleInfo = ReturnInfo(Turn, ActiveAIArmies, PlayerArmy.Army)
-            renpy.hide_screen("ZoomScreen")
-            renpy.hide_screen("CurrentMap")
             renpy.show_screen("VictoryScreen", WinLose)
     
     def ReturnPositive(Start, Target):
@@ -195,6 +199,7 @@ init python:
                     else:
                         TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
                         PotentialTarget += 1
+        
         for x in range(0, len(TargetList)):
             if (TargetList[x].TotalDistance < ClosestTargetDistance):
                 ClosestTargetDistance = TargetList[x].TotalDistance
@@ -206,21 +211,24 @@ init python:
                 Action = "Attack"
             else:
                 PredictPathList = GeneratePaths(Unit, StartX, StartY)
-                PredictFinalPath = []
-                PredictFinalPath.append(AISetDestination(Unit, Map, StartX, StartY, PredictPathList, ClosestTarget))
-                for y in range(0, len(PredictFinalPath[0].WayPoints)):
-                    if (PredictFinalPath[0].WayPoints[y] == "N"):
-                        StartX -= 1
-                    if (PredictFinalPath[0].WayPoints[y] == "E"):
-                        StartY += 1
-                    if (PredictFinalPath[0].WayPoints[y] == "S"):
-                        StartX += 1
-                    if (PredictFinalPath[0].WayPoints[y] == "W"):
-                        StartY -= 1
-                tempaction = IsTarget(Unit, x, StartX, StartY, Indirect=x.IndirectFire)
-                if (tempaction == True):
-                    if (Action != "Attack"):
-                        Action = "Move Attack"
+                if (PredictPathList == []):
+                    Action = "Idle"
+                else:
+                    PredictFinalPath = []
+                    PredictFinalPath.append(AISetDestination(Unit, Map, StartX, StartY, PredictPathList, ClosestTarget))
+                    for y in range(0, len(PredictFinalPath[0].WayPoints)):
+                        if (PredictFinalPath[0].WayPoints[y] == "N"):
+                            StartX -= 1
+                        if (PredictFinalPath[0].WayPoints[y] == "E"):
+                            StartY += 1
+                        if (PredictFinalPath[0].WayPoints[y] == "S"):
+                            StartX += 1
+                        if (PredictFinalPath[0].WayPoints[y] == "W"):
+                            StartY -= 1
+                    tempaction = IsTarget(Unit, x, StartX, StartY, Indirect=x.IndirectFire)
+                    if (tempaction == True):
+                        if (Action != "Attack"):
+                            Action = "Move Attack"
         return Action
         
     def ReturnPlus(x):

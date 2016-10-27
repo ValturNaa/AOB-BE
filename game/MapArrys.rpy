@@ -132,55 +132,26 @@ init 2 python:
     
     
 screen CurrentMap:
-    add "TopBanner" xpos 0 ypos 0
-    viewport:
-        area 0, 50, 1300, 750
-        draggable True
-        if EdgeScroll == True:
-            edgescroll (120, 450)
-        xadjustment MCX
-        yadjustment MCY
-        child_size 50*ZoomList[MapZoom][1]*len(CurrentMap[1]), 50*ZoomList[MapZoom][1]*len(CurrentMap)
-        
-        add BattleMapClass(CurrentMap) at ZoomList[MapZoom][0]
-                        
+    if not CheckWin():
+        add "TopBanner" xpos 0 ypos 0
+        viewport:
+            area 0, 50, 1300, 750
+            draggable True
+            if EdgeScroll == True:
+                edgescroll (120, 450)
+            xadjustment MCX
+            yadjustment MCY
+            child_size 50*ZoomList[MapZoom][1]*len(CurrentMap[1]), 50*ZoomList[MapZoom][1]*len(CurrentMap)
+            
+            add BattleMapClass(CurrentMap) at ZoomList[MapZoom][0]
+                            
 
-        if DeploymentStart == False:
-            # active battle overlay
-            if PickingDestination == False:
-                if RangeCalculation == False:
-                    if AtoB == True:
-                        # shows if unit is moving
-                        grid len(CurrentOverlay) len(CurrentOverlay[0]):
-                            for x in range(0, len(CurrentOverlay)): 
-                                for y in range(0, len(CurrentOverlay[x])):
-                                    if CurrentOverlay[x][y].UnitPresent == "Null":
-                                        add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
-                                    else:
-                                        add CurrentOverlay[x][y].UnitIdle
-                            at ZoomList[MapZoom][0]
-                    else:
-                        if AITurn == False:
-                            # Idle overlay
-                            grid len(CurrentOverlay) len(CurrentOverlay[0]):
-                                for x in range(0, len(CurrentOverlay)): 
-                                    for y in range(0, len(CurrentOverlay[x])):
-                                        if CurrentOverlay[x][y].UnitPresent == "Null":
-                                            add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
-                                        else:
-                                            if CurrentOverlay[x][y].UnitID.ArmyID == 1:
-                                                if ResolvingDamage == False:
-                                                    imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover hovered Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("PlayerMonsterCard") action SetVariable("StartX", x), SetVariable("StartY", y), AddToSet(MoveSelect, CurrentOverlay[x][y].UnitID), Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID), Jump("PathGenerator")
-                                                else:
-                                                    add CurrentOverlay[x][y].UnitIdle
-                                            else:
-                                                if ResolvingDamage == False:
-                                                    imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action NullAction()
-                                                else:
-                                                    add CurrentOverlay[x][y].UnitIdle
-
-                                at ZoomList[MapZoom][0]
-                        else:
+            if DeploymentStart == False:
+                # active battle overlay
+                if PickingDestination == False:
+                    if RangeCalculation == False:
+                        if AtoB == True:
+                            # shows if unit is moving
                             grid len(CurrentOverlay) len(CurrentOverlay[0]):
                                 for x in range(0, len(CurrentOverlay)): 
                                     for y in range(0, len(CurrentOverlay[x])):
@@ -188,8 +159,50 @@ screen CurrentMap:
                                             add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
                                         else:
                                             add CurrentOverlay[x][y].UnitIdle
-                                at ZoomList[MapZoom][0]  
-                                        
+                                at ZoomList[MapZoom][0]
+                        else:
+                            if AITurn == False:
+                                # Idle overlay
+                                grid len(CurrentOverlay) len(CurrentOverlay[0]):
+                                    for x in range(0, len(CurrentOverlay)): 
+                                        for y in range(0, len(CurrentOverlay[x])):
+                                            if CurrentOverlay[x][y].UnitPresent == "Null":
+                                                add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
+                                            else:
+                                                if CurrentOverlay[x][y].UnitID.ArmyID == 1:
+                                                    if ResolvingDamage == False:
+                                                        imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover hovered Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("PlayerMonsterCard") action SetVariable("StartX", x), SetVariable("StartY", y), AddToSet(MoveSelect, CurrentOverlay[x][y].UnitID), Show("PlayerMonsterCard", Unit=CurrentOverlay[x][y].UnitID), Jump("PathGenerator")
+                                                    else:
+                                                        add CurrentOverlay[x][y].UnitIdle
+                                                else:
+                                                    if ResolvingDamage == False:
+                                                        imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action NullAction()
+                                                    else:
+                                                        add CurrentOverlay[x][y].UnitIdle
+
+                                    at ZoomList[MapZoom][0]
+                            else:
+                                grid len(CurrentOverlay) len(CurrentOverlay[0]):
+                                    for x in range(0, len(CurrentOverlay)): 
+                                        for y in range(0, len(CurrentOverlay[x])):
+                                            if CurrentOverlay[x][y].UnitPresent == "Null":
+                                                add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
+                                            else:
+                                                add CurrentOverlay[x][y].UnitIdle
+                                    at ZoomList[MapZoom][0]  
+                                            
+                    else:
+                        # movement range overlay
+                        grid len(CurrentOverlay) len(CurrentOverlay[0]):
+                            for x in range(0, len(CurrentOverlay)): 
+                                for y in range(0, len(CurrentOverlay[x])):
+                                    if CurrentOverlay[x][y].UnitPresent == "Null":
+                                        add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
+                                    elif CurrentOverlay[x][y].UnitPresent == "Move":
+                                        imagebutton idle "MoveIdle" hover "MoveHover" action SetVariable("FinalDestinationX", x), SetVariable("FinalDestinationY", y), SetVariable("FinalDestination", [CurrentOverlay[x][y]]), Jump("MostEfficientRoute")
+                                    else:
+                                        imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action NullAction()
+                            at ZoomList[MapZoom][0]
                 else:
                     # movement range overlay
                     grid len(CurrentOverlay) len(CurrentOverlay[0]):
@@ -202,120 +215,108 @@ screen CurrentMap:
                                 else:
                                     imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action NullAction()
                         at ZoomList[MapZoom][0]
+                                    
+                                        
+            # target range overlay
+            if DeploymentStart == False:
+                if RangeCalculation == True:
+                    grid len(CurrentOverlay) len(CurrentOverlay[0]):
+                        for x in range(0, len(CurrentOverlay)): 
+                            for y in range(0, len(CurrentOverlay[x])):
+                                if CurrentOverlay[x][y].RangeOverlay == "Range":
+                                    add "RangeTile"
+                                elif CurrentOverlay[x][y].RangeOverlay == "Target":
+                                    imagebutton idle "TargetIdle" hover "TargetHover" hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action SetVariable("TargetX", x), SetVariable("TargetY", y), SetVariable("TargetID", [CurrentOverlay[x][y].UnitID]), Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID), Jump("ResolveDamage")
+                                else:
+                                    add "Null" at hidden
+                        at ZoomList[MapZoom][0]
+            
+                
             else:
-                # movement range overlay
+                # deployment overlay
                 grid len(CurrentOverlay) len(CurrentOverlay[0]):
                     for x in range(0, len(CurrentOverlay)): 
                         for y in range(0, len(CurrentOverlay[x])):
                             if CurrentOverlay[x][y].UnitPresent == "Null":
                                 add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
-                            elif CurrentOverlay[x][y].UnitPresent == "Move":
-                                imagebutton idle "MoveIdle" hover "MoveHover" action SetVariable("FinalDestinationX", x), SetVariable("FinalDestinationY", y), SetVariable("FinalDestination", [CurrentOverlay[x][y]]), Jump("MostEfficientRoute")
+                            elif CurrentOverlay[x][y].UnitPresent == "Deploy":
+                                add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
                             else:
-                                imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitIdle hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action NullAction()
-                    at ZoomList[MapZoom][0]
-                                
-                                    
-        # target range overlay
-        if DeploymentStart == False:
+                                # used to remove an already deployed unit and put them back into the deployment list, re-setting the battletile perameters
+                                imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover action AddToSet(PlayerArmy.DeployArmy, CurrentOverlay[x][y].UnitID), SetField(CurrentOverlay[x][y], "UnitID", "None"), SetField(CurrentOverlay[x][y], "UnitPresent", "Deploy"), SetField(CurrentOverlay[x][y], "Visibility", 0), SetField(CurrentOverlay[x][y], "UnitIdle", "None"), SetField(CurrentOverlay[x][y], "UnitHover", "None"), Jump("RenderMap")
+                    at ZoomList[MapZoom][0]    
+                            
+                            
+            if PickingDestination == True:
+                if AtoB == False:
+                    imagebutton idle "CancelMoveIdle" hover "CancelMoveHover" xpos CurrentOverlay[StartX][StartY].XPos ypos CurrentOverlay[StartX][StartY].YPos at ZoomList[MapZoom][0] action SetVariable("MoveCancel", True), Jump("ResetMoveVariables")
             if RangeCalculation == True:
+                imagebutton idle "CancelMoveIdle" hover "CancelMoveHover" xpos CurrentOverlay[StartX][StartY].XPos ypos CurrentOverlay[StartX][StartY].YPos at ZoomList[MapZoom][0] action SetVariable("MoveCancel", True), Jump("ResetMoveVariables")
+                    
+            # moving sprite
+            if AtoB == True:
+                add MoveSelect[0].BattleSpriteMove at CurrentMove, ZoomList[MapZoom][0]
+                
+            if PlaceUnit == True:
+                # Activates when unit is selected for deployment
                 grid len(CurrentOverlay) len(CurrentOverlay[0]):
                     for x in range(0, len(CurrentOverlay)): 
-                        for y in range(0, len(CurrentOverlay[x])):
-                            if CurrentOverlay[x][y].RangeOverlay == "Range":
-                                add "RangeTile"
-                            elif CurrentOverlay[x][y].RangeOverlay == "Target":
-                                imagebutton idle "TargetIdle" hover "TargetHover" hovered Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID) unhovered Hide("EnemyMonsterCard") action SetVariable("TargetX", x), SetVariable("TargetY", y), SetVariable("TargetID", [CurrentOverlay[x][y].UnitID]), Show("EnemyMonsterCard", Unit=CurrentOverlay[x][y].UnitID), Jump("ResolveDamage")
+                        for y in range(0, len(CurrentOverlay[x])): 
+                            if CurrentOverlay[x][y].UnitPresent == "Deploy":
+                                imagebutton idle "DeploymentIdle" hover "DeploymentHover" action SetField(CurrentOverlay[x][y], "UnitID", ActiveDeployment[0]), SetField(CurrentOverlay[x][y], "UnitPresent", ActiveDeployment[0].Self), SetField(CurrentOverlay[x][y], "UnitIdle", ActiveDeployment[0].BattleSpriteIdle), SetField(CurrentOverlay[x][y], "UnitHover", ActiveDeployment[0].BattleSpriteHover), SetField(CurrentOverlay[x][y], "Visibility", 1), Jump("UnitPlacement")
                             else:
-                                add "Null" at hidden
+                                add "Clear"
                     at ZoomList[MapZoom][0]
-        
-            
-        else:
-            # deployment overlay
-            grid len(CurrentOverlay) len(CurrentOverlay[0]):
-                for x in range(0, len(CurrentOverlay)): 
-                    for y in range(0, len(CurrentOverlay[x])):
-                        if CurrentOverlay[x][y].UnitPresent == "Null":
-                            add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
-                        elif CurrentOverlay[x][y].UnitPresent == "Deploy":
-                            add "Null" at ImageAlpha[CurrentOverlay[x][y].Visibility]
-                        else:
-                            # used to remove an already deployed unit and put them back into the deployment list, re-setting the battletile perameters
-                            imagebutton idle CurrentOverlay[x][y].UnitIdle hover CurrentOverlay[x][y].UnitHover action AddToSet(PlayerArmy.DeployArmy, CurrentOverlay[x][y].UnitID), SetField(CurrentOverlay[x][y], "UnitID", "None"), SetField(CurrentOverlay[x][y], "UnitPresent", "Deploy"), SetField(CurrentOverlay[x][y], "Visibility", 0), SetField(CurrentOverlay[x][y], "UnitIdle", "None"), SetField(CurrentOverlay[x][y], "UnitHover", "None"), Jump("RenderMap")
-                at ZoomList[MapZoom][0]    
-                        
-                        
-        if PickingDestination == True:
-            if AtoB == False:
-                imagebutton idle "CancelMoveIdle" hover "CancelMoveHover" xpos CurrentOverlay[StartX][StartY].XPos ypos CurrentOverlay[StartX][StartY].YPos at ZoomList[MapZoom][0] action SetVariable("MoveCancel", True), Jump("ResetMoveVariables")
-        if RangeCalculation == True:
-            imagebutton idle "CancelMoveIdle" hover "CancelMoveHover" xpos CurrentOverlay[StartX][StartY].XPos ypos CurrentOverlay[StartX][StartY].YPos at ZoomList[MapZoom][0] action SetVariable("MoveCancel", True), Jump("ResetMoveVariables")
-                
-        # moving sprite
-        if AtoB == True:
-            add MoveSelect[0].BattleSpriteMove at CurrentMove, ZoomList[MapZoom][0]
-            
-        if PlaceUnit == True:
-            # Activates when unit is selected for deployment
-            grid len(CurrentOverlay) len(CurrentOverlay[0]):
-                for x in range(0, len(CurrentOverlay)): 
-                    for y in range(0, len(CurrentOverlay[x])): 
-                        if CurrentOverlay[x][y].UnitPresent == "Deploy":
-                            imagebutton idle "DeploymentIdle" hover "DeploymentHover" action SetField(CurrentOverlay[x][y], "UnitID", ActiveDeployment[0]), SetField(CurrentOverlay[x][y], "UnitPresent", ActiveDeployment[0].Self), SetField(CurrentOverlay[x][y], "UnitIdle", ActiveDeployment[0].BattleSpriteIdle), SetField(CurrentOverlay[x][y], "UnitHover", ActiveDeployment[0].BattleSpriteHover), SetField(CurrentOverlay[x][y], "Visibility", 1), Jump("UnitPlacement")
-                        else:
-                            add "Clear"
-                at ZoomList[MapZoom][0]
 
-    
-    # GUI at the bottom of the map
-    add "BattleCardUnder" xpos 0 ypos 800
-    add "BattleMonsterCard" xpos 0 ypos 800
-    if DeploymentStart == True:
-            hbox:
-                xpos 20 ypos 820
-                for x in range(0, len(PlayerArmy.DeployArmy)):
-                    imagebutton:
-                        idle PlayerArmy.DeployArmy[x].BattleSpriteIdle
-                        hover PlayerArmy.DeployArmy[x].BattleSpriteHover
-                        action SetVariable("ActiveDeployment", [PlayerArmy.DeployArmy[x].Self]), SetVariable("PlaceUnit", True), Jump("RenderMap")
-   
-    add "BattleMonsterCardSmall" xpos 450 ypos 800
         
-    add "BattleMonsterCard" xpos 850 ypos 800
-    if DeploymentStart == True:
-            hbox:
-                xpos 870 ypos 820
-                for x in range(0, len(Enemy1Army.Army)):
-                    add Enemy1Army.Army[x].BattleSpriteIdle
-    
-    hbox:
-        xpos 0
-        ypos 735
-        for x in range(0, 6):
-            add "BlankBlock"
-    if PickingDestination == True:
-    
+        # GUI at the bottom of the map
+        add "BattleCardUnder" xpos 0 ypos 800
+        add "BattleMonsterCard" xpos 0 ypos 800
+        if DeploymentStart == True:
+                hbox:
+                    xpos 20 ypos 820
+                    for x in range(0, len(PlayerArmy.DeployArmy)):
+                        imagebutton:
+                            idle PlayerArmy.DeployArmy[x].BattleSpriteIdle
+                            hover PlayerArmy.DeployArmy[x].BattleSpriteHover
+                            action SetVariable("ActiveDeployment", [PlayerArmy.DeployArmy[x].Self]), SetVariable("PlaceUnit", True), Jump("RenderMap")
+       
+        add "BattleMonsterCardSmall" xpos 450 ypos 800
+            
+        add "BattleMonsterCard" xpos 850 ypos 800
+        if DeploymentStart == True:
+                hbox:
+                    xpos 870 ypos 820
+                    for x in range(0, len(Enemy1Army.Army)):
+                        add Enemy1Army.Army[x].BattleSpriteIdle
+        
         hbox:
             xpos 0
             ypos 735
-            for x in range(0, len(SelectedBattleSkills)):
-                if MoveSelect[0].Action == True:
-                    imagebutton idle SelectedBattleSkills[x].WeaponIdle hover SelectedBattleSkills[x].WeaponHover right_padding 23 hovered SetVariable("EdgeScroll", False) unhovered SetVariable("EdgeScroll", True) action SetVariable("SelectedAttack", [SelectedBattleSkills[x]]), Jump("AttackRange")
-                else:
-                    imagebutton idle SelectedBattleSkills[x].WeaponIdle hover SelectedBattleSkills[x].WeaponIdle right_padding 23 hovered SetVariable("EdgeScroll", False) unhovered SetVariable("EdgeScroll", True) action NullAction()
+            for x in range(0, 6):
+                add "BlankBlock"
+        if PickingDestination == True:
+        
+            hbox:
+                xpos 0
+                ypos 735
+                for x in range(0, len(SelectedBattleSkills)):
+                    if MoveSelect[0].Action == True:
+                        imagebutton idle SelectedBattleSkills[x].WeaponIdle hover SelectedBattleSkills[x].WeaponHover right_padding 23 hovered SetVariable("EdgeScroll", False) unhovered SetVariable("EdgeScroll", True) action SetVariable("SelectedAttack", [SelectedBattleSkills[x]]), Jump("AttackRange")
+                    else:
+                        imagebutton idle SelectedBattleSkills[x].WeaponIdle hover SelectedBattleSkills[x].WeaponIdle right_padding 23 hovered SetVariable("EdgeScroll", False) unhovered SetVariable("EdgeScroll", True) action NullAction()
 
-    
-    if DeploymentStart == True:
-        if len(PlayerArmy.DeployArmy) == 0:
-            imagebutton idle "FinishDeploymentIdle" hover "FinishDeploymentHover" xpos 0.44 ypos 0.84 action Jump("FinishDeployment")
-        else:
-            add "FinishDeploymentAlpha" xpos 0.44 ypos 0.84
-    if DeploymentStart == False:
-        if AtoB == False:
-            if AITurn == False:
-                if ResolvingDamage == False:
-                    imagebutton idle "NextTurnIdle" hover "NextTurnHover" xpos 650 ypos 0 action Jump("NextTurn")
+        
+        if DeploymentStart == True:
+            if len(PlayerArmy.DeployArmy) == 0:
+                imagebutton idle "FinishDeploymentIdle" hover "FinishDeploymentHover" xpos 0.44 ypos 0.84 action Jump("FinishDeployment")
+            else:
+                add "FinishDeploymentAlpha" xpos 0.44 ypos 0.84
+        if DeploymentStart == False:
+            if AtoB == False:
+                if AITurn == False:
+                    if ResolvingDamage == False:
+                        imagebutton idle "NextTurnIdle" hover "NextTurnHover" xpos 650 ypos 0 action Jump("NextTurn")
     
     
 

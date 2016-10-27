@@ -619,6 +619,8 @@ label AITurn:
                     elif AIAction == "Move Attack":
                         AIMoveAction()
                         AIAttackAction(ActiveAIArmies[army].Army[x])
+                    elif AIAction == "Idle":
+                        pass
                     ResetMoveVariables()
                     CheckWin()
                     
