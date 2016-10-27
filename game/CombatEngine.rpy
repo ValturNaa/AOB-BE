@@ -644,6 +644,9 @@ label ResetAI:
 
 
 screen VictoryScreen(Condition):
+    
+    add Solid("#FFF") # Se we have a background...
+    
     add "images/GUI/VictoryScreen/victor_background.png" xpos 0 ypos 0
     if Condition == "Win":
         add "images/GUI/VictoryScreen/victor_winner.png" xpos 550 ypos 100
