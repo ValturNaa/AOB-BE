@@ -401,14 +401,14 @@ label ResolveDamage:
 screen DamageScreen(Damage, ArmyID, Attacker, Defender, Attack):
     
     if Attacker.ArmyID == 1:
-        add Attack.Animation xpos 0 ypos 100
+        add Attack.Animation xpos 100 ypos 100
     else:
-        add Attack.Animation xpos 700 ypos 100
+        add Attack.Animation xpos 600 ypos 100
         
     if Defender.ArmyID == 1:
-        add Defender.PFlinch xpos 0 ypos 100
+        add Defender.PFlinch xpos 100 ypos 100
     else:
-        add Defender.PFlinch xpos 700 ypos 100
+        add Defender.PFlinch xpos 600 ypos 100
     
     if ArmyID == 1:
         text "-[Damage]" at FloatingDamage1, Fade

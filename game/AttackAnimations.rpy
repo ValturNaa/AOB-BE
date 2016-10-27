@@ -57,7 +57,7 @@ init:
         pause 0.1
         im.Flip("images/BattleSprites/BanditThug/Attack/ThugKnife10.png", horizontal=True)
     
-    image E_ThugKnife:
+    image ThugKnife:
         "images/BattleSprites/BanditThug/Attack/ThugKnife1.png"
         pause 0.5
         "images/BattleSprites/BanditThug/Attack/ThugKnife2.png"

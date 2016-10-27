@@ -313,8 +313,7 @@ screen CurrentMap:
             if AITurn == False:
                 if ResolvingDamage == False:
                     imagebutton idle "NextTurnIdle" hover "NextTurnHover" xpos 650 ypos 0 action Jump("NextTurn")
-    
-    text "[TargetID]" xpos 0.5 ypos 0.9
+
 
 
 

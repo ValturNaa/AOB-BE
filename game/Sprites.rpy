@@ -128,7 +128,7 @@ init:
         pause 0.5
         "images/BattleSprites/BanditBruiser/Walk/BruiserFrontIdle.png"
         pause 0.5
-        "images/BattleSprites/BanditBruiser/Walk/BruiserFront.png"
+        "images/BattleSprites/BanditBruiser/Walk/BruiserFront1.png"
         pause 0.5
         repeat
     image BruiserMoveN:

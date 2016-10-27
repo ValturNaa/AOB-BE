@@ -376,6 +376,7 @@ init python:
 
     def FinishMove():
         global CurrentOverlay
+        global MoveSelect
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0].Self
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitID = MoveSelect[0]
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitIdle = MoveSelect[0].BattleSpriteIdle
@@ -524,6 +525,9 @@ init python:
         AISelectAttack(Unit, StartX, StartY)
         Target = AIAttackTarget(Unit, SelectedAttack[0], StartX, StartY)
         TargetID = [CurrentOverlay[Target.Xpos][Target.Ypos].UnitID]
+        print str(TargetID)
+        print str(Target.Xpos)
+        print str(Target.Ypos)
         for x in range(0, len(CurrentOverlay)):
             for y in range(0, len(CurrentOverlay[x])):
                 if (CurrentOverlay[x][y].UnitPresent == TargetID[0].Self):
@@ -537,7 +541,7 @@ init python:
         
         renpy.show_screen("PlayerMonsterCard", TargetID[0])
         renpy.show_screen("EnemyMonsterCard", Unit)
-        renpy.show_screen("DamageScreen", Damage=CombatDamage.FinalDamage, ArmyID=TargetID[0].ArmyID, Attacker=MoveSelect[0], Defender=TargetID[0], Attack=SelectedAttack[0])
+        renpy.show_screen("DamageScreen", Damage=CombatDamage.FinalDamage, ArmyID=TargetID[0].ArmyID, Attacker=Unit, Defender=TargetID[0], Attack=SelectedAttack[0])
         while CombatDamage.FinalDamage > 0:
             TargetID[0].CurrentMorale -= 1
             CombatDamage.FinalDamage -= 1
@@ -637,7 +641,7 @@ init python:
                                         if (CurrentOverlay[x][y].FireNorth == True):
                                             if (CurrentOverlay[x-1][y].UnitID != "None"):
                                                 if (CurrentOverlay[x-1][y].UnitID.ArmyID != Unit.ArmyID):
-                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
+                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x-1), ReturnPositive(StartY, y), x-1, y))
                                                     is_target = True
                                                 CurrentOverlay[x-1][y].FireNorth = False
                                             CurrentOverlay[x-1][y].RangeCheck = True
@@ -652,7 +656,7 @@ init python:
                                         if (CurrentOverlay[x][y].FireEast == True):
                                             if (CurrentOverlay[x][y+1].UnitID != "None"):
                                                 if (CurrentOverlay[x][y+1].UnitID.ArmyID != Unit.ArmyID):
-                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
+                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y+1), x, y+1))
                                                     is_target = True
                                                 CurrentOverlay[x][y+1].FireEast = False
                                             CurrentOverlay[x][y+1].RangeCheck = True
@@ -667,7 +671,7 @@ init python:
                                         if (CurrentOverlay[x][y].FireSouth == True):
                                             if (CurrentOverlay[x+1][y].UnitID != "None"):
                                                 if (CurrentOverlay[x+1][y].UnitID.ArmyID != Unit.ArmyID):
-                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
+                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x+1), ReturnPositive(StartY, y), x+1, y))
                                                     is_target = True
                                                 CurrentOverlay[x+1][y].FireSouth = False
                                             CurrentOverlay[x+1][y].RangeCheck = True
@@ -682,7 +686,7 @@ init python:
                                         if (CurrentOverlay[x][y].FireWest == True):
                                             if (CurrentOverlay[x][y-1].UnitID != "None"):
                                                 if (CurrentOverlay[x][y-1].UnitID.ArmyID != Unit.ArmyID):
-                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y), x, y))
+                                                    TargetList.append(AIEnemyInfo(ReturnPositive(StartX, x), ReturnPositive(StartY, y-1), x, y-1))
                                                     is_target = True
                                                 CurrentOverlay[x][y-1].FireWest = False
                                             CurrentOverlay[x][y-1].RangeCheck = True

@@ -75,8 +75,22 @@ init -1:
     # attack buttons defined here
     image BlankBlock = "images/GUI/blank move button.png"
     image BlankHover = "images/GUI/blank move button active.png"
+    
     image ClubIdle = LiveComposite((50, 50), (0, 0), "BlankBlock", (0, 0), "images/GUI/bludgeon_inactive.png")
     image ClubHover = LiveComposite((50, 50), (0, 0), "BlankHover", (0, 0), "images/GUI/bludgeon_active.png")
+    
+    image AxeIdle = LiveComposite((50, 50), (0, 0), "BlankBlock", (0, 0), "images/GUI/axe_inactive.png")
+    image AxeHover = LiveComposite((50, 50), (0, 0), "BlankHover", (0, 0), "images/GUI/axe_active.png")
+    
+    image BowIdle = LiveComposite((50, 50), (0, 0), "BlankBlock", (0, 0), "images/GUI/bow_inactive.png")
+    image BowHover = LiveComposite((50, 50), (0, 0), "BlankHover", (0, 0), "images/GUI/bow_active.png")
+    
+    image ClawIdle = LiveComposite((50, 50), (0, 0), "BlankBlock", (0, 0), "images/GUI/claw_inactive.png")
+    image ClawHover = LiveComposite((50, 50), (0, 0), "BlankHover", (0, 0), "images/GUI/claw_active.png")
+    
+    image KnifeIdle = LiveComposite((50, 50), (0, 0), "BlankBlock", (0, 0), "images/GUI/knife_inactive.png")
+    image KnifeHover = LiveComposite((50, 50), (0, 0), "BlankHover", (0, 0), "images/GUI/knife_active.png")
+    
 
 
     # generic buttons defined here
@@ -426,14 +440,18 @@ init 1 python:
     
     
     # define weapons here (self, Name, Range, Damage, DamageType, Attacks, Cooldown, Idle, Hover, Bonuses=[], IndirectFire=False)
-    E_ThugKnife = weapon("Knife", 1, 4, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_ThugKnife")
+    # weapons prefixed with E_ will face left(enemy unit), no prefix faces right(Player unit)
+    E_ThugKnife = weapon("Knife", 1, 4, "Physical", 1, 1, "KnifeIdle", "KnifeHover", "E_ThugKnife")
     E_BruiserClub = weapon("Club", 1, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_BruiserClub")
-    E_BanditArcherBow = weapon("Bow", 5, 3, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_BanditArcherBow")
-    MCAxe = weapon("Axe", 1, 7, "Physical", 1, 1, "ClubIdle", "ClubHover", "MCAxe")
-    E_FWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_FWClaw")
-    FWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "FWClaw")
-    E_MWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "E_MWClaw")
-    MWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClubIdle", "ClubHover", "MWClaw")
+    E_BanditArcherBow = weapon("Bow", 5, 3, "Physical", 1, 1, "BowIdle", "BowHover", "E_BanditArcherBow")
+    ThugKnife = weapon("Knife", 1, 4, "Physical", 1, 1, "KnifeIdle", "KnifeHover", "ThugKnife")
+    BruiserClub = weapon("Club", 1, 5, "Physical", 1, 1, "ClubIdle", "ClubHover", "BruiserClub")
+    BanditArcherBow = weapon("Bow", 5, 3, "Physical", 1, 1, "BowIdle", "BowHover", "BanditArcherBow")
+    MCAxe = weapon("Axe", 1, 7, "Physical", 1, 1, "AxeIdle", "AxeHover", "MCAxe")
+    E_FWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClawIdle", "ClawHover", "E_FWClaw")
+    FWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClawIdle", "ClawHover", "FWClaw")
+    E_MWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClawIdle", "ClawHover", "E_MWClaw")
+    MWolfClaw = weapon("Wolf Claw", 1, 8, "Physical", 1, 1, "ClawIdle", "ClawHover", "MWClaw")
     
     
     #(self, Ferocity, Finesse, Determination, Cunning,  BattleName, OrigionalName, BattleSkills, Traits, MovementMax, BattleSpriteIdle, BattleSpriteHover, BattleSpriteMove, Mugshot, Gender, ArmyID, PAB=0, CAB=0, PRB=0, CRB=0):
