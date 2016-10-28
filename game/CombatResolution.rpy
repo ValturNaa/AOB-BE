@@ -383,7 +383,7 @@ label ResolveDamage:
         while CombatDamage.FinalDamage > 0:
             TargetID[0].CurrentMorale -= 1
             CombatDamage.FinalDamage -= 1
-            renpy.pause(0.04)
+            renpy.pause(0.01)
         if TargetID[0].CurrentMorale <= 0:
             renpy.hide("EnemyMonsterCard")
             TargetID[0].Routed = True

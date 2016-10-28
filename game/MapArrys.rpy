@@ -127,12 +127,8 @@ init 2 python:
     CurrentFacing = "N"
     CurrentMove = "None"
 
-    
-    
-    
-    
 screen CurrentMap:
-    if not CheckWin():
+    if BE_ACTIVE is True:
         add "TopBanner" xpos 0 ypos 0
         viewport:
             area 0, 50, 1300, 750

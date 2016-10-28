@@ -106,12 +106,8 @@ init python:
         
         if (WinLose != "No"):
             ReturnBattleInfo = ReturnInfo(Turn, ActiveAIArmies, PlayerArmy.Army)
-            renpy.show_screen("VictoryScreen", WinLose)
-            return True
-        
-        return False
-        
-    
+            store.BE_ACTIVE = WinLose
+            renpy.jump("finished_be")
     
     def ReturnPositive(Start, Target):
         temp1 = Start - Target
