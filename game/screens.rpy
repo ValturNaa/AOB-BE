@@ -1,561 +1,470 @@
-﻿# This file is in the public domain. Feel free to modify it as a basis
-# for your own screens.
-
-# Note that many of these screens may be given additional arguments in the
-# future. The use of **kwargs in the parameter list ensures your code will
-# work in the future.
-
-##############################################################################
-# Say
-#
-# Screen that's used to display adv-mode dialogue.
-# http://www.renpy.org/doc/html/screen_special.html#say
-screen say(who, what, side_image=None, two_window=False):
-
-    # Decide if we want to use the one-window or two-window variant.
-    if not two_window:
-
-        # The one window variant.
-        window:
-            id "window"
-
-            has vbox:
-                style "say_vbox"
-
-            if who:
-                text who id "who"
-
-            text what id "what"
-
-    else:
-
-        # The two window variant.
-        vbox:
-            style "say_two_window_vbox"
-
-            if who:
-                window:
-                    style "say_who_window"
-
-                    text who:
-                        id "who"
-
-            window:
-                id "window"
-
-                has vbox:
-                    style "say_vbox"
-
-                text what id "what"
-
-    # If there's a side image, display it above the text.
-    if side_image:
-        add side_image
-    else:
-        add SideImage() xalign 0.0 yalign 1.0
-
-    # Use the quick menu.
-    use quick_menu
-
-
-##############################################################################
-# Choice
-#
-# Screen that's used to display in-game menus.
-# http://www.renpy.org/doc/html/screen_special.html#choice
-
-screen choice(items):
-
-    window:
-        style "menu_window"
-        xalign 0.5
-        yalign 0.5
-
-        vbox:
-            style "menu"
-            spacing 2
-
-            for caption, action, chosen in items:
-
-                if action:
-
-                    button:
-                        action action
-                        style "menu_choice_button"
-
-                        text caption style "menu_choice"
-
-                else:
-                    text caption style "menu_caption"
-
-init -2:
-    $ config.narrator_menu = True
-
-    style menu_window is default
-
-    style menu_choice is button_text:
-        clear
-
-    style menu_choice_button is button:
-        xminimum int(config.screen_width * 0.75)
-        xmaximum int(config.screen_width * 0.75)
-
-
-##############################################################################
-# Input
-#
-# Screen that's used to display renpy.input()
-# http://www.renpy.org/doc/html/screen_special.html#input
-
-screen input(prompt):
-
-    window style "input_window":
-        has vbox
-
-        text prompt style "input_prompt"
-        input id "input" style "input_text"
-
-    use quick_menu
-
-##############################################################################
-# Nvl
-#
-# Screen used for nvl-mode dialogue and menus.
-# http://www.renpy.org/doc/html/screen_special.html#nvl
-
-screen nvl(dialogue, items=None):
-
-    window:
-        style "nvl_window"
-
-        has vbox:
-            style "nvl_vbox"
-
-        # Display dialogue.
-        for who, what, who_id, what_id, window_id in dialogue:
-            window:
-                id window_id
-
-                has hbox:
-                    spacing 10
-
-                if who is not None:
-                    text who id who_id
-
-                text what id what_id
-
-        # Display a menu, if given.
-        if items:
-
-            vbox:
-                id "menu"
-
-                for caption, action, chosen in items:
-
-                    if action:
-
-                        button:
-                            style "nvl_menu_choice_button"
-                            action action
-
-                            text caption style "nvl_menu_choice"
-
-                    else:
-
-                        text caption style "nvl_dialogue"
-
-    add SideImage() xalign 0.0 yalign 1.0
-
-    use quick_menu
-
-##############################################################################
-# Main Menu
-#
-# Screen that's used to display the main menu, when Ren'Py first starts
-# http://www.renpy.org/doc/html/screen_special.html#main-menu
-
+﻿##MENUS
+#Main Menu
 screen main_menu():
-
-    # This ensures that any other menu screen is replaced.
+    #tag
     tag menu
-
-    # The background of the main menu.
-    window:
-        style "mm_root"
-
-    # The main menu buttons.
-    frame:
-        style_group "mm"
-        xalign .98
-        yalign .98
-
-        has vbox
-
-        textbutton _("Start Game") action Start()
-        textbutton _("Load Game") action ShowMenu("load")
-        textbutton _("Preferences") action ShowMenu("preferences")
-        textbutton _("Help") action Help()
-        textbutton _("Quit") action Quit(confirm=False)
-
-init -2:
-
-    # Make all the main menu buttons be the same size.
-    style mm_button:
-        size_group "mm"
-
-
-
-##############################################################################
-# Navigation
-#
-# Screen that's included in other screens to display the game menu
-# navigation and background.
-# http://www.renpy.org/doc/html/screen_special.html#navigation
-screen navigation():
-
-    # The background of the game menu.
-    window:
-        style "gm_root"
-
-    # The various buttons.
-    frame:
-        style_group "gm_nav"
-        xalign .98
-        yalign .98
-
-        has vbox
-
-        textbutton _("Return") action Return()
-        textbutton _("Preferences") action ShowMenu("preferences")
-        textbutton _("Save Game") action ShowMenu("save")
-        textbutton _("Load Game") action ShowMenu("load")
-        textbutton _("Main Menu") action MainMenu()
-        textbutton _("Help") action Help()
-        textbutton _("Quit") action Quit()
-
-init -2:
-
-    # Make all game menu navigation buttons the same size.
-    style gm_nav_button:
-        size_group "gm_nav"
-
-
-##############################################################################
-# Save, Load
-#
-# Screens that allow the user to save and load the game.
-# http://www.renpy.org/doc/html/screen_special.html#save
-# http://www.renpy.org/doc/html/screen_special.html#load
-
-# Since saving and loading are so similar, we combine them into
-# a single screen, file_picker. We then use the file_picker screen
-# from simple load and save screens.
-
-screen file_picker():
-
-    frame:
-        style "file_picker_frame"
-
-        has vbox
-
-        # The buttons at the top allow the user to pick a
-        # page of files.
-        hbox:
-            style_group "file_picker_nav"
-
-            textbutton _("Previous"):
-                action FilePagePrevious()
-
-            textbutton _("Auto"):
-                action FilePage("auto")
-
-            textbutton _("Quick"):
-                action FilePage("quick")
-
-            for i in range(1, 9):
-                textbutton str(i):
-                    action FilePage(i)
-
-            textbutton _("Next"):
-                action FilePageNext()
-
-        $ columns = 2
-        $ rows = 5
-
-        # Display a grid of file slots.
-        grid columns rows:
-            transpose True
-            xfill True
-            style_group "file_picker"
-
-            # Display ten file slots, numbered 1 - 10.
-            for i in range(1, columns * rows + 1):
-
-                # Each file slot is a button.
-                button:
-                    action FileAction(i)
-                    xfill True
-
-                    has hbox
-
-                    # Add the screenshot.
-                    add FileScreenshot(i)
-
-                    $ file_name = FileSlotName(i, columns * rows)
-                    $ file_time = FileTime(i, empty=_("Empty Slot."))
-                    $ save_name = FileSaveName(i)
-
-                    text "[file_name]. [file_time!t]\n[save_name!t]"
-
-                    key "save_delete" action FileDelete(i)
-
-
-screen save():
-
-    # This ensures that any other menu screen is replaced.
-    tag menu
-
-    use navigation
-    use file_picker
-
-screen load():
-
-    # This ensures that any other menu screen is replaced.
-    tag menu
-
-    use navigation
-    use file_picker
-
-init -2:
-    style file_picker_frame is menu_frame
-    style file_picker_nav_button is small_button
-    style file_picker_nav_button_text is small_button_text
-    style file_picker_button is large_button
-    style file_picker_text is large_button_text
-
-
-##############################################################################
-# Preferences
-#
-# Screen that allows the user to change the preferences.
-# http://www.renpy.org/doc/html/screen_special.html#prefereces
-
-screen preferences():
-
-    tag menu
-
-    # Include the navigation.
-    use navigation
-
-    # Put the navigation columns in a three-wide grid.
-    grid 3 1:
-        style_group "prefs"
-        xfill True
-
-        # The left column.
-        vbox:
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Display")
-                textbutton _("Window") action Preference("display", "window")
-                textbutton _("Fullscreen") action Preference("display", "fullscreen")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Transitions")
-                textbutton _("All") action Preference("transitions", "all")
-                textbutton _("None") action Preference("transitions", "none")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Text Speed")
-                bar value Preference("text speed")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                textbutton _("Joystick...") action Preference("joystick")
-
-
-        vbox:
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Skip")
-                textbutton _("Seen Messages") action Preference("skip", "seen")
-                textbutton _("All Messages") action Preference("skip", "all")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                textbutton _("Begin Skipping") action Skip()
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("After Choices")
-                textbutton _("Stop Skipping") action Preference("after choices", "stop")
-                textbutton _("Keep Skipping") action Preference("after choices", "skip")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Auto-Forward Time")
-                bar value Preference("auto-forward time")
-
-                if config.has_voice:
-                    textbutton _("Wait for Voice") action Preference("wait for voice", "toggle")
-
-        vbox:
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Music Volume")
-                bar value Preference("music volume")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Sound Volume")
-                bar value Preference("sound volume")
-
-                if config.sample_sound:
-                    textbutton _("Test"):
-                        action Play("sound", config.sample_sound)
-                        style "soundtest_button"
-
-            if config.has_voice:
-                frame:
-                    style_group "pref"
-                    has vbox
-
-                    label _("Voice Volume")
-                    bar value Preference("voice volume")
-
-                    textbutton _("Voice Sustain") action Preference("voice sustain", "toggle")
-                    if config.sample_voice:
-                        textbutton _("Test"):
-                            action Play("voice", config.sample_voice)
-                            style "soundtest_button"
-
-init -2:
-    style pref_frame:
-        xfill True
-        xmargin 5
-        top_margin 5
-
-    style pref_vbox:
-        xfill True
-
-    style pref_button:
-        size_group "pref"
-        xalign 1.0
-
-    style pref_slider:
-        xmaximum 192
-        xalign 1.0
-
-    style soundtest_button:
-        xalign 1.0
-
-
-##############################################################################
-# Yes/No Prompt
-#
-# Screen that asks the user a yes or no question.
-# http://www.renpy.org/doc/html/screen_special.html#yesno-prompt
-
-screen yesno_prompt(message, yes_action, no_action):
-
+    #background
+    add "data/menu/main/back.png"
+    add "data/menu/main/fore.png"
+    add "data/menu/main/menuBack.png" xpos 460 ypos 677
+    #buttons
+    imagebutton auto "data/menu/main/new_%s.png" xpos 540 ypos 737 focus_mask True action newGameVars, Start
+    imagebutton auto "data/menu/main/load_%s.png" xpos 539 ypos 807 focus_mask True action showSave, Show("fileOp", None, False)
+    imagebutton auto "data/menu/main/options_%s.png" xpos 515 ypos 877 focus_mask True action Show("options", None, False)
+    imagebutton auto "data/menu/main/quit_%s.png" xpos 600 ypos 937 focus_mask True action Quit(confirm= False)
+
+screen newGame():
+    python:
+        resetBreedVars()
+
+#game menu
+screen game_menu():
     modal True
+    add "data/menu/main/backGame.png"
+    imagebutton auto "data/menu/main/return_%s.png" xpos 520 ypos 737 action Hide("game_menu")
+    imagebutton auto "data/menu/main/data_%s.png" xpos 530 ypos 807 action Hide("game_menu"), showSaveN, Show("fileOp", None, True)
+    imagebutton auto "data/menu/main/options_%s.png" xpos 497 ypos 877 focus_mask True action Show("options", None, True)
+    imagebutton auto "data/menu/main/quit_%s.png" xpos 584 ypos 937 focus_mask True action Hide("game_menu"), Hide("farm"), Hide("map"), Show("main_menu")
+        
+#Options
+screen options(game):
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    modal True
+    add im.Scale("data/menu/options/back.png", 1300, 1000)
+    imagebutton auto "data/menu/options/return_%s.png" xpos 250 ypos 760  action Hide("options")
+    if (_preferences.fullscreen):
+        imagebutton auto "data/menu/options/window_%s.png" xpos 505 ypos 450  action Preference("display", "window")
+    else:
+        imagebutton auto "data/menu/options/fullscreen_%s.png" xpos 505 ypos 450  action Preference("display", "fullscreen")
+    imagebutton auto "data/menu/options/default_%s.png" xpos 770 ypos 760 action Hide("options")
+    if (gay):
+        imagebutton auto "data/menu/options/gayOn_%s.png" xpos 285 ypos 605 action toggleGay
+    else:
+        imagebutton auto "data/menu/options/gayOff_%s.png" xpos 285 ypos 605 action toggleGay
+    if (straight):
+        imagebutton auto "data/menu/options/straightOn_%s.png" xpos 447 ypos 605 action toggleStraight
+    else:
+        imagebutton auto "data/menu/options/straightOff_%s.png" xpos 447 ypos 605 action toggleStraight
+    if (lesbian):
+        imagebutton auto "data/menu/options/lesbianOn_%s.png" xpos 639 ypos 605 action toggleLesbian
+    else:
+        imagebutton auto "data/menu/options/lesbianOff_%s.png" xpos 639 ypos 605 action toggleLesbian
+    if (herms):
+        imagebutton auto "data/menu/options/hermsOn_%s.png" xpos 850 ypos 605 action toggleHerms
+    else:
+        imagebutton auto "data/menu/options/hermsOff_%s.png" xpos 850 ypos 605 action toggleHerms
+    if (anal):
+        imagebutton auto "data/menu/options/analOn_%s.png" xpos 298 ypos 659 action toggleAnal
+    else:
+        imagebutton auto "data/menu/options/analOff_%s.png" xpos 298 ypos 659 action toggleAnal
+    if (vaginal):
+        imagebutton auto "data/menu/options/vaginalOn_%s.png" xpos 436 ypos 659 action toggleVaginal
+    else:
+        imagebutton auto "data/menu/options/vaginalOff_%s.png" xpos 436 ypos 659 action toggleVaginal
+    if (oral):
+        imagebutton auto "data/menu/options/oralOn_%s.png" xpos 585 ypos 659 action toggleOral
+    else:
+        imagebutton auto "data/menu/options/oralOff_%s.png" xpos 585 ypos 659 action toggleOral
+    if (bondage):
+        imagebutton auto "data/menu/options/bondageOn_%s.png" xpos 708 ypos 659 action toggleBondage
+    else:
+        imagebutton auto "data/menu/options/bondageOff_%s.png" xpos 708 ypos 659 action toggleBondage
+    if (zoophilia):
+        imagebutton auto "data/menu/options/zoophiliaOn_%s.png" xpos 883 ypos 659 action toggleZoophilia
+    else:
+        imagebutton auto "data/menu/options/zoophiliaOff_%s.png" xpos 883 ypos 659 action toggleZoophilia
+    
+#Save/ Load
+screen fileOp(game):
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    modal True
+    add im.Scale("data/menu/options/backSave.png", 1300, 1000)
+    fixed:
+        area (70, 115, 503, 720)
+        vpgrid id"vpS":
+            cols 1
+            spacing 10
+            draggable True
+            mousewheel True
+            for save in saveList:
+                add save
+        vbar value YScrollValue("vpS") xpos 1.0
+    if (selectedSave!= None):
+        add im.Scale(selectedSave.portrait, 200, 200) xpos 800 ypos 200
+        text selectedSave.name size 30 font "SegoeBold.ttf" color(0,0,0) xanchor 0.5 xpos 900 ypos 160
+        text selectedSave.date size 20 font "SegoeBold.ttf" color(0,0,0) xanchor 0.5 xpos 765 ypos 420
+        text selectedSave.money size 20 font "SegoeBold.ttf" color(0,0,0) xanchor 0.5 xpos 1060 ypos 420
+        text selectedSave.chapter size 20 font "SegoeBold.ttf" color(0,0,0) xpos 900 ypos 500
+        text selectedSave.region size 20 font "SegoeBold.ttf" color(0,0,0) xpos 900 ypos 530
+        text selectedSave.mission size 20 font "SegoeBold.ttf" color(0,0,0) xpos 900 ypos 560
+        fixed:
+            area (670, 450, 182, 385)
+            vpgrid id"vp":
+                cols 1
+                spacing 10
+                draggable True
+                mousewheel True
+                for monster in selectedSave.knownMonsters:
+                    text monster size 25 font "SegoeBold.ttf" color(0,0,0)
+            vbar value YScrollValue("vp") xpos 1.0
+    if (game):
+        imagebutton auto "data/menu/options/save_%s.png" xpos 145 ypos 870  action saveGameTest
+    imagebutton auto "data/menu/options/saveReturn_%s.png" xanchor 0.5 xpos 1060 ypos 870  action Hide("fileOp"), clearSelection
+    imagebutton auto "data/menu/options/load_%s.png" xpos 400 ypos 870  action Hide("fileOp"), loadGameTest
+  
+##LOCATIONS        
+        
+#Map
+screen map:
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    modal True
+    #background
+    add im.Scale("data/menu/map/back.png", 1300, 1000)
+    #buttons
+    imagebutton auto "data/menu/map/menu_%s.png" xpos 132 ypos 900 action Show("game_menu")
+    imagebutton auto "data/menu/map/back_%s.png" xpos 535 ypos 895 action Hide("map")
+    imagebutton auto "data/menu/map/farm_%s.png" xpos 915 ypos 900 focus_mask True action Hide("map"), Hide("farm"), Hide("combat"), Show("farm")
+    
+#Farm
+screen farm():
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    #background
+    add im.Scale("data/menu/farm/back.png", 1300, 1000)
+    #buttons
+    imagebutton auto "data/menu/farm/map_%s.png" xpos 0 ypos 0 focus_mask True action Show("map")
+    imagebutton auto "data/menu/farm/viewer_%s.png" xpos 840 ypos 360 focus_mask True action Hide("farm"), clearBreedMonsters, showViewer, Show("barn")
+    imagebutton auto "data/menu/farm/house_%s.png" xpos 1060 ypos 610 focus_mask True action advanceDayLaird
+    imagebutton auto "data/menu/farm/request_%s.png" xpos 460 ypos 420 focus_mask True action Hide("farm"), clearBreedMonsters, showRequest, Show("request")
+    imagebutton auto "data/menu/farm/combat_%s.png" xpos 90 ypos 520 focus_mask True action Hide("farm"), clearBreedMonsters, showCombat, Show("combat")
+    imagebutton auto "data/menu/farm/breed_%s.png" xpos 710 ypos 590 focus_mask True action Hide("farm"), clearBreedMonsters, showBreed, Show("breed")
+    add "data/menu/farm/tree.png"
+    imagebutton auto "data/menu/farm/menu_%s.png" xpos 0 ypos 0 focus_mask True action Show("game_menu")
+    #info
+    add clock xpos 525
+    text ("Money: "+ str(gameMoney)+ "G") size 25 font "SegoeBold.ttf" color (250,250,50) xpos (650- len(str("Money: "+ str(gameMoney)+ "G")* 20)/ 2) ypos 150
+  
+#monster info
+screen details():
+    modal True
+    add "data/menu/viewer/detailBack.png"
+    text breedMonster1.name size 40 font "SegoeBold.ttf" color (0,0,0) xpos (650- len(breedMonster1.name)* 28/ 2) ypos 20
+    text ("Ferocity: "+ str(breedMonster1.ferocity)) size 30 font "SegoeBold.ttf" color (0,0,0) xpos 250 ypos 500
+    text ("Finesse: "+ str(breedMonster1.finesse)) size 30 font "SegoeBold.ttf" color (0,0,0) xpos 800 ypos 500
+    text ("Determination: "+ str(breedMonster1.determination)) size 30 font "SegoeBold.ttf" color (0,0,0) xpos 250 ypos 600
+    text ("Cunning: "+ str(breedMonster1.cunning)) size 30 font "SegoeBold.ttf" color (0,0,0) xpos 800 ypos 600
+    text ("Fertility: "+ str(breedMonster1.fertility)) size 30 font "SegoeBold.ttf" color (0,0,0) xpos 250 ypos 700
+    text ("Endurance: "+ str(breedMonster1.stamina)+ "/"+ str(breedMonster1.maxStamina)) size 30 font "SegoeBold.ttf" color (0,0,0) xpos 800 ypos 700
+    if (len(breedMonster1.relatives)> 1):
+        add BreedCard(breedMonster1.relatives[1], False, "other", None) xpos 80 ypos 220 id "cardF"
+        add BreedCard(breedMonster1.relatives[0], False, "other", None) xpos 875 ypos 220 id "cardM"
+    imagebutton auto "data/menu/viewer/detailClose_%s.png" xpos 570 ypos 930 action Hide("details")
+    
+#Monster viewer
+screen barn():
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add im.Scale("data/menu/viewer/back.png", 1300, 1000)
+    add viewerV
+    add "data/menu/viewer/penFront.png" xpos 604 ypos 608
+    add "data/menu/viewer/lighting.png"
+    if (viewYoung):
+        imagebutton auto "data/menu/viewer/old_%s.png" xpos 550 ypos 0  action toggleViewYoung
+    else:
+        imagebutton auto "data/menu/viewer/young_%s.png" xpos 550 ypos 0  action toggleViewYoung
+    fixed:
+        area (20, 150, 300, 850)
+        vpgrid:
+            cols 1
+            draggable True
+            mousewheel True
+            for monster in monsterList1:
+                add monster
+    add filter1 xpos 5 ypos 15
+    if (breedMonster1!= None):
+        if (barnMenu):
+            imagebutton auto "data/menu/viewer/hideMenu_%s.png" xpos 1050 ypos 0  action toggleBarnMenu
+            imagebutton auto "data/menu/viewer/feed_%s.png" xpos 1050 ypos 120  action toggleBarnMenu
+            if (breedMonster1.species.species!= "player"):
+                imagebutton auto "data/menu/viewer/release_%s.png" xpos 1050 ypos 240  action discardMonsterBarn
+            #if (breedMonster1.training< 10 and breedMonster1.stamina> 0):
+                #imagebutton auto "data/menu/viewer/train_%s.png" xpos 1050 ypos 360  action Hide("barn"), Show("train")
+        else:
+            imagebutton auto "data/menu/viewer/showMenu_%s.png" xpos 1050 ypos 0  action toggleBarnMenu
+        imagebutton auto "data/menu/viewer/info_%s.png" xpos 800 ypos 0  action Show("details")
+    imagebutton auto "data/menu/viewer/back_%s.png" xpos 400 ypos 900  action Hide("barn"), Show("farm"), clearBreedMonsters, clearFilters
+    add traitPick
+  
+##Training
+screen train():
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add im.Scale("data/menu/training/back.png", 1300, 1000)
+    imagebutton auto "data/menu/training/fer_%s.png" xpos 100 ypos 100  action trainFerocity, Hide("train"), Show("barn")
+    imagebutton auto "data/menu/training/fin_%s.png" xpos 800 ypos 100  action trainFinesse, Hide("train"), Show("barn")
+    imagebutton auto "data/menu/training/det_%s.png" xpos 100 ypos 500  action trainDetermination, Hide("train"), Show("barn")
+    imagebutton auto "data/menu/training/cun_%s.png" xpos 800 ypos 500  action trainCunning, Hide("train"), Show("barn")
+    imagebutton auto "data/menu/training/back_%s.png" xpos 500 ypos 850  action Hide("train"), Show("barn")
+        
+#Monster requests
+screen request():
+    modal True
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add im.Scale("data/menu/request/back.png", 1300, 1000)
+    vpgrid:
+        cols 2
+        draggable True
+        mousewheel True
+        xpos 100
+        ypos 165
+        for monster in monsterList2:
+            fixed:
+                area (0, 0, 400, 190)
+                add monster:
+                    align (0.5, 0.5)
+    vpgrid:
+        cols 1
+        draggable True
+        mousewheel True
+        xpos 970
+        ypos 150
+        for monster in monsterList1:
+            add monster
+    add filter1 xpos 958 ypos 15
+    imagebutton auto "data/menu/request/back_%s.png" xpos 400 ypos 900  action Hide("request"), Show("farm"), clearBreedMonsters, clearFilters, clearText
+    imagebutton auto "data/menu/request/fulfil_%s.png" xpos 395 ypos 0  action Hide("request"), sellMonster, Show("request")
+    if (sellText!= None):
+        text sellText size 40 color (80, 80, 0) font "SegoeBold.ttf" xpos (650- 30*len(sellText)/ 2) ypos 480 at fadeOutText
+    add traitPick
+    
+#Mission/ Explore
+screen combat():
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add im.Scale("data/menu/battleHub/back.png", 1300, 1000)
+    imagebutton auto "data/menu/battleHub/back_%s.png" xpos 400 ypos 900  action Hide("combat"), Show("farm"), clearBreedMonsters, clearFilters
+    imagebutton auto "data/menu/battleHub/explore_%s.png" xpos 700 ypos 0  action setExplore, Show("mission")
+    imagebutton auto "data/menu/battleHub/map_%s.png" xpos 250 ypos 0  action Show("map")
+    
+screen mission():
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add im.Scale("data/menu/battleHub/backMission.png", 1300, 1000)
+    text activeMission.title size 40 font "SegoeBold.ttf" italic True color (0,0,0,) xalign 0.5 ypos 100
+    if (activeMission.scouted):
+        text activeMission.enemies size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 200
+        text activeMission.primary size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 235
+        text activeMission.secondary size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 270
+        text activeMission.recommend size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 305
+        text activeMission.team size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 340
+        python:
+            descText= activeMission.description
+            itint= 0
+            line1= ""
+            line2= ""
+            line3= ""
+            line4= ""
+            line5= ""
+            line6= ""
+            listLine= [line1, line2, line3, line4, line5]
+            while (itint< 6):
+                 if (len(descText)> 60):
+                        textOut= descText[0: descText.find(" ", 60)]
+                 else:
+                        textOut= descText
+                 if (itint== 0):
+                     line1= textOut
+                 elif (itint== 1):
+                     line2= textOut
+                 elif (itint== 2):
+                     line3= textOut
+                 elif (itint== 3):
+                     line4= textOut
+                 elif (itint== 4):
+                     line5= textOut
+                 elif (itint== 5):
+                     line6= textOut
+                 itint+= 1
+                 if (len(descText)> 60):
+                        descText= descText[descText.find(" ", 60)+ 1: ]
+                 else:
+                        break
+        text line1 size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 450
+        text line2 size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 490
+        text line3 size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 530
+        text line4 size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 570
+        text line5 size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 610
+        text line6 size 20 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 650
+    else:
+        text "Details Unknown, send a scout to learn more" size 25 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 200
+        imagebutton auto "data/menu/battleHub/scout_%s.png" xpos 570 ypos 730  action scoutMission
+    imagebutton auto "data/menu/battleHub/backMission_%s.png" xpos 250 ypos 720  action Hide("mission")
+    imagebutton auto "data/menu/battleHub/selectorOpen_%s.png" xpos 800 ypos 720  action Hide("mission"), showCombat, Show("teamPickScreen")
+    
+screen teamPickScreen():
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add im.Scale("data/menu/battleHub/backSelector.png", 1300, 1000)
+    fixed:
+        area (100, 150, 1300, 850)
+        vpgrid:
+            cols 3
+            spacing 80
+            draggable True
+            mousewheel True
+            for monster in monsterList1:
+                add monster
+    add filter1 xpos 138 ypos 13
+    text activeMission.title size 30 font "SegoeBold.ttf" italic True color (0,0,0,) xalign 0.5 ypos 30
+    text (str(len(selectorActive))+ "/"+ str(activeMission.maxTeam)+ " monsters.") size 20 font "SegoeBold.ttf" color (0,0,0,) xalign 0.5 ypos 80
+    imagebutton auto "data/menu/battleHub/embark_%s.png" xpos 750 ypos 900  action Hide("teamPickScreen"), Jump("CombatEngine"), clearSelection
+    imagebutton auto "data/menu/battleHub/backSelector_%s.png" xpos 350 ypos 900  action Hide("teamPickScreen"), Show("mission"), clearSelection
+    add traitPick
+    
+##BREEDING
 
-    window:
-        style "gm_root"
+#Breed
+screen breed():
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    #background
+    add im.Scale("data/menu/breed/back.png", 1300, 1000)
+    text (str(int(pregChanceGlobal))+ "%") size 25 font "SegoeBold.ttf" xpos 645 ypos 40
+    add viewerB
+    #monster lists
+    fixed:
+        area (20, 150, 300, 850)
+        vpgrid:
+            cols 1
+            draggable True
+            mousewheel True
+            for monster in monsterList1:
+                add monster
+    fixed:
+        area (970, 150, 300, 850)
+        vpgrid:
+            cols 1
+            draggable True
+            mousewheel True
+            for monster in monsterList2:
+                add monster
+    add filter1 xpos 10 ypos 15
+    add filter2 xpos 958 ypos 15
+    #buttons
+    imagebutton auto "data/menu/breed/back_%s.png" xpos 530 ypos 955 action Hide("breed"), Show("farm"), clearBreedMonsters, clearFilters
+    imagebutton auto "data/menu/breed/breed_%s.png" xpos 660 ypos 955 action Hide("breed"), startSex
+    if (incest):
+        imagebutton auto "data/menu/breed/incest2_%s.png" xpos 510 ypos 5 action toggleIncest, refreshBreed
+    else:
+        imagebutton auto "data/menu/breed/incest_%s.png" xpos 510 ypos 5 action toggleIncest, refreshBreed
+    if (exhaust):
+        imagebutton auto "data/menu/breed/exhaust_%s.png" xpos 640 ypos 5 action toggleExhaust, refreshBreed
+    else:
+        imagebutton auto "data/menu/breed/exhaust2_%s.png" xpos 640 ypos 5 action toggleExhaust, refreshBreed
+    add traitPick
+                
+#sex scene
+screen h_scene(animString, i):
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add "data/menu/hscene/back.png"
+    add animString+ str(i)
+    if (i<1):
+        imagebutton auto "data/menu/hscene/next_%s.png" xpos 1050 ypos 200 action Hide("h_scene"), ShowTransient("h_scene", None, animString, i+ 1)
+    if (i> 0):
+        imagebutton auto "data/menu/hscene/prev_%s.png" xpos 50 ypos 200 action Hide("h_scene"), ShowTransient("h_scene", None, animString, i- 1)
+    imagebutton auto "data/menu/hscene/exit_%s.png" xpos 600 ypos 790 action calcPreg, Hide("h_scene")
+        
+screen h_scene_start(animString):
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()    
+    add "data/menu/hscene/back.png"
+    add animString+ str(0)
+    imagebutton auto "data/menu/hscene/next_%s.png" xpos 1050 ypos 200 action Hide("h_scene_start"), ShowTransient("h_scene", None, animString, 1)
+    imagebutton auto "data/menu/hscene/exit_%s.png" xpos 600 ypos 790 action calcPreg, Hide("h_scene_start")
+        
+##ALERTS            
+            
+#Birth
+screen birth(name, monster):
+    modal True
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add im.Scale("data/menu/alert/back.png", 1300, 1000)
+    python:
+        global breedMonster1
+        breedMonster1= monster
+        renpy.redraw(viewerV, 0)
+    add BreedCard(monster.relatives[1], False, "other", None) xpos 225 ypos 400 id "cardF"
+    add BreedCard(monster.relatives[0], False, "other", None) xpos 700 ypos 400 id "cardM"
+    add BreedCard(monster, False, "other", None) xpos 475 ypos 600 id "card"
+    text name+ " gave birth!" size 50 color (0,0,0) font "SegoeBold.ttf" xpos 400 ypos 200
+    text "New monster's name:" size 30 color (0,0,0) font "SegoeBold.ttf" xpos 420 ypos 270
+    button:
+        id "input_1"
+        xysize (500, 30)
+        action NullAction()
+        add Input(hover_color="#3399ff", size= 30, color="#000", default= "nameless", changed= renameMonster, length= 30, button= renpy.get_widget("birth", "input_1")) 
+        xpos 370
+        ypos 320
+    imagebutton auto "data/menu/alert/done_%s.png" xpos 878 ypos 800 action Hide("birth"), giveBirth2
+    imagebutton auto "data/menu/alert/release_%s.png" xpos 193 ypos 800 action Hide("birth"), discardMonsterBirth, giveBirth2
 
-    frame:
-        style_group "yesno"
+#Age Up
+screen ageUp(name):
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add im.Scale("data/menu/alert/back.png", 1300, 1000)
+    text name+ " has grown up!" size 50 color (0,0,0) font "SegoeBold.ttf" xpos 400 ypos 250
+    imagebutton auto "data/menu/alert/done_%s.png" xpos 878 ypos 800 action Hide("ageUp")
 
-        xfill True
-        xmargin .05
-        ypos .1
-        yanchor 0
-        ypadding .05
-
-        has vbox:
-            xalign .5
-            yalign .5
-            spacing 30
-
-        label _(message):
-            xalign 0.5
-
-        hbox:
-            xalign 0.5
-            spacing 100
-
-            textbutton _("Yes") action yes_action
-            textbutton _("No") action no_action
-
-    # Right-click and escape answer "no".
-    key "game_menu" action no_action
-
-init -2:
-    style yesno_button:
-        size_group "yesno"
-
-    style yesno_label_text:
-        text_align 0.5
-        layout "subtitle"
-
-
-##############################################################################
-# Quick Menu
-#
-# A screen that's included by the default say screen, and adds quick access to
-# several useful functions.
-screen quick_menu():
-
-    # Add an in-game quick menu.
-    hbox:
-        style_group "quick"
-
-        xalign 1.0
-        yalign 1.0
-
-        textbutton _("Back") action Rollback()
-        textbutton _("Save") action ShowMenu('save')
-        textbutton _("Q.Save") action QuickSave()
-        textbutton _("Q.Load") action QuickLoad()
-        textbutton _("Skip") action Skip()
-        textbutton _("F.Skip") action Skip(fast=True, confirm=True)
-        textbutton _("Auto") action Preference("auto-forward", "toggle")
-        textbutton _("Prefs") action ShowMenu('preferences')
-
-init -2:
-    style quick_button:
-        is default
-        background None
-        xpadding 5
-
-    style quick_button_text:
-        is default
-        size 12
-        idle_color "#8888"
-        hover_color "#ccc"
-        selected_idle_color "#cc08"
-        selected_hover_color "#cc0"
-        insensitive_color "#4448"
-
+#Pregnancy
+screen pregnantWin(pregName):
+    key "mouseup_1" action NullAction()
+    key "K_RETURN" action NullAction()
+    key "K_SPACE" action NullAction()
+    key "K_KP_ENTER" action NullAction()
+    add im.Scale("data/menu/alert/back.png", 1300, 1000)
+    text pregName size 50 color (0,0,0) font "SegoeBold.ttf" xpos  400 ypos 250
+    imagebutton auto "data/menu/alert/done_%s.png" xpos 878 ypos 800 action Hide("pregnantWin")
+    
+#fade
+screen fadeSleeper():
+    modal True
+    add "data/other/blackscreen.png" at fadeSleep
+    timer 1.0 action Hide("fadeSleeper"), updateTimeKeeper
+    

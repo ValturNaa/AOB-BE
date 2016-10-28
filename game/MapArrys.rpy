@@ -341,12 +341,12 @@ screen PlayerMonsterCard(Unit):
         xpos 290 ypos 824
         text "{}/{}".format(Unit.CurrentMorale, Unit.MaxMorale)
         
-    text "{}".format(Unit.Agression) xpos 235 ypos 865
-    text "{}".format(Unit.Seduction) xpos 235 ypos 905
-    text "{}".format(Unit.PhysicalResist) xpos 235 ypos 930
-    text "{}".format(Unit.CharmResist) xpos 235 ypos 960
+    text "{}".format(Unit.Agression) xpos 235 color(0,0,0) font "SegoeBold.ttf" ypos 862
+    text "{}".format(Unit.Seduction) xpos 235 color(0,0,0) font "SegoeBold.ttf" ypos 894
+    text "{}".format(Unit.PhysicalResist) xpos 235 color(0,0,0) font "SegoeBold.ttf" ypos 926
+    text "{}".format(Unit.CharmResist) xpos 235 color(0,0,0) font "SegoeBold.ttf" ypos 958
     
-    text "{}".format(Unit.OrigionalName) xpos 40 ypos 820
+    text "{}".format(Unit.OrigionalName) xpos 40 color(0,0,0) font "SegoeBold.ttf" ypos 820
     add Unit.Mugshot xpos 30 ypos 845
     
 screen EnemyMonsterCard(Unit):
@@ -373,12 +373,12 @@ screen EnemyMonsterCard(Unit):
         xpos 1140 ypos 824
         text "{}/{}".format(Unit.CurrentMorale, Unit.MaxMorale)
         
-    text "{}".format(Unit.Agression) xpos 1085 ypos 865
-    text "{}".format(Unit.Seduction) xpos 1085 ypos 905
-    text "{}".format(Unit.PhysicalResist) xpos 1085 ypos 930
-    text "{}".format(Unit.CharmResist) xpos 1085 ypos 960
+    text "{}".format(Unit.Agression) xpos 1085 color(0,0,0) font "SegoeBold.ttf" ypos 862
+    text "{}".format(Unit.Seduction) xpos 1085 color(0,0,0) font "SegoeBold.ttf" ypos 894
+    text "{}".format(Unit.PhysicalResist) xpos 1085 color(0,0,0) font "SegoeBold.ttf" ypos 926
+    text "{}".format(Unit.CharmResist) xpos 1085 color(0,0,0) font "SegoeBold.ttf" ypos 958
     
-    text "{}".format(Unit.OrigionalName) xpos 890 ypos 820
+    text "{}".format(Unit.OrigionalName) xpos 890 color(0,0,0) font "SegoeBold.ttf" ypos 820
     add Unit.Mugshot xpos 880 ypos 845
 
 

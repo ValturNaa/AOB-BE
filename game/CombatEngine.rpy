@@ -477,13 +477,18 @@ label CombatEngine:
     default testarmy = []
     python:
         # sets up player army. Works for a fixed army, but will need some sort of selection screen and drawing stats from breeding classes.
-        p1 = unit(5, 5, 5, 5, "p1", "Claw Wolf", [MWolfClaw], [], 4, "MWolfIdle", "MWolfHover", "MWolfMove", "MWolfMug", "Male", 1)
-        p2 = unit(5, 5, 5, 5, "p2", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "FWolfMug", "Female", 1)
-        p3 = unit(5, 5, 5, 5, "p3", "Player", [MCAxe], [], 4, "MCIdle", "MCHover", "MCMove", "MCMug", "Male", 1)
-        PlayerArmy = Army([p1, p2, p3], [p1, p2, p3])
-        # sets up enely 1's army. Will need a generator for random events and scripted ones some sort of selection method
-        testarmy = EnemyArmyGenerator("Bandits", 3, 4)
-        Enemy1Army = Army(testarmy, testarmy)
+        #p1 = unit(5, 5, 5, 5, "p1", "Claw Wolf", [MWolfClaw], [], 4, "MWolfIdle", "MWolfHover", "MWolfMove", "MWolfMug", "Male", 1)
+        #p2 = unit(5, 5, 5, 5, "p2", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "FWolfMug", "Female", 1)
+        #PlayerArmy = Army([p1, p2, p3], [p1, p2, p3])
+        
+        ###pass army from mission select
+        PlayerArmy= missionArmyP
+        # sets up enemy 1's army. Will need a generator for random events and scripted ones some sort of selection method
+        if (missionArmyE== None):
+            testarmy = EnemyArmyGenerator("Bandits", 3, 4)
+            Enemy1Army = Army(testarmy, testarmy)
+        else:
+            Enemy1Army= missionEnemyE
         ActiveAIArmies.append(Enemy1Army)
         # completeddeployment keeps track of which units have been deployed, used for all armies in turn and reset after use
         CompletedDeployment = []
@@ -503,22 +508,12 @@ label CombatEngine:
         
         
         
-        # Set to extrapolate needed info from BattleFieldList. All that should be needed to set up "current" variables
-    menu:
-        "Pick your battlefield type"
-        
-        "Grassland":
-            $ CurrentBattlefieldID = 0
-        "Light forest":
-            $ CurrentBattlefieldID = 1
-        "Forest":
-            $ CurrentBattlefieldID = 2
-        "Dense forest":
-            $ CurrentBattlefieldID = 3
         
         
         
     python:
+        CurrentBattlefieldID= random.randint(0, 3)
+        print "battlefiled= "+ str(BattleFieldList[CurrentBattlefieldID])
         BE_ACTIVE = True # Global variable so we know if BE sequence is still running.
         CurrentMap = BattleFieldList[CurrentBattlefieldID]
         CurrentOverlay = OverlayGenerator(CurrentMap)
@@ -533,7 +528,7 @@ label CombatEngine:
             TempIndecesY = CurrentPlayerDeployment[i][0]
             TempIndecesX = CurrentPlayerDeployment[i][1]
             CurrentOverlay[TempIndecesY][TempIndecesX].UnitPresent = "Deploy"
-        # getPlayerMonsters()
+        getPlayerMonsters()
     jump SetPos
     
 label SetPos:
@@ -688,7 +683,7 @@ screen VictoryScreen(Condition):
     add "images/GUI/VictoryScreen/victor_sides.png" xpos 800 ypos 760
     text "[ReturnBattleInfo.SideQuests]" xpos 980 ypos 760
     
-    imagebutton idle "images/GUI/VictoryScreen/victor_return_idle.png" hover "images/GUI/VictoryScreen/victor_return_hover.png" xpos 520 ypos 770 action Return()
+    imagebutton idle "images/GUI/VictoryScreen/victor_return_idle.png" hover "images/GUI/VictoryScreen/victor_return_hover.png" xpos 520 ypos 770 action Hide("VictoryScreen")
     
     
     

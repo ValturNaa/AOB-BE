@@ -107,6 +107,8 @@ init python:
         if (WinLose != "No"):
             ReturnBattleInfo = ReturnInfo(Turn, ActiveAIArmies, PlayerArmy.Army)
             store.BE_ACTIVE = WinLose
+            global gameMoney
+            gameMoney+= ReturnBattleInfo.Gold
             renpy.jump("finished_be")
     
     def ReturnPositive(Start, Target):
