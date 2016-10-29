@@ -118,14 +118,14 @@ init python:
     def GetX(Unit, Map):
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map[x][y].UnitPresent == Unit.Self):
+                if (Map[x][y].UnitPresent == Unit):
                     StartX = x
         return StartX
         
     def GetY(Unit, Map):
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map[x][y].UnitPresent == Unit.Self):
+                if (Map[x][y].UnitPresent == Unit):
                     StartY = y
         return StartY
         
@@ -147,7 +147,7 @@ init python:
         ClosestTarget = 0
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map[x][y].UnitPresent == Unit.Self):
+                if (Map[x][y].UnitPresent == Unit):
                     StartX = x
                     StartY = y
                 else:
@@ -179,7 +179,7 @@ init python:
         ClosestTarget = 0
         for x in range(0, len(Map)):
             for y in range(0, len(Map[x])):
-                if (Map[x][y].UnitPresent == Unit.Self):
+                if (Map[x][y].UnitPresent == Unit):
                     StartX = x
                     StartY = y
                 else:
@@ -468,7 +468,7 @@ init python:
     def FinishMove():
         global CurrentOverlay
         global MoveSelect
-        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0].Self
+        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0]
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitID = MoveSelect[0]
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitIdle = MoveSelect[0].BattleSpriteIdle
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitHover = MoveSelect[0].BattleSpriteHover
@@ -610,7 +610,7 @@ init python:
         global ResolvingDamage
         for x in range(0, len(CurrentOverlay)):
             for y in range(0, len(CurrentOverlay[x])):
-                if (CurrentOverlay[x][y].UnitPresent == Unit.Self):
+                if (CurrentOverlay[x][y].UnitPresent == Unit):
                     StartX = x
                     StartY = y
         AISelectAttack(Unit, StartX, StartY)
@@ -621,7 +621,7 @@ init python:
         print str(Target.Ypos)
         for x in range(0, len(CurrentOverlay)):
             for y in range(0, len(CurrentOverlay[x])):
-                if (CurrentOverlay[x][y].UnitPresent == TargetID[0].Self):
+                if (CurrentOverlay[x][y].UnitPresent == TargetID[0]):
                     TargetX = x
                     TargetY = y 
         CombatDamage = GetDamage(Unit, SelectedAttack[0], TargetID[0])

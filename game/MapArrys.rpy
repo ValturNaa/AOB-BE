@@ -259,7 +259,7 @@ screen CurrentMap:
                     for x in range(0, len(CurrentOverlay)): 
                         for y in range(0, len(CurrentOverlay[x])): 
                             if CurrentOverlay[x][y].UnitPresent == "Deploy":
-                                imagebutton idle "DeploymentIdle" hover "DeploymentHover" action SetField(CurrentOverlay[x][y], "UnitID", ActiveDeployment[0]), SetField(CurrentOverlay[x][y], "UnitPresent", ActiveDeployment[0].Self), SetField(CurrentOverlay[x][y], "UnitIdle", ActiveDeployment[0].BattleSpriteIdle), SetField(CurrentOverlay[x][y], "UnitHover", ActiveDeployment[0].BattleSpriteHover), SetField(CurrentOverlay[x][y], "Visibility", 1), Jump("UnitPlacement")
+                                imagebutton idle "DeploymentIdle" hover "DeploymentHover" action SetField(CurrentOverlay[x][y], "UnitID", ActiveDeployment[0]), SetField(CurrentOverlay[x][y], "UnitPresent", ActiveDeployment[0]), SetField(CurrentOverlay[x][y], "UnitIdle", ActiveDeployment[0].BattleSpriteIdle), SetField(CurrentOverlay[x][y], "UnitHover", ActiveDeployment[0].BattleSpriteHover), SetField(CurrentOverlay[x][y], "Visibility", 1), Jump("UnitPlacement")
                             else:
                                 add "Clear"
                     at ZoomList[MapZoom][0]
@@ -275,7 +275,7 @@ screen CurrentMap:
                         imagebutton:
                             idle PlayerArmy.DeployArmy[x].BattleSpriteIdle
                             hover PlayerArmy.DeployArmy[x].BattleSpriteHover
-                            action SetVariable("ActiveDeployment", [PlayerArmy.DeployArmy[x].Self]), SetVariable("PlaceUnit", True), Jump("RenderMap")
+                            action SetVariable("ActiveDeployment", [PlayerArmy.DeployArmy[x]]), SetVariable("PlaceUnit", True), Jump("RenderMap")
        
         add "BattleMonsterCardSmall" xpos 450 ypos 800
             
@@ -429,7 +429,7 @@ label FinishDeployment:
             while CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitPresent != "Deploy":
                 DeploymentRandomiser = renpy.random.randint(0, len(Enemy1Army.DeployArmy))
             CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitID = ActiveDeployment[0]
-            CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitPresent = ActiveDeployment[0].Self
+            CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitPresent = ActiveDeployment[0]
             CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitIdle = ActiveDeployment[0].BattleSpriteIdle
             CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].UnitHover = ActiveDeployment[0].BattleSpriteHover
             CurrentOverlay[CurrentEnemy1Deployment[DeploymentRandomiser][0]][CurrentEnemy1Deployment[DeploymentRandomiser][1]].Visibility = 1

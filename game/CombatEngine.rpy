@@ -238,8 +238,6 @@ init 1 python:
     # can handle up to 4 armies but easily accomodate more with a few added lines. I figure up to 4 armies is enough for now.
     class battlefield(object):
         def __init__(self, Field, FieldOverlay, FieldID, PlayerDeployment, PlayerArmy, Enemy1Deployment, Enemy1Army, Enemy2=False, Enemy2Deployment=[], Enemy2Army=[], Enemy3=False, Enemy3Deployment=[], Enemy3Army=[]):
-            # self
-            self.Self = self
             # 2d list
             self.Field = Field
             # 2d list
@@ -272,8 +270,6 @@ init 1 python:
     # Monster stats for each chosen to participate passed into this class, used as needed and then discareded at the end of the battle. Any stat increases or bonuses passed back to the breeding class at the end.
     class unit(object):
         def __init__(self, Ferocity, Finesse, Determination, Cunning,  BattleName, OrigionalName, BattleSkills, Traits, MovementMax, BattleSpriteIdle, BattleSpriteHover, BattleSpriteMove, Mugshot, Gender, ArmyID, PAB=0, CAB=0, PRB=0, CRB=0):
-            # used to append self to lists
-            self.Self = self
             # string used to reference self
             self.BattleName = BattleName
             # used to help transition stat changes back to origional seeding monster in the breeding engine

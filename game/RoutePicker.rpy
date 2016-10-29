@@ -1,7 +1,6 @@
 init python:
     class Path(object):
         def __init__(self):
-            self.Self = self
             self.Name = "None"
             # in the format [[Direction(E.g. "N"), [distance up / down from start. distance left / right from start]]] for each step
             self.WayPoints = []
@@ -241,7 +240,7 @@ label MostEfficientRoute:
             
 label FinishMove:
     python:
-        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0].Self
+        CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitPresent = MoveSelect[0]
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitID = MoveSelect[0]
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitIdle = MoveSelect[0].BattleSpriteIdle
         CurrentOverlay[FinalDestinationX][FinalDestinationY].UnitHover = MoveSelect[0].BattleSpriteHover
