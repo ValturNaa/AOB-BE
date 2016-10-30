@@ -480,15 +480,17 @@ label CombatEngine:
         #p1 = unit(5, 5, 5, 5, "p1", "Claw Wolf", [MWolfClaw], [], 4, "MWolfIdle", "MWolfHover", "MWolfMove", "MWolfMug", "Male", 1)
         #p2 = unit(5, 5, 5, 5, "p2", "Claw Wolf", [FWolfClaw], [], 4, "FWolfIdle", "FWolfHover", "FWolfMove", "FWolfMug", "Female", 1)
         #PlayerArmy = Army([p1, p2, p3], [p1, p2, p3])
+        ###clear AIArmies
+        ActiveAIArmies= []
         
         ###pass army from mission select
         PlayerArmy= missionArmyP
         # sets up enemy 1's army. Will need a generator for random events and scripted ones some sort of selection method
         if (missionArmyE== None):
-            testarmy = EnemyArmyGenerator("Bandits", 3, 4)
-            Enemy1Army = Army(testarmy, testarmy)
+            testarmy = EnemyArmyGenerator("Bandits", 3, 20)
+            Enemy1Army= Army(testarmy, testarmy)
         else:
-            Enemy1Army= missionEnemyE
+            Enemy1Army= Army(missionArmyE, missionArmyE)
         ActiveAIArmies.append(Enemy1Army)
         # completeddeployment keeps track of which units have been deployed, used for all armies in turn and reset after use
         CompletedDeployment = []
@@ -505,9 +507,6 @@ label CombatEngine:
         BattleFieldList.append(UnderlayGenerator(15, 15, "light forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grass, grass, grassCampfire, grass, grass], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
         BattleFieldList.append(UnderlayGenerator(15, 15, "forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grass, grass, grassCampfire, grass, grass], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
         BattleFieldList.append(UnderlayGenerator(15, 15, "heavy forest", [SpecialFeature(grassStone)], 6, [SpecialFeature([[grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade], [grassVBkade, grass, grass, grass, grassVBkade], [grass, grass, grassCampfire, grass, grass], [grassVBkade, grass, grass, grass, grassVBkade], [grassHBkade, grassHBkade, grass, grassHBkade,grassHBkade]], SpecificPlacing=True, SpecificX=7, SpecificY=7, MultiPart=True)]))
-        
-        
-        
         
         
         
@@ -600,7 +599,7 @@ label NextTurn:
             
     #"[randomtest] and [PlayerArmy.Army]"
     #"Movement current 0 = [PlayerArmy.Army[0].MovementCurrent] / Movement current 1 = [PlayerArmy.Army[1].MovementCurrent] / Movement current 2 = [PlayerArmy.Army[2].MovementCurrent]"
-    call ResetMoveVariables
+    call ResetMoveVariables from _call_ResetMoveVariables_1
     jump AITurn
     
 label showpath:
@@ -683,7 +682,7 @@ screen VictoryScreen(Condition):
     add "images/GUI/VictoryScreen/victor_sides.png" xpos 800 ypos 760
     text "[ReturnBattleInfo.SideQuests]" xpos 980 ypos 760
     
-    imagebutton idle "images/GUI/VictoryScreen/victor_return_idle.png" hover "images/GUI/VictoryScreen/victor_return_hover.png" xpos 520 ypos 770 action Hide("VictoryScreen")
+    imagebutton idle "images/GUI/VictoryScreen/victor_return_idle.png" hover "images/GUI/VictoryScreen/victor_return_hover.png" xpos 520 ypos 770 action Hide("VictoryScreen"), Show("combat")
     
     
     

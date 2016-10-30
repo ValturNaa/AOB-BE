@@ -38,6 +38,11 @@ init python:
     gameRegion= ""
     gameMission= ""
     saveList= []
+    currentPair= False
+    #missions
+    availableMissions= []
+    knownEnemies= ["Bandits", "Wolf Pack"]
+    missionTitles= {"Bandits": ["Taking out the trash", "Bandit blues", "Up to no good"], "Wolf Pack": ["Running with the wolves", "DildoQuest I", "Pack it up"]}
     
     #classes
     class Species():
@@ -121,6 +126,7 @@ init python:
             self.statPoints= 1.0
             self.relatives= []
             self.relativeNames= []
+            self.decay= 30
             
         def addGene(self, gene):
             self.genes.append(gene)
@@ -161,7 +167,7 @@ init python:
                         
         def getCombatMonster(self):
             bName= self.gender[0].upper()+ self.species.battleName
-            return unit(self.ferocity, self.finesse, self.determination, self.cunning, "p"+ str(len(PlayerArmy.Army)), self.name, self.species.attacklist[self.gender], [], 4, bName+ "Idle", bName+ "Hover", bName+ "Move", bName+ "Mug", self.gender[0].upper()+ self.gender[1:], 1)
+            return unit(int(self.ferocity), int(self.finesse), int(self.determination), int(self.cunning), "p"+ str(len(PlayerArmy.Army)), self.name, self.species.attacklist[self.gender], [], 4, bName+ "Idle", bName+ "Hover", bName+ "Move", bName+ "Mug", self.gender[0].upper()+ self.gender[1:], 1)
             
             
         def loadRelatives(self):
@@ -220,6 +226,13 @@ init python:
             self.description= des
             self.presetArmyP= Army([], [])
             self.presetArmyE= None
+            self.enemyClass= ""
+            self.enemySize= 1
+            self.enemySkill= 40
+            self.decay= 30
+            
+        def generateArmy(self):
+            self.presetArmyE= EnemyArmyGenerator(self.enemyClass, self.enemySize, self.enemySkill)
            
             
     class ClockBox(renpy.Displayable):
@@ -316,6 +329,7 @@ init python:
         file.write(str(monster.stamina)+ "\n")
         file.write(str(monster.training)+ "\n")
         file.write(str(monster.statPoints)+ "\n")
+        file.write(str(monster.decay)+ "\n")
         file.write(str(monster.fertility)+ "\n")
         for kin in monster.relatives:
             file.write("k="+ str(kin.intID)+ "\n")
@@ -371,8 +385,44 @@ init python:
         for monster in requestedMonsters:
             file.write("newRequestMonster"+ "\n")
             saveMonster(file, monster)
+        for mission in availableMissions:
+            file.write("newMission"+ "\n")
+            saveMission(file, mission)
         file.close()
     
+    def saveMission(file, mission):
+        file.write(mission.title+ "\n")
+        file.write(str(mission.scouted)+ "\n")
+        file.write(mission.enemies+ "\n")
+        file.write(mission.primary+ "\n")
+        file.write(mission.secondary+ "\n")
+        file.write(mission.recommend+ "\n")
+        file.write(str(mission.maxTeam)+ "\n")
+        file.write(mission.team+ "\n")
+        file.write(mission.description+ "\n")
+        file.write(mission.enemyClass+ "\n")
+        file.write(str(mission.enemySize)+ "\n")
+        file.write(str(mission.enemySkill)+ "\n")
+        file.write(str(mission.decay)+ "\n")
+        
+    def loadMission(file):
+        mission= Mission()
+        mission.title= file.readline()[:-1]
+        mission.scouted= file.readline()[:-1]== "True"
+        mission.enemies= file.readline()[:-1]
+        mission.primary= file.readline()[:-1]
+        mission.secondary= file.readline()[:-1]
+        mission.recommend= file.readline()[:-1]
+        mission.maxTeam= int(file.readline()[:-1])
+        mission.team= file.readline()[:-1]
+        mission.description= file.readline()[:-1]
+        mission.enemyClass= file.readline()[:-1]
+        mission.enemySize= int(file.readline()[:-1])
+        mission.enemySkill= int(file.readline()[:-1])
+        mission.decay= int(file.readline()[:-1])
+        mission.generateArmy()
+        return mission
+        
     def loadMonster(file):
         monster= Monster()
         monster.name= file.readline()[:-1]
@@ -396,6 +446,7 @@ init python:
         monster.stamina= int(file.readline()[:-1])
         monster.training= int(file.readline()[:-1])
         monster.statPoints= float(file.readline()[:-1])
+        monster.decay= int(file.readline()[:-1])
         monster.fertility= int(file.readline()[:-1])
         line= file.readline()[:-1]
         while (line[0]== 'k'):
@@ -412,7 +463,6 @@ init python:
         monster.calcEndurance()
         monster.calcFertility()
         monster.applyGenes()
-        print monster.name
         return monster
     
     def loadGene(file):
@@ -421,7 +471,6 @@ init python:
     def quickLoad(slot, target):
         try:
             file= open("saves/aobSave"+ str(slot)+ ".txt", 'r')
-            print "read start"
             target.name= file.readline()[:-1]
             target.date= file.readline()[:-1]
             target.money= file.readline()[:-1]
@@ -435,7 +484,6 @@ init python:
                 target.knownMonsters.append(line)
                 line= file.readline()[:-1]
             file.close()
-            print "read stop"
         except:
             import traceback
             traceback.print_exc()
@@ -443,6 +491,9 @@ init python:
     def loadGameTest():
         if (selectedSave!= None):
             loadGame(selectedSave.slot)
+            renpy.hide_screen("farm")
+            renpy.show_screen("farm")
+            renpy.restart_interaction()
         
     def saveGameTest():
         global selectedSave
@@ -480,9 +531,11 @@ init python:
             global oral
             global bondage
             global zoophilia
+            global availableMissions
             playerMonsters= []
             youngMonsters= []
-            requestedMonsters= list()
+            availableMissions= []
+            requestedMonsters= []
             knownSpecies= {}
             knownVariants= list()
             knownSpecies["clawwolf"]= clawwolf
@@ -521,6 +574,9 @@ init python:
                 line= file.readline()[:-1]
             while (line== "newRequestMonster"):
                 requestedMonsters.append(loadMonster(file))
+                line= file.readline()[:-1]
+            while (line== "newMission"):
+                availableMissions.append(loadMission(file))
                 line= file.readline()[:-1]
             file.close()
             for monster in playerMonsters:
@@ -578,6 +634,8 @@ init python:
         global oral
         global bondage
         global zoophilia
+        global availableMissions
+        availableMissions= []
         gay= True
         straight= True
         lesbian= True
@@ -662,13 +720,43 @@ init python:
         global activeMission
         global missionArmyP
         global missionArmyE
-        activeMission= Mission()
+        activeMission= newMission()
         missionArmyP= activeMission.presetArmyP
         missionArmyE= activeMission.presetArmyE
+        exev= random.randint(0, 2)
+        if (exev< 2):
+            renpy.show_screen("mission", False)
+            renpy.restart_interaction()
+        elif (exev== 2):
+            renpy.hide_screen("combat")
+            renpy.hide_screen("farm")
+            renpy.hide_screen("main_menu")
+            renpy.jump("wolf_event")
 
     def scoutMission():
         activeMission.scouted= True
         renpy.restart_interaction()
+        
+    def newMission():
+        temp= Mission()
+        temp.enemyClass= knownEnemies[random.randint(0, len(knownEnemies)- 1)]
+        temp.enemySize= random.randint(1, 4)
+        titrange= missionTitles[temp.enemyClass]
+        temp.title= titrange[random.randint(0, len(titrange)- 1)]
+        temp.enemies= str(temp.enemySize)+ "x "+ temp.enemyClass
+        temp.primary= "Eliminate all enemies"
+        temp.recommend= "Clawwolves"
+        temp.maxTeam= temp.enemySize
+        temp.team= "Max team size: "+ str(temp.maxTeam)
+        temp.description= "A simple attack on a group of hostiles that have been causing trouble for nearby settlements."
+        temp.generateArmy()
+        return temp
+        
+    def removeMission():
+        for mission in availableMissions:
+            if (activeMission== mission):
+                availableMissions.remove(mission)
+                break
         
     def clearSelection():
         selectorActive= []

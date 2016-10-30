@@ -262,11 +262,22 @@ screen combat():
     key "K_SPACE" action NullAction()
     key "K_KP_ENTER" action NullAction()
     add im.Scale("data/menu/battleHub/back.png", 1300, 1000)
+    vpgrid:
+        cols 2
+        draggable True
+        mousewheel True
+        xpos 160
+        ypos 255
+        for mission in availableMissions:
+            fixed:
+                area (0, 0, 420, 165)
+                add MissionCard(mission):
+                    align (0.5, 0.5)
     imagebutton auto "data/menu/battleHub/back_%s.png" xpos 400 ypos 900  action Hide("combat"), Show("farm"), clearBreedMonsters, clearFilters
     imagebutton auto "data/menu/battleHub/explore_%s.png" xpos 700 ypos 0  action setExplore, Show("mission")
     imagebutton auto "data/menu/battleHub/map_%s.png" xpos 250 ypos 0  action Show("map")
     
-screen mission():
+screen mission(leave= True):
     key "mouseup_1" action NullAction()
     key "K_RETURN" action NullAction()
     key "K_SPACE" action NullAction()
@@ -320,7 +331,8 @@ screen mission():
     else:
         text "Details Unknown, send a scout to learn more" size 25 font "SegoeBold.ttf" color (0,0,0,) xpos 250 ypos 200
         imagebutton auto "data/menu/battleHub/scout_%s.png" xpos 570 ypos 730  action scoutMission
-    imagebutton auto "data/menu/battleHub/backMission_%s.png" xpos 250 ypos 720  action Hide("mission")
+    if (leave):
+        imagebutton auto "data/menu/battleHub/backMission_%s.png" xpos 250 ypos 720  action Hide("mission")
     imagebutton auto "data/menu/battleHub/selectorOpen_%s.png" xpos 800 ypos 720  action Hide("mission"), showCombat, Show("teamPickScreen")
     
 screen teamPickScreen():
@@ -341,7 +353,7 @@ screen teamPickScreen():
     add filter1 xpos 138 ypos 13
     text activeMission.title size 30 font "SegoeBold.ttf" italic True color (0,0,0,) xalign 0.5 ypos 30
     text (str(len(selectorActive))+ "/"+ str(activeMission.maxTeam)+ " monsters.") size 20 font "SegoeBold.ttf" color (0,0,0,) xalign 0.5 ypos 80
-    imagebutton auto "data/menu/battleHub/embark_%s.png" xpos 750 ypos 900  action Hide("teamPickScreen"), Jump("CombatEngine"), clearSelection
+    imagebutton auto "data/menu/battleHub/embark_%s.png" xpos 750 ypos 900  action Hide("teamPickScreen"), Hide("combat"), removeMission, Jump("CombatEngine")
     imagebutton auto "data/menu/battleHub/backSelector_%s.png" xpos 350 ypos 900  action Hide("teamPickScreen"), Show("mission"), clearSelection
     add traitPick
     
@@ -378,7 +390,16 @@ screen breed():
     add filter2 xpos 958 ypos 15
     #buttons
     imagebutton auto "data/menu/breed/back_%s.png" xpos 530 ypos 955 action Hide("breed"), Show("farm"), clearBreedMonsters, clearFilters
-    imagebutton auto "data/menu/breed/breed_%s.png" xpos 660 ypos 955 action Hide("breed"), startSex
+    if (currentPair):
+        if (breedMonster1!= None and breedMonster2!= None and breedMonster1.stamina> 0 and breedMonster2.stamina>0):
+            imagebutton auto "data/menu/breed/repeat_%s.png" xpos 660 ypos 955 action Hide("breed"), startSex
+        else:
+            add "data/menu/breed/repeat_disabled.png" xpos 660 ypos 955
+    else:
+        if (breedMonster1!= None and breedMonster2!= None and breedMonster1.stamina> 0 and breedMonster2.stamina>0):
+            imagebutton auto "data/menu/breed/breed_%s.png" xpos 660 ypos 955 action Hide("breed"), startSex
+        else:
+            add "data/menu/breed/breed_disabled.png" xpos 660 ypos 955
     if (incest):
         imagebutton auto "data/menu/breed/incest2_%s.png" xpos 510 ypos 5 action toggleIncest, refreshBreed
     else:
@@ -397,7 +418,7 @@ screen h_scene(animString, i):
     key "K_KP_ENTER" action NullAction()
     add "data/menu/hscene/back.png"
     add animString+ str(i)
-    if (i<1):
+    if (renpy.has_image(animString+ str(i+ 1))):
         imagebutton auto "data/menu/hscene/next_%s.png" xpos 1050 ypos 200 action Hide("h_scene"), ShowTransient("h_scene", None, animString, i+ 1)
     if (i> 0):
         imagebutton auto "data/menu/hscene/prev_%s.png" xpos 50 ypos 200 action Hide("h_scene"), ShowTransient("h_scene", None, animString, i- 1)
@@ -410,13 +431,14 @@ screen h_scene_start(animString):
     key "K_KP_ENTER" action NullAction()    
     add "data/menu/hscene/back.png"
     add animString+ str(0)
-    imagebutton auto "data/menu/hscene/next_%s.png" xpos 1050 ypos 200 action Hide("h_scene_start"), ShowTransient("h_scene", None, animString, 1)
+    if (renpy.has_image(animString+ str(1))):
+        imagebutton auto "data/menu/hscene/next_%s.png" xpos 1050 ypos 200 action Hide("h_scene_start"), ShowTransient("h_scene", None, animString, 1)
     imagebutton auto "data/menu/hscene/exit_%s.png" xpos 600 ypos 790 action calcPreg, Hide("h_scene_start")
         
 ##ALERTS            
             
 #Birth
-screen birth(name, monster):
+screen birth(name, monster, wild= False):
     modal True
     key "mouseup_1" action NullAction()
     key "K_RETURN" action NullAction()
@@ -427,10 +449,14 @@ screen birth(name, monster):
         global breedMonster1
         breedMonster1= monster
         renpy.redraw(viewerV, 0)
-    add BreedCard(monster.relatives[1], False, "other", None) xpos 225 ypos 400 id "cardF"
-    add BreedCard(monster.relatives[0], False, "other", None) xpos 700 ypos 400 id "cardM"
+    if not (wild):
+        add BreedCard(monster.relatives[1], False, "other", None) xpos 225 ypos 400 id "cardF"
+        add BreedCard(monster.relatives[0], False, "other", None) xpos 700 ypos 400 id "cardM"
     add BreedCard(monster, False, "other", None) xpos 475 ypos 600 id "card"
-    text name+ " gave birth!" size 50 color (0,0,0) font "SegoeBold.ttf" xpos 400 ypos 200
+    if (wild):
+        text "Obtained a new monster!" size 50 color (0,0,0) font "SegoeBold.ttf" xpos 400 ypos 200
+    else:
+        text name+ " gave birth!" size 50 color (0,0,0) font "SegoeBold.ttf" xpos 400 ypos 200
     text "New monster's name:" size 30 color (0,0,0) font "SegoeBold.ttf" xpos 420 ypos 270
     button:
         id "input_1"
@@ -439,8 +465,12 @@ screen birth(name, monster):
         add Input(hover_color="#3399ff", size= 30, color="#000", default= "nameless", changed= renameMonster, length= 30, button= renpy.get_widget("birth", "input_1")) 
         xpos 370
         ypos 320
-    imagebutton auto "data/menu/alert/done_%s.png" xpos 878 ypos 800 action Hide("birth"), giveBirth2
-    imagebutton auto "data/menu/alert/release_%s.png" xpos 193 ypos 800 action Hide("birth"), discardMonsterBirth, giveBirth2
+    if (wild):
+        imagebutton auto "data/menu/alert/done_%s.png" xpos 878 ypos 800 action Hide("birth"), addMonsterWild
+        imagebutton auto "data/menu/alert/release_%s.png" xpos 193 ypos 800 action Hide("birth")
+    else:
+        imagebutton auto "data/menu/alert/done_%s.png" xpos 878 ypos 800 action Hide("birth"), giveBirth2
+        imagebutton auto "data/menu/alert/release_%s.png" xpos 193 ypos 800 action Hide("birth"), discardMonsterBirth, giveBirth2
 
 #Age Up
 screen ageUp(name):

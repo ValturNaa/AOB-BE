@@ -35,6 +35,49 @@ init 1 python:
     sellText= None
     
     #classes
+    class MissionCard(renpy.Displayable):
+        "A mission representation"
+        def __init__(self, mis, **kwargs):
+            super(MissionCard, self).__init__(**kwargs)
+            self.mission= mis
+            self.selected= False
+            self.hoverCheck= False
+            self.width= 300
+            self.height= 150
+            
+        def render(self, width, height, st, at):
+            render= renpy.Render(self.width, self.height)
+            if (self.selected):
+                mcBack= renpy.render(Image("data/menu/breed/mcardBack.png"), width, height, st, at)
+            else:
+                mcBack= renpy.render(Image("data/menu/breed/bcardBack.png"), width, height, st, at)
+            textN= renpy.render(Text(self.mission.title, color= (0,0,0), font= "SegoeBold.ttf", size= 25), width, height, st, at)
+            if (self.mission.scouted):
+                textE= renpy.render(Text(self.mission.enemyClass, color= (0,0,0), font= "SegoeBold.ttf", size= 20), width, height, st, at)
+            else:
+                textE= renpy.render(Text("Not scouted", color= (0,0,0), font= "SegoeBold.ttf", size= 20), width, height, st, at)
+            #rendering
+            render.blit(mcBack, (0, 0))
+            render.blit(textN, (10, 5))
+            #stats
+            render.blit(textE, (10, 40))
+            return render
+           
+        def event(self, ev, x, y, st):
+            if (ev.type== pygame.MOUSEBUTTONDOWN):
+                if (x> 0 and x< self.width and y> 0 and y< self.height):
+                    if (ev.button== 1):
+                        global activeMission
+                        global missionArmyP
+                        global missionArmyE
+                        activeMission= self.mission
+                        missionArmyP= activeMission.presetArmyP
+                        missionArmyE= activeMission.presetArmyE
+                        renpy.show_screen("mission")
+            if (ev.type== pygame.MOUSEBUTTONUP and ev.button== 1):
+                if (x> 0 and x< self.width and y> 0 and y< self.height):   
+                    renpy.restart_interaction()
+                        
     class SaveCard(renpy.Displayable):
         "A save file representation"
         def __init__(self, slo= 0, **kwargs):
@@ -435,6 +478,7 @@ init 1 python:
         def event(self, ev, x, y, st):
             global breedMonster1
             global  breedMonster2
+            global currentPair
             if (ev.type== pygame.MOUSEMOTION or ev.type== pygame.MOUSEBUTTONDOWN):
                 if (x> 0 and x< self.width and y> 0 and y< self.height):
                     if (ev.type== pygame.MOUSEBUTTONDOWN and ev.button== 3):
@@ -493,6 +537,7 @@ init 1 python:
                                 renpy.redraw(self.viewer, 0)
                             renpy.redraw(self, 0)
                             if (self.mode== "breeding"):
+                                currentPair= False
                                 showBreed()
                                 renpy.restart_interaction()
                             elif (self.mode== "request"):
@@ -808,6 +853,7 @@ init 1 python:
         global rename
         global birthInt
         global requestedMonsters
+        global availableMissions
         birthInt= 0
         gameDay+= 1
         if (gameDay> 30):
@@ -819,6 +865,7 @@ init 1 python:
         gameMinute= 0
         for monster in playerMonsters:
             monster.health= monster.maxHealth
+            monster.calcEndurance()
             monster.stamina= monster.maxStamina
             for gene in monster.genes:
                 if ("status" in gene.effect):
@@ -835,18 +882,30 @@ init 1 python:
                         if (gene.name== "Young"):
                             renpy.show_screen("ageUp", name= monster.name)
                             monster.stamina= monster.maxStamina
-                            monster.calcFertility()
                             playerMonsters.append(monster)
                             youngMonsters.remove(monster)
+                            monster.calcFertility()
+                            monster.fertility= monster.fertilityBase
         for monster in playerMonsters:
             if (giveBirth()):
                 break
             else:
                 birthInt+= 1
         if (gameDay % 10== 0):
-            requestedMonsters.append(newMonsterRequest()) 
+            requestedMonsters.append(newMonsterRequest())
+            availableMissions.append(newMission())
         if (len(requestedMonsters)> 8):
             requestedMonsters= requestedMonsters[:8]
+        if (len(availableMissions)> 8):
+            availableMissions= availableMissions[:8]
+        for mission in availableMissions:
+            mission.decay-= 1
+            if (mission.decay<=0 ):
+                availableMissions.remove(mission)
+        for request in requestedMonsters:
+            request.decay-= 1
+            if (request.decay<=0 ):
+                requestedMonsters.remove(request)
         renpy.restart_interaction()
         
     def updateTimeKeeper():
@@ -938,11 +997,11 @@ init 1 python:
         if not (os.path.exists("saves")):
             os.makedirs("saves")
         for file in os.listdir("saves"):
-            temp= SaveCard(itint)
+            temp= SaveCard(slo= itint)
             quickLoad(itint, temp)
             saveList.append(temp)
             itint+= 1
-        saveList.append(SaveCard(itint))
+        saveList.append(SaveCard(slo= itint))
         
     def showSave():
         global saveList
@@ -951,7 +1010,7 @@ init 1 python:
         if not (os.path.exists("saves")):
             os.makedirs("saves")
         for file in os.listdir("saves"):
-            temp= SaveCard()
+            temp= SaveCard(slo= itint)
             quickLoad(itint, temp)
             saveList.append(temp)
             itint+= 1
@@ -1077,10 +1136,12 @@ init 1 python:
         
     def startSex():
         global gameHour
+        global currentPair
         if (gameHour< 23 and breedMonster1!= None and breedMonster2!= None and breedMonster1!= breedMonster2 and breedMonster1.stamina>0 and breedMonster2.stamina> 0):
                 gameHour+= 1
                 breedMonster1.stamina-= 1
                 breedMonster2.stamina-= 1
+                currentPair= True
                 calcTraining(breedMonster1, breedMonster2)
                 calcTraining(breedMonster2, breedMonster1)
                 if (gameHour> 24):
@@ -1091,7 +1152,7 @@ init 1 python:
                     permitted= False
                 if (breedMonster1.gender== "female" and breedMonster2.gender== "female" and lesbian== False ):
                     permitted= False
-                if ((breedMonster1.gender== "female" and breedMonster2.gender== "male") or (breedMonster2.gender== "female" and breedMonster1.gender== "male") and straight== False):
+                if (((breedMonster1.gender== "female" and breedMonster2.gender== "male") or (breedMonster2.gender== "female" and breedMonster1.gender== "male")) and straight== False):
                     permitted= False
                 if ((breedMonster1.gender== "hermaphrodite" or breedMonster2.gender== "hermaphrodite") and herms== False):
                     permitted= False
@@ -1145,7 +1206,6 @@ init 1 python:
                     showRequest()
      
     def increaseFertility(monster1, monster2):
-        print monster1.name+ " fertilityBase= "+ str(monster1.fertilityBase)+ "/ "+ str(monster1.fertilityBase* 1.5)
         if (monster1.gender!= "male" and monster2.gender!= "female"):
             if (monster1.fertilityBase> 20):
                 monster1.fertility+= monster1.fertilityBase/ 10 
@@ -1205,6 +1265,11 @@ init 1 python:
                 monster.relatives.remove(rename)
         youngMonsters.remove(rename)
         
+    def addMonsterWild():
+        global breedMonster1
+        playerMonsters.append(breedMonster1)
+        breedMonster1= None
+        
     def discardMonsterBarn():
         global breedMonster1
         if (breedMonster1.species.species!= "player"):
@@ -1234,6 +1299,8 @@ init 1 python:
             monster1.cunning+= monster2.species.cunMod* monster1.statPoints
             if (monster1.cunning> 200):
                 monster1.cunning= 200
+            if (monster1.species.species!= "player"):
+                monster1.training-= 1
         
     def trainFerocity():
         global breedMonster1

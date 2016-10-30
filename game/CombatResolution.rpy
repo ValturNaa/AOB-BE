@@ -42,9 +42,9 @@ init python:
         UnmodifiedDamage = renpy.random.randint(BottomDamage, TopDamage)
 
         if (Weapon.DamageType =="Physical"):
-            ResistRange = Defender.PhysicalResist+Defender.PRB
+            ResistRange = int(Defender.PhysicalResist+Defender.PRB)
         elif (Weapon.DamageType =="Physical"):
-            ResistRange = Defender.CharmResist+Defender.CRB
+            ResistRange = int(Defender.CharmResist+Defender.CRB)
         RandomBlock = renpy.random.randint(0, ResistRange)
         
         BlockedDamage = UnmodifiedDamage-RandomBlock
@@ -380,10 +380,10 @@ label ResolveDamage:
     
     show screen DamageScreen(Damage=CombatDamage.FinalDamage, ArmyID=TargetID[0].ArmyID, Attacker=MoveSelect[0], Defender=TargetID[0], Attack=SelectedAttack[0])
     python:
-        while CombatDamage.FinalDamage > 0:
+        while CombatDamage.FinalDamage > 0 and TargetID[0].CurrentMorale> 0:
             TargetID[0].CurrentMorale -= 1
             CombatDamage.FinalDamage -= 1
-            renpy.pause(0.01)
+            renpy.pause(0.001)
         if TargetID[0].CurrentMorale <= 0:
             renpy.hide("EnemyMonsterCard")
             TargetID[0].Routed = True
